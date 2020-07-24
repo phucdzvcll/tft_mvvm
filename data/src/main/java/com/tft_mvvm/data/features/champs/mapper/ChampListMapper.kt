@@ -10,9 +10,9 @@ class ChampListMapper : Mapper<ChampListResponse?, ChampListEntity>() {
         val champ = input?.feed?.champs?.filterNotNull().defaultEmpty().map { champ ->
             //todo need update id vs date correct
             ChampListEntity.Champ(
-                name = "",
-                linkimg = "",
-                coat = ""
+                name = champ.name.value,
+                linkimg = champ.linkimg.value,
+                coat = champ.coat.value
             )
         }
         return ChampListEntity(champs = champ)

@@ -17,6 +17,7 @@ val dataModule = module {
     factory {
         ChampListMapper()
     }
+
     factory<Interceptor> {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY

@@ -4,7 +4,6 @@ import com.tft_mvvm.domain.features.champs.usecase.GetChampsUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-
     single {
         GetChampsUseCase(
             champRepository = get()
