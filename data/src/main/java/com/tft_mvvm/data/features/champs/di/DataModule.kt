@@ -1,9 +1,9 @@
 package com.tft_mvvm.data.features.champs.di
 
 import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
-import com.tft_mvvm.data.features.champs.repository.ChampRepositoryImpl
-import com.tft_mvvm.data.features.champs.service.ChampApiService
-import com.tft_mvvm.domain.features.champs.repository.ChampRepository
+import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
+import com.tft_mvvm.data.features.champs.service.ApiService
+import com.tft_mvvm.domain.features.champs.repository.RepoRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,6 +25,7 @@ val dataModule = module {
     }
 
     factory {
+
         OkHttpClient.Builder()
             .addInterceptor(get<Interceptor>())
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -41,12 +42,12 @@ val dataModule = module {
             .build()
     }
 
-    factory { get<Retrofit>().create(ChampApiService::class.java) }
+    factory { get<Retrofit>().create(ApiService::class.java) }
 
 
-    single<ChampRepository> {
-        ChampRepositoryImpl(
-            champApiService = get(),
+    single<RepoRepository> {
+        RepoRepositoryImpl(
+            apiService = get(),
             champListMapper = get()
         )
     }

@@ -1,7 +1,15 @@
 package com.example.presentation.features.champs.model.model
 
+import java.io.Serializable
+
 data class Champ (
     var name : String,
-    var linkimg: String,
-    var coat : String
-)
+    var linkImg: String,
+    var coat : String,
+    var origin:String,
+    var classs:String,
+    var id :String,
+    var skillName:String,
+    var linkSkilAvatar:String,
+    var activated:String
+):Serializable
