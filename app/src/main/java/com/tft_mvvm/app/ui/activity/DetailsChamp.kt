@@ -38,6 +38,7 @@ class DetailsChamp : AppCompatActivity(),
        origin.text=champ.origin
        classs.text=champ.classs
         Glide.with(this).load(champ.linkSkilAvatar).into(skill_avatar);
+        Glide.with(this).load(champ.linkChampCover).into(champ_cover);
         skill_name.text=champ.skillName
         activated.text=champ.activated
        rv_origin.layoutManager = GridLayoutManager(this,4)
@@ -50,15 +51,8 @@ class DetailsChamp : AppCompatActivity(),
     private fun getChampsByOrigin(champ: Champ) {
         champsByOrigin = ArrayList(arrayListOf())
         mainViewModel.getChampByOrigin(
-            name = "",
-            linkImg = "",
-            coat = "",
-            origin = champ.origin,
-            classs = "",
-            id = "",
-            linkSkillAvatar = "",
-            activated = "",
-            skillName = ""
+
+            origin = champ.origin
         )
         mainViewModel.getChampsByOriginLiveData()
             .observe(this, Observer {
@@ -70,15 +64,7 @@ class DetailsChamp : AppCompatActivity(),
     private fun getChampsByClasss(champ: Champ) {
         champsByClasss = ArrayList(arrayListOf())
         mainViewModel.getChampByClasss(
-            name = "",
-            linkImg = "",
-            coat = "",
-            origin = "",
-            classs = champ.classs,
-            id = "",
-            linkSkillAvatar = "",
-            activated = "",
-            skillName = ""
+            classs = champ.classs
         )
         mainViewModel.getChampsByClassLiveData()
             .observe(this, Observer {

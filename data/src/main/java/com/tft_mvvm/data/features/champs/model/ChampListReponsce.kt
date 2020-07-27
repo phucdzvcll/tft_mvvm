@@ -33,7 +33,9 @@ data class Champ (
     @SerializedName("gsx\$linkskillavatar")
         val linkSkillAvatar : GsxName,
     @SerializedName("gsx\$activated")
-        val activated : GsxName
+        val activated : GsxName,
+    @SerializedName("gsx\$linkchampcover")
+    val linkChampCover : GsxName
 )
 
 

@@ -2,6 +2,7 @@ package com.tft_mvvm.app.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(),
         setupUI()
         getChamps()
         sort()
+
     }
 
     private fun setupUI() {
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun getChamps() {
         champs = ArrayList(arrayListOf())
-        champViewModel.getChamps(name = "", linkImg = "", coat = "",origin = "",classs = "", id = "",skillName = "",activated = "",linkSkillAvatar = "")
+        champViewModel.getChamps()
         champViewModel.getChampsLiveData()
             .observe(this, Observer {
                 champs.clear()

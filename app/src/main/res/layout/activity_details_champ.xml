@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background">
-<LinearLayout
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.tft_mvvm.app.ui.activity.DetailsChamp"
@@ -27,19 +26,28 @@
             android:textColor="#2EA7F6"
             />
     </androidx.appcompat.widget.Toolbar>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
     <ImageView
-        android:id="@+id/skill_cover"
+        android:id="@+id/champ_cover"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#AA9FCC"/>
+        android:scaleType="centerCrop"/>
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/skill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/background">
+        app:cardBackgroundColor="#314670"
+        app:cardCornerRadius="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="skill name"
                 android:textAlignment="center"
-                android:textColor="#000"
+                android:textColor="#BC5C5C"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_margin="8dp"/>
@@ -72,59 +80,74 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
-                    android:textColor="#000"
+                    android:textColor="#BFB2B2"
                     android:text="activated"
                     />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="HỆ"
-        android:textSize="30sp"
-        android:textColor="#000"
-        android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        android:textAlignment="center"/>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/origin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textColor="#000"
         android:layout_margin="8dp"
-        android:textStyle="bold"
-        />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
-        android:id="@+id/rv_origin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TỘC"
-        android:textSize="30sp"
-        android:textColor="#000"
-        android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        android:textAlignment="center"/>
+        app:cardBackgroundColor="#314670"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HỆ"
+                android:textSize="30sp"
+                android:textColor="#E6CD99"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/origin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:layout_margin="8dp"
+                android:textStyle="bold"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="5dp"
+                android:id="@+id/rv_origin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/classs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textColor="#000"
-        android:layout_margin="8dp"
-        android:textStyle="bold"
-        />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
-        android:id="@+id/rv_classs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TỘC"
+                android:textSize="30sp"
+                android:textColor="#5ECCBF"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/classs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:layout_margin="8dp"
+                android:textStyle="bold"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="5dp"
+                android:id="@+id/rv_classs"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
-</ScrollView>

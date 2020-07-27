@@ -8,7 +8,6 @@ import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 class ChampListMapper : Mapper<ChampListResponse?, ChampListEntity>() {
     override fun map(input: ChampListResponse?): ChampListEntity {
         val champ = input?.feed?.champs?.filterNotNull().defaultEmpty().map { champ ->
-
             ChampListEntity.Champ(
                 name = champ.name.value,
                 linkImg = champ.linkImg.value,
@@ -18,7 +17,8 @@ class ChampListMapper : Mapper<ChampListResponse?, ChampListEntity>() {
                 id = champ.id.value,
                 skillName = champ.skillName.value,
                 linkSkillAvatar = champ.linkSkillAvatar.value,
-                activated = champ.activated.value
+                activated = champ.activated.value,
+                linkChampCover = champ.linkChampCover.value
             )
         }
         return ChampListEntity(champs = champ)

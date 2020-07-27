@@ -3,16 +3,13 @@ import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 
 interface RepoRepository {
     suspend fun getChamps(
-        name : String,
-        linkImg:String,
-        coat : String,
-        origin:String,
-        classs:String,
-        id:String,
-        skillName:String,
-        linkSkillAvatar:String,
-        activated:String
     ): ChampListEntity
 
+    suspend fun getChampsByOrigin(
+        origin:String
+    ): ChampListEntity
 
+    suspend fun getChampsByClass(
+        classs:String
+    ): ChampListEntity
 }

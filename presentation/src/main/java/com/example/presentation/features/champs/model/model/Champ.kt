@@ -11,5 +11,6 @@ data class Champ (
     var id :String,
     var skillName:String,
     var linkSkilAvatar:String,
-    var activated:String
+    var activated:String,
+    var linkChampCover:String
 ):Serializable

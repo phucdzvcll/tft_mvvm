@@ -10,6 +10,7 @@ data class ChampListEntity (val champs:List<Champ>){
         val id:String,
         val skillName:String,
         val linkSkillAvatar:String,
-        val activated:String
+        val activated:String,
+        val linkChampCover:String
     )
 }
