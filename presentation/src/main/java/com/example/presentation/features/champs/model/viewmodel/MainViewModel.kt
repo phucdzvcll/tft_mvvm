@@ -36,7 +36,6 @@ class MainViewModel(
         }
 
 
-
     fun getChampsLiveData(): LiveData<List<Champ>> {
         return champLiveData
     }

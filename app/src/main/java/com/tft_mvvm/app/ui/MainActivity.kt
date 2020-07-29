@@ -5,14 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.presentation.features.champs.model.model.Champ
-import com.example.presentation.features.champs.model.viewmodel.ChampViewModel
+import com.example.presentation.features.champs.model.viewmodel.MainViewModel
 import com.tft_mvvm.app.adapter.MyAdapter
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),OnItemClickListener {
-    private val champViewModel: ChampViewModel by viewModel()
+    private val champViewModel: MainViewModel by viewModel()
     private lateinit var adapter: MyAdapter
     private lateinit var champs: ArrayList<Champ>
     private var isLoading: Boolean? = null
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(),OnItemClickListener {
     }
 
     private fun setupUI() {
-        adapter = MyAdapter(arrayListOf())
+        adapter = MyAdapter(arrayListOf(), this)
         rv.layoutManager = GridLayoutManager(this, 5)
         rv.adapter = adapter
         swipe_refresh_layout.setOnRefreshListener {
@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(),OnItemClickListener {
 
     private fun getChamps() {
         champs = ArrayList(arrayListOf())
-        champViewModel.getChamps(name = "", linkImg = "", coat = "")
         champViewModel.getChampsLiveData()
             .observe(this, Observer {
                 champs.clear()
@@ -61,7 +60,8 @@ class MainActivity : AppCompatActivity(),OnItemClickListener {
             .observe(this, Observer { isLoading = it })
     }
 
-    override fun onClickListener(champ: Champ?) {
-
+    override fun onClickListener(champ: Champ) {
+        TODO("Not yet implemented")
     }
+
 }
