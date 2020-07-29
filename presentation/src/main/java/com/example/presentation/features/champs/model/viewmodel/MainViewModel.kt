@@ -17,8 +17,6 @@ class MainViewModel(
     private val champListMapper: ChampMapper
 ) : BaseViewModel() {
     private val champLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
-    private val champByOriginLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
-    private val champByClassLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getChamps() =
@@ -32,18 +30,12 @@ class MainViewModel(
             }){
                 val champs = champListMapper.mapList(it.champs)
                 champLiveData.value = champs
+                isLoadingLiveData.value = false
             }
         }
 
-
     fun getChampsLiveData(): LiveData<List<Champ>> {
         return champLiveData
-    }
-    fun getChampsByOriginLiveData():LiveData<List<Champ>>{
-        return champByOriginLiveData
-    }
-    fun getChampsByClassLiveData():LiveData<List<Champ>>{
-        return champByClassLiveData
     }
     fun isRefresh(): LiveData<Boolean> {
         return isLoadingLiveData

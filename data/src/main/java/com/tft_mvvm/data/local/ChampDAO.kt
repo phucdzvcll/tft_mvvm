@@ -10,6 +10,12 @@ interface ChampDAO {
     @Query("SELECT * FROM champ")
     suspend fun getData():List<ChampListDBO.ChampDBO>
 
+    @Query("SELECT * FROM champ WHERE origin LIKE:origin ")
+    suspend fun getChampsByOrigin(origin : String):List<ChampListDBO.ChampDBO>
+
+    @Query("SELECT * FROM champ WHERE classs LIKE:classs")
+    suspend fun getChampsByClasss(classs:String):List<ChampListDBO.ChampDBO>
+
     @Insert
     suspend fun insertChamps(userDBOS: List<ChampListDBO.ChampDBO>)
 }

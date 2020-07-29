@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.repository
 
-import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -17,7 +16,6 @@ class RepoRepositoryImpl(
     private val remoteExceptionInterceptor: RemoteExceptionInterceptor,
     private val champListMapper: ChampListMapper,
     private val champDaoEntityMapper: ChampDaoEntityMapper
-
 ) : RepoRepository {
     override suspend fun getChamps() =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
@@ -38,13 +36,17 @@ class RepoRepositoryImpl(
             }
         }
 
-    override suspend fun getChampsByOrigin(origin: String): Either<Failure, ChampListEntity> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getChampsByOrigin(origin: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            val dbResult = ChampListEntity(champs = champListMapper.mapList(champDAO.getChampsByOrigin(origin)))
+            return@runSuspendWithCatchError Either.Success(dbResult)
+        }
 
-    override suspend fun getChampsByClass(classs: String): Either<Failure, ChampListEntity> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getChampsByClass(classs: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            val dbResult = ChampListEntity(champs = champListMapper.mapList(champDAO.getChampsByClasss(classs)))
+            return@runSuspendWithCatchError Either.Success(dbResult)
+        }
 
 
 }
