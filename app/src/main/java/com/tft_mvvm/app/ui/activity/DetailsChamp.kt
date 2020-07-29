@@ -29,8 +29,6 @@ class DetailsChamp : AppCompatActivity(),
         setContentView(R.layout.activity_details_champ)
         val intent = intent
         val champ: Champ = intent.getSerializableExtra("champ") as Champ
-        getChampsByOrigin(champ)
-        getChampsByClasss(champ)
         setupUI(champ)
     }
     private fun setupUI(champ:Champ) {
@@ -47,31 +45,6 @@ class DetailsChamp : AppCompatActivity(),
         rv_classs.layoutManager =GridLayoutManager(this,4)
         adapterShowChampByClasss = MyAdapter(arrayListOf(),this)
         rv_classs.adapter = adapterShowChampByClasss
-    }
-    private fun getChampsByOrigin(champ: Champ) {
-        champsByOrigin = ArrayList(arrayListOf())
-        mainViewModel.getChampByOrigin(
-
-            origin = champ.origin
-        )
-        mainViewModel.getChampsByOriginLiveData()
-            .observe(this, Observer {
-                champsByOrigin.clear()
-                champsByOrigin.addAll(it)
-                adapterShowChampsByOrigin.addData(champsByOrigin)
-            })
-    }
-    private fun getChampsByClasss(champ: Champ) {
-        champsByClasss = ArrayList(arrayListOf())
-        mainViewModel.getChampByClasss(
-            classs = champ.classs
-        )
-        mainViewModel.getChampsByClassLiveData()
-            .observe(this, Observer {
-                champsByClasss.clear()
-                champsByClasss.addAll(it)
-                adapterShowChampByClasss.addData(champsByClasss)
-            })
     }
 
     override fun onClickListener(champ: Champ) {

@@ -12,9 +12,7 @@ val presentationModule = module {
     viewModel {
         MainViewModel(
             champsUseCase = get(),
-            champListMapper = get(),
-            champsByOriginUseCase = get(),
-            champsByClassUseCase = get()
+            champListMapper = get()
         )
     }
 }

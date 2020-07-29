@@ -1,15 +1,17 @@
 package com.tft_mvvm.domain.features.champs.repository
+import com.example.common_jvm.exception.Failure
+import com.example.common_jvm.function.Either
 import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 
 interface RepoRepository {
     suspend fun getChamps(
-    ): ChampListEntity
+    ): Either<Failure,ChampListEntity>
 
     suspend fun getChampsByOrigin(
         origin:String
-    ): ChampListEntity
+    ): Either<Failure,ChampListEntity>
 
     suspend fun getChampsByClass(
         classs:String
-    ): ChampListEntity
+    ): Either<Failure,ChampListEntity>
 }

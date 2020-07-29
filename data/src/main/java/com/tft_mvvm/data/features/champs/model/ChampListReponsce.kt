@@ -12,7 +12,7 @@ data class ChampListResponse(
 )
 
 data class GsxName (
-    @SerializedName("\$t") val value : String
+    @SerializedName("\$t") val value : String?
 )
 
 data class Champ (
@@ -35,7 +35,7 @@ data class Champ (
     @SerializedName("gsx\$activated")
         val activated : GsxName,
     @SerializedName("gsx\$linkchampcover")
-    val linkChampCover : GsxName
+        val linkChampCover : GsxName
 )
 
 
