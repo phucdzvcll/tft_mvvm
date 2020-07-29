@@ -1,12 +1,16 @@
 package com.tft_mvvm.data.features.champs.di
 
+import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
+import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
 import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
+import com.tft_mvvm.data.local.ChampRoomDatabase
 import com.tft_mvvm.domain.features.champs.repository.RepoRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,6 +21,11 @@ val dataModule = module {
     factory {
         ChampListMapper()
     }
+    factory {
+        ChampDaoEntityMapper()
+    }
+
+    factory { RemoteExceptionInterceptor() }
 
     factory<Interceptor> {
         HttpLoggingInterceptor().apply {
@@ -44,11 +53,17 @@ val dataModule = module {
 
     factory { get<Retrofit>().create(ApiService::class.java) }
 
+    single { ChampRoomDatabase.getInstance(androidContext()) }
+
+    single { get<ChampRoomDatabase>().champDAO() }
 
     single<RepoRepository> {
         RepoRepositoryImpl(
             apiService = get(),
-            champListMapper = get()
+            champDAO = get(),
+            remoteExceptionInterceptor = get(),
+            champListMapper = get(),
+            champDaoEntityMapper = get()
         )
     }
 }
