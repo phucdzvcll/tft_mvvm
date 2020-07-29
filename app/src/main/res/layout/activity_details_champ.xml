@@ -15,11 +15,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name Champ"
+            tools:text="Name Champ"
             android:textAlignment="center"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:orientation="vertical">
 
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/champ_cover"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -53,11 +53,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/skill_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="skill name"
+                tools:text="skill name"
                 android:textAlignment="center"
                 android:textColor="#BC5C5C"
                 android:textSize="20sp"
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/skill_avatar"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
                     android:textColor="#BFB2B2"
-                    android:text="activated"
+                    tools:text="activated"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/he"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="HỆ"
@@ -122,6 +123,7 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/toc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TỘC"
