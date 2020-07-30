@@ -2,7 +2,6 @@ package com.tft_mvvm.app.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.tft_mvvm.app.ui.adapter.ViewPagerAdapter
 import com.tft_mvvm.app.ui.fragment.ShowChampByGold
@@ -21,11 +20,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun addTab(viewPager: ViewPager){
         val showChampByGold = ShowChampByGold()
-        val showChampByname = ShowChampByName()
+        val showChampByName = ShowChampByName()
         val showRecommendTeam = ShowRecommendTeam()
         val adapter = ViewPagerAdapter(supportFragmentManager, arrayListOf(), arrayListOf())
         adapter.add(fragment = showChampByGold, title = "Gold")
-        adapter.add(fragment = showChampByname, title = "Gold")
+        adapter.add(fragment = showChampByName, title = "Gold")
         adapter.add(fragment = showRecommendTeam, title = "Gold")
         viewPager.adapter = adapter
     }

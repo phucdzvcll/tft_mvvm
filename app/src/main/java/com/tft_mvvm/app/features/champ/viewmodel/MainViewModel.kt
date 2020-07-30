@@ -37,7 +37,7 @@ class MainViewModel(
     fun getChampsLiveData(): LiveData<List<Champ>> {
         return champLiveData
     }
-    fun isRefresh(): LiveData<Boolean> {
+    fun getIsRefresh(): LiveData<Boolean> {
         return isLoadingLiveData
     }
 }
