@@ -1,4 +1,3 @@
-include ':presentation'
 include ':common_jvm'
 include ':data'
 include ':domain'

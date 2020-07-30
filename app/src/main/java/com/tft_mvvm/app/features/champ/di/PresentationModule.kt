@@ -1,7 +1,9 @@
-package com.example.presentation.features.champs.model.di
+package com.tft_mvvm.app.features.champ.di
 
-import com.example.presentation.mapper.ChampMapper
+import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
+import com.tft_mvvm.app.mapper.ChampMapper
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val presentationModule = module {
@@ -14,4 +16,8 @@ val presentationModule = module {
             champListMapper = get()
         )
     }
+}
+fun getPresentationKoinModule(): Module {
+    return presentationModule
+
 }

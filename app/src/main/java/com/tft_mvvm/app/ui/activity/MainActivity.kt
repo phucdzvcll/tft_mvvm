@@ -2,13 +2,12 @@ package com.tft_mvvm.app.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.presentation.features.champs.model.model.Champ
-import com.example.presentation.features.champs.model.viewmodel.MainViewModel
-import com.tft_mvvm.app.adapter.MyAdapter
+import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
+import com.tft_mvvm.app.features.champ.model.Champ
+import com.tft_mvvm.app.ui.adapter.MyAdapter
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.activity_main.*
