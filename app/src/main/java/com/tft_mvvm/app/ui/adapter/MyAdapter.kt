@@ -16,6 +16,10 @@ class MyAdapter(private val champs: ArrayList<Champ>, private val onItemClickLis
             Glide.with(itemView.img.context)
                 .load(champ.linkImg)
                 .into(itemView.img)
+//                .onLoadFailed({
+//                    //
+//                    //loadImage from disk /DATA/app/champ.id.png
+//                })
             when(champ.coat){
                 "1" -> itemView.img.setBackgroundResource(R.drawable.background_1_gold)
                 "2" -> itemView.img.setBackgroundResource(R.drawable.background_2_gold)
@@ -38,15 +42,5 @@ class MyAdapter(private val champs: ArrayList<Champ>, private val onItemClickLis
         champs.clear()
         champs.addAll(list)
         notifyDataSetChanged()
-    }
-    fun sortByName(){
-            champs.sortBy { champ: Champ ->champ.name  }
-            notifyDataSetChanged()
-
-    }
-    fun sortByCoat(){
-            champs.sortByDescending { champ: Champ ->champ.coat  }
-            notifyDataSetChanged()
-
     }
 }
