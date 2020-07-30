@@ -30,6 +30,7 @@ class MainViewModel(
             }){
                 val champs = champListMapper.mapList(it.champs)
                 champLiveData.value = champs
+                isLoadingLiveData.value = false
             }
         }
 

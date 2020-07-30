@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity(),
     OnItemClickListener {
     private val champViewModel: MainViewModel by viewModel()
     private lateinit var adapter: MyAdapter
-    private lateinit var champs: ArrayList<Champ>
     private var isLoading: Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity(),
         swipe_refresh_layout.setOnRefreshListener {
             getChamps()
             group_radio_btn.clearCheck()
-            swipe_refresh_layout.isRefreshing = isLoading!!
         }
     }
 
@@ -53,20 +51,17 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun getChamps() {
-        champs = ArrayList(arrayListOf())
         champViewModel.getChamps()
         champViewModel.getChampsLiveData()
             .observe(this, Observer {
-                champs.clear()
-                champs.addAll(it)
-                adapter.addData(champs)
+                adapter.addData(it)
             })
         champViewModel.isRefresh()
-            .observe(this, Observer { isLoading = it })
+            .observe(this, Observer {swipe_refresh_layout.isRefreshing = it })
     }
 
     override fun onClickListener(champ: Champ) {
-        val intent : Intent = Intent(this,
+        val intent = Intent(this,
             DetailsChamp::class.java)
             intent.putExtra("champ",champ)
         startActivity(intent)

@@ -34,10 +34,6 @@ class MyAdapter(private val champs: ArrayList<Champ>, private val onItemClickLis
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) =
         holder.bind(champs[position], onItemClickListener)
-
-
-
-
     fun addData(list: List<Champ>) {
         champs.clear()
         champs.addAll(list)
