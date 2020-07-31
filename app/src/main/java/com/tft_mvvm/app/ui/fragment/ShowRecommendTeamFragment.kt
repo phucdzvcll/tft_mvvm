@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.tft_mvvm.champ.R
 
-class ShowRecommendTeam : Fragment() {
+class ShowRecommendTeamFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

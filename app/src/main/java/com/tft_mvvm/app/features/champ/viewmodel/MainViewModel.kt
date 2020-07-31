@@ -27,7 +27,9 @@ class MainViewModel(
             }
             champResult.either({
                 champLiveData.value= listOf()
+                isLoadingLiveData.value = false
             }){
+
                 val champs = champListMapper.mapList(it.champs)
                 champLiveData.value = champs
                 isLoadingLiveData.value = false
@@ -37,7 +39,7 @@ class MainViewModel(
     fun getChampsLiveData(): LiveData<List<Champ>> {
         return champLiveData
     }
-    fun getIsRefresh(): LiveData<Boolean> {
+    fun isRefresh(): LiveData<Boolean> {
         return isLoadingLiveData
     }
 }
