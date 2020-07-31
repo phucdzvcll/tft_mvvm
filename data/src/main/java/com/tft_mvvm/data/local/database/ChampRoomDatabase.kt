@@ -1,4 +1,4 @@
-package com.tft_mvvm.data.local
+package com.tft_mvvm.data.local.database
 
 import android.content.Context
 import androidx.room.Database

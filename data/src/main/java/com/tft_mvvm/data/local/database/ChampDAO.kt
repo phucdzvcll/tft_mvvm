@@ -1,4 +1,4 @@
-package com.tft_mvvm.data.local
+package com.tft_mvvm.data.local.database
 
 import androidx.room.Dao
 import androidx.room.Insert

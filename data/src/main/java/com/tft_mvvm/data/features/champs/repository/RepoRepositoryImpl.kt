@@ -6,7 +6,7 @@ import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
 import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
 import com.tft_mvvm.data.features.champs.service.ApiService
-import com.tft_mvvm.data.local.ChampDAO
+import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 import com.tft_mvvm.domain.features.champs.repository.RepoRepository
 
