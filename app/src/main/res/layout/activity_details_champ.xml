@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     app:cardBackgroundColor="#314670"
-                    app:cardCornerRadius="10dp">
+                    app:cardCornerRadius="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:text="activated"
-                            android:layout_margin="4dp"
+                            android:layout_margin="6dp"
                             android:textColor="#BFB2B2"
                             android:textSize="17sp" />
                     </LinearLayout>
@@ -104,12 +104,13 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     app:cardBackgroundColor="#314670"
-                    app:cardCornerRadius="10dp">
+                    app:cardCornerRadius="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
@@ -134,7 +135,7 @@
                             android:id="@+id/rv_origin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp" />
+                            android:layout_marginTop="8dp" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"

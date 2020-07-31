@@ -2,7 +2,6 @@ package com.tft_mvvm.data.features.champs.mapper
 
 import com.example.common_jvm.mapper.Mapper
 
-import com.tft_mvvm.data.features.champs.model.ChampListResponse
 import com.tft_mvvm.data.local.model.ChampListDBO
 import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 
@@ -17,7 +16,8 @@ class ChampListMapper : Mapper<ChampListDBO.ChampDBO, ChampListEntity.Champ>() {
             classs = input.classs,
             activated = input.activated,
             linkChampCover = input.linkChampCover,
-            coat = input.coat,
+            cost = input.cost,
+            rankChamp = input.rankChamp,
             linkImg = input.linkImg
         )
     }

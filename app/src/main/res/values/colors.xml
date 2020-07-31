@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="background">#141F35</color>
+    <color name="Dialog_background_cardview">#FFEEDA</color>
+    <color name="text_acticated_color_dialog">#3C5295</color>
+    <color name="text_name_dialog_color">#0D1242</color>
+    <color name="text_name_champ_coloer">#001066</color>
 </resources>

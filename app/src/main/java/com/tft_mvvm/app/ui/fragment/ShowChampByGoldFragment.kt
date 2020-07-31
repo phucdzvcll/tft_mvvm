@@ -5,24 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.activity.DetailsChampActivity
-import com.tft_mvvm.app.ui.adapter.MyAdapter
+import com.tft_mvvm.app.ui.adapter.AdapterShowByGold
 import com.tft_mvvm.champ.R
 import com.tft_mvvm.champ.databinding.FragmentShowChampByGoldBinding
-import kotlinx.android.synthetic.main.fragment_show_champ_by_gold.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
     private val mainViewModel: MainViewModel by viewModel()
-    private var adapter: MyAdapter? = null
+    private var adapter: AdapterShowByGold? = null
 
     var biding: FragmentShowChampByGoldBinding? = null
     override fun onCreateView(
@@ -45,7 +43,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setupUi() {
-        adapter = MyAdapter(arrayListOf(), this)
+        adapter = AdapterShowByGold(arrayListOf(), this)
         biding?.rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
         biding?.rvByGold?.adapter = adapter
         biding?.swipeRefreshLayoutByGold?.setOnRefreshListener {
@@ -55,7 +53,9 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
 
     private fun getChamp() {
         mainViewModel.getChampsLiveData()
-            .observe(viewLifecycleOwner, Observer { adapter!!.addData(it) })
+            .observe(viewLifecycleOwner, Observer {
+                adapter!!.addData(it)
+            })
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
             Observer { biding?.swipeRefreshLayoutByGold?.isRefreshing = it })

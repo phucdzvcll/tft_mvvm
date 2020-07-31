@@ -1,5 +1,6 @@
 package com.tft_mvvm.app.features.champ.di
 
+import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -13,6 +14,13 @@ val presentationModule = module {
     viewModel {
         MainViewModel(
             champsUseCase = get(),
+            champListMapper = get()
+        )
+    }
+    viewModel {
+        DetailsViewModel(
+            champsByOriginUseCase = get(),
+            champsByClassUseCase = get(),
             champListMapper = get()
         )
     }

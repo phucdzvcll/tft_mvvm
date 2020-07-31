@@ -10,7 +10,7 @@ class ChampDaoEntityMapper : Mapper<ChampListResponse?, ChampListDBO>() {
         val champDBO = input?.feed?.champs?.filterNotNull().defaultEmpty().map { champDBO ->
             ChampListDBO.ChampDBO(
                 id = champDBO.id.value.defaultEmpty(),
-                coat = champDBO.coat.value.defaultEmpty(),
+                cost = champDBO.cost.value.defaultEmpty(),
                 linkImg = champDBO.linkImg.value.defaultEmpty(),
                 linkChampCover = champDBO.linkChampCover.value.defaultEmpty(),
                 activated = champDBO.activated.value.defaultEmpty(),
@@ -18,6 +18,7 @@ class ChampDaoEntityMapper : Mapper<ChampListResponse?, ChampListDBO>() {
                 origin = champDBO.origin.value.defaultEmpty(),
                 skillName = champDBO.skillName.value.defaultEmpty(),
                 name = champDBO.name.value.defaultEmpty(),
+                rankChamp = champDBO.rankChamp.value.defaultEmpty(),
                 linkSkilAvatar = champDBO.linkSkillAvatar.value.defaultEmpty()
             )
         }

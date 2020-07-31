@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.repository
 
-import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -38,13 +37,26 @@ class RepoRepositoryImpl(
             }
         }
 
-    override suspend fun getChampsByOrigin(origin: String): Either<Failure, ChampListEntity> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getChampsByOrigin(origin: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            return@runSuspendWithCatchError Either.Success(
+                ChampListEntity(
+                    champs = champListMapper.mapList(
+                        champDAO.getDataByOrigin(origin)
+                    )
+                )
+            )
+        }
 
-    override suspend fun getChampsByClass(classs: String): Either<Failure, ChampListEntity> {
-        TODO("Not yet implemented")
-    }
-
+    override suspend fun getChampsByClass(classs: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            return@runSuspendWithCatchError Either.Success(
+                ChampListEntity(
+                    champs = champListMapper.mapList(
+                        champDAO.getDataByClass(classs)
+                    )
+                )
+            )
+        }
 
 }
