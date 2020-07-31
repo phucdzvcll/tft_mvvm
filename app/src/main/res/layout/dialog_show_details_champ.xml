@@ -15,7 +15,8 @@
         android:textAlignment="center"
         android:textColor="@color/text_name_champ_coloer"
         android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:background="@color/backgroung_toolbar"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/champ_cover_dialog"

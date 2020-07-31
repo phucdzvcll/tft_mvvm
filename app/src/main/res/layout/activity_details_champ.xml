@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#323B55"
+            android:background="@color/backgroung_toolbar"
             android:gravity="center">
 
             <TextView

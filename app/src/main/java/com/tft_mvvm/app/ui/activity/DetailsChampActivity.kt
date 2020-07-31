@@ -3,27 +3,26 @@ package com.tft_mvvm.app.ui.activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.os.CountDownTimer
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.tft_mvvm.champ.R
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowByOriginAndClass
+import com.tft_mvvm.champ.R
 import com.tft_mvvm.champ.databinding.ActivityDetailsChampBinding
 import kotlinx.android.synthetic.main.activity_details_champ.*
-import kotlinx.android.synthetic.main.dialog_show_details_champ.*
-import kotlinx.android.synthetic.main.item_show_by_gold.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     private var biding: ActivityDetailsChampBinding? = null
@@ -44,7 +43,23 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         biding?.toolbarTitle?.text = champ.name
         setSupportActionBar(biding?.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        var exit = false
         toolbar.setNavigationOnClickListener {
+            if (exit) {
+                finish()
+            } else {
+                Toast.makeText(
+                    this, "Nhấn nút back lần nữa để quay lại",
+                    Toast.LENGTH_SHORT
+                ).show()
+                exit = true
+                object : CountDownTimer(3000, 1000) {
+                    override fun onTick(l: Long) {}
+                    override fun onFinish() {
+                        exit = false
+                    }
+                }.start()
+            }
         }
         biding?.origin?.text = champ.origin
         biding?.classs?.text = champ.classs

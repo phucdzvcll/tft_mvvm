@@ -13,11 +13,13 @@
         android:background="@color/background">
 
         <com.google.android.material.tabs.TabLayout
-            android:background="#234861"
+            android:background="@color/background_tablayout"
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="#FF9F85"/>
+            app:tabIndicatorColor="@color/underline_tablayout"
+            app:tabTextColor="@color/tab_text_color"
+            />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
