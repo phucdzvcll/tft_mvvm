@@ -54,7 +54,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
     private fun getChamp() {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                adapter!!.addData(it)
+                adapter?.addData(it.sortedBy { champ->champ.cost })
             })
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
