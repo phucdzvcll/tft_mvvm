@@ -23,13 +23,13 @@
             android:background="@color/backgroung_toolbar"
             android:gravity="center">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="75dp"
                 android:textAlignment="center"
-                android:textColor="#2EA7F6"
+                android:textColor="@color/color_background_title_toolbar"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 tools:text="Name Champ" />
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#314670"
+                    app:cardBackgroundColor="@color/color_background_cardview"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout
@@ -74,7 +74,7 @@
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="8sp"
-                                android:background="#000" />
+                                android:background="@color/color_black" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/skill_name"
@@ -83,7 +83,7 @@
                                 android:layout_gravity="center"
                                 tools:text="skill name"
                                 android:textAlignment="center"
-                                android:textColor="#BC5C5C"
+                                android:textColor="@color/color_skillname"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -94,7 +94,7 @@
                             android:layout_height="wrap_content"
                             tools:text="activated"
                             android:layout_margin="6dp"
-                            android:textColor="#BFB2B2"
+                            android:textColor="@color/color_skill_activated"
                             android:textSize="17sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#314670"
+                    app:cardBackgroundColor="@color/color_background_cardview"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout

@@ -3,6 +3,8 @@ package com.tft_mvvm.data.features.champs.di
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
 import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
+import com.tft_mvvm.data.features.champs.mapper.TeamDaoEntityMapper
+import com.tft_mvvm.data.features.champs.mapper.TeamListMapper
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
@@ -24,8 +26,17 @@ val dataModule = module {
     factory {
         ChampDaoEntityMapper()
     }
+    factory {
+        TeamDaoEntityMapper()
+    }
 
-    factory { RemoteExceptionInterceptor() }
+    factory {
+        TeamListMapper()
+    }
+
+    factory {
+        RemoteExceptionInterceptor()
+    }
 
     factory<Interceptor> {
         HttpLoggingInterceptor().apply {
@@ -33,7 +44,7 @@ val dataModule = module {
         }
     }
 
-    factory {
+    single {
 
         OkHttpClient.Builder()
             .addInterceptor(get<Interceptor>())
@@ -43,7 +54,7 @@ val dataModule = module {
             .build()
     }
 
-    single {
+    factory {
         Retrofit.Builder()
             .client(get())
             .baseUrl("https://spreadsheets.google.com")
@@ -57,12 +68,18 @@ val dataModule = module {
 
     single { get<ChampRoomDatabase>().champDAO() }
 
+    single { get<ChampRoomDatabase>().teamDAO() }
+
+
     single<RepoRepository> {
         RepoRepositoryImpl(
             apiService = get(),
             champDAO = get(),
+            teamListMapper = get(),
+            teamDaoEntityMapper = get(),
             remoteExceptionInterceptor = get(),
             champListMapper = get(),
+            teamDAO = get(),
             champDaoEntityMapper = get()
         )
     }

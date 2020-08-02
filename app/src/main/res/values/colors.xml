@@ -13,4 +13,9 @@
     <color name="tab_text_color">#C9E3FF</color>
     <color name="backgroung_toolbar">#EFF8FD</color>
     <color name="color_while">#fff</color>
+    <color name="color_background_title_toolbar">#2EA7F6</color>
+    <color name="color_background_cardview">#314670</color>
+    <color name="color_black">#000</color>
+    <color name="color_skillname">#BC5C5C</color>
+    <color name="color_skill_activated">#BFB2B2</color>
 </resources>

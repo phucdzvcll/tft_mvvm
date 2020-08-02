@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tft_mvvm.data.local.model.ChampListDBO
+import com.tft_mvvm.data.local.model.TeamListDBO
 
-@Database(entities = [ChampListDBO.ChampDBO::class], version = 1)
+@Database(entities = [ChampListDBO.ChampDBO::class, TeamListDBO.TeamDBO::class], version = 1, exportSchema = false)
 
 abstract class ChampRoomDatabase : RoomDatabase() {
 
     abstract fun champDAO(): ChampDAO
+
+    abstract fun teamDAO():TeamDAO
 
     companion object {
 

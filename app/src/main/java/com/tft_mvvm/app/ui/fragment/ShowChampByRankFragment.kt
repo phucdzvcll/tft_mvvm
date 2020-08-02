@@ -24,11 +24,10 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 import kotlinx.android.synthetic.main.fragment_show_champ_by_rank.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ShowChampByRankFragment : Fragment(),OnItemClickListener {
+class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     private val mainViewModel: MainViewModel by viewModel()
     private var sectionedAdapter: SectionedRecyclerViewAdapter? = null
     private var recyclerView: RecyclerView? = null
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -72,7 +71,13 @@ class ShowChampByRankFragment : Fragment(),OnItemClickListener {
             .observe(viewLifecycleOwner, Observer {
                 for ((key, value) in it) {
                     if (value.isNotEmpty()) {
-                        sectionedAdapter?.addSection(MySection(key, value,this))
+                        sectionedAdapter?.addSection(
+                            MySection(
+                                key,
+                                value.sortedBy { champ -> champ.cost },
+                                this
+                            )
+                        )
                         sectionedAdapter?.notifyDataSetChanged()
                     }
                 }
