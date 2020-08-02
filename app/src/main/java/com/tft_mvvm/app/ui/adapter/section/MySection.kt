@@ -26,7 +26,6 @@ class MySection(
         return list.size
     }
 
-
     override fun getItemViewHolder(view: View?): RecyclerView.ViewHolder? {
         return view?.let { ItemViewHolder(it) }
     }
