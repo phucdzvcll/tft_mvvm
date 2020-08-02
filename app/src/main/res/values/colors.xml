@@ -12,4 +12,5 @@
     <color name="background_tablayout">#234861</color>
     <color name="tab_text_color">#C9E3FF</color>
     <color name="backgroung_toolbar">#EFF8FD</color>
+    <color name="color_while">#fff</color>
 </resources>
