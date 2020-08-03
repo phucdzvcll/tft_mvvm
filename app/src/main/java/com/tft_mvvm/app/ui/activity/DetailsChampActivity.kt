@@ -43,23 +43,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         biding?.toolbarTitle?.text = champ.name
         setSupportActionBar(biding?.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        var exit = false
         toolbar.setNavigationOnClickListener {
-            if (exit) {
-                finish()
-            } else {
-                Toast.makeText(
-                    this, "Nhấn nút back lần nữa để quay lại",
-                    Toast.LENGTH_SHORT
-                ).show()
-                exit = true
-                object : CountDownTimer(3000, 1000) {
-                    override fun onTick(l: Long) {}
-                    override fun onFinish() {
-                        exit = false
-                    }
-                }.start()
-            }
+            finish()
         }
         biding?.origin?.text = champ.origin
         biding?.classs?.text = champ.classs

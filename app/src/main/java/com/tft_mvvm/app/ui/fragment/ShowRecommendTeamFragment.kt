@@ -43,7 +43,7 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getTeams(true)
+        getTeams(false)
     }
 
     private fun setupUi(view: View) {
