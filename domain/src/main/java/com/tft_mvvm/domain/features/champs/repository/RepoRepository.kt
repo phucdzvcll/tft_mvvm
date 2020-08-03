@@ -19,5 +19,6 @@ interface RepoRepository {
     ): Either<Failure, ChampListEntity>
 
     suspend fun getTeams(
+        isForceLoadData:Boolean
     ): Either<Failure, TeamBuilderListEntity>
 }

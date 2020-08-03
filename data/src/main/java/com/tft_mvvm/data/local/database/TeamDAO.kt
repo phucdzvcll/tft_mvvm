@@ -14,4 +14,6 @@ interface TeamDAO {
     @Insert
     suspend fun insertTeam(teamDBOs: List<TeamListDBO.TeamDBO>)
 
+    @Query("Delete from team")
+    suspend fun deleteAllTeam()
 }

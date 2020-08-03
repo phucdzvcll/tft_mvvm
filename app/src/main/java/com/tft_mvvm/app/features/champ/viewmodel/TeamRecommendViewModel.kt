@@ -18,26 +18,27 @@ class TeamRecommendViewModel(
     private val teamBuilderMapper: TeamBuilderMapper
 ) : BaseViewModel() {
     private val listTeamBuilderLiveData: MutableLiveData<List<TeamBuilder>> = MutableLiveData()
-    private val isLoadingLiveData:MutableLiveData<Boolean> = MutableLiveData(false)
-    fun getTeams() =
+    private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    fun getTeams(isForceLoadData: Boolean) =
         viewModelScope.launch(Dispatchers.Main) {
-            isLoadingLiveData.value=true
+            isLoadingLiveData.value = true
             val champResult = withContext(Dispatchers.IO) {
-                getTeamUseCase.execute(UseCaseParams.Empty)
+                getTeamUseCase.execute(GetTeamUseCase.GetTeamUseCaseParam(isForceLoadData))
             }
             champResult.either({
                 listTeamBuilderLiveData.value = listOf()
-                isLoadingLiveData.value=false
+                isLoadingLiveData.value = false
             }) { (teams) ->
                 listTeamBuilderLiveData.value = teamBuilderMapper.mapList(teams)
-                isLoadingLiveData.value=false
+                isLoadingLiveData.value = false
             }
         }
 
-    fun getListTeamBuilderLiveData():LiveData<List<TeamBuilder>>{
+    fun getListTeamBuilderLiveData(): LiveData<List<TeamBuilder>> {
         return listTeamBuilderLiveData
     }
-    fun isLoading():LiveData<Boolean>{
+
+    fun isLoading(): LiveData<Boolean> {
         return isLoadingLiveData
     }
 }

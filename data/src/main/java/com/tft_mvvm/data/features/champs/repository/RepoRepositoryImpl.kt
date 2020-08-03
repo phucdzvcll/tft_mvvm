@@ -68,11 +68,12 @@ class RepoRepositoryImpl(
             )
         }
 
-    override suspend fun getTeams() =
+    override suspend fun getTeams(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             var dbTeamListEntity =
                 TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
-            if (teamDAO.getAllTeam().isNullOrEmpty()) {
+            if (teamDAO.getAllTeam().isNullOrEmpty() || isForceLoadData) {
+                teamDAO.deleteAllTeam()
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
                 teamDAO.insertTeam(teamListDBO.teamDBOs)

@@ -2,6 +2,7 @@ package com.tft_mvvm.app.ui.fragment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +43,7 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getTeams()
+        getTeams(true)
     }
 
     private fun setupUi(view: View) {
@@ -53,19 +54,23 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayoutTeamBuilderRecommend)
 
         swipeRefreshLayout?.setOnRefreshListener {
-            getTeams()
+            Log.d("PHUC", "setOnRefreshListener")
+            getTeams(true)
         }
     }
 
-    private fun getTeams() {
+    private fun getTeams(isForceLoadData: Boolean) {
         teamRecommendViewModel.getListTeamBuilderLiveData()
             .observe(viewLifecycleOwner, Observer {
-                it.sortedBy { teamBuilder -> teamBuilder.name  }
+                Log.d("PHUC", "Observer -> $it")
+                it.sortedBy { teamBuilder -> teamBuilder.name }
                 adapterShowRecommendTeamBuilder?.addData(it)
             })
         teamRecommendViewModel.isLoading()
-            .observe(viewLifecycleOwner, Observer { swipeRefreshLayout?.isRefreshing = it })
-        teamRecommendViewModel.getTeams()
+            .observe(viewLifecycleOwner, Observer {
+                swipeRefreshLayout?.isRefreshing = it
+            })
+        teamRecommendViewModel.getTeams(isForceLoadData)
     }
 
     override fun onClickListener(champ: Champ) {
