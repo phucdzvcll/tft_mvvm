@@ -28,7 +28,7 @@ class AdapterShowRecommendTeamBuilder(
                 "S" -> itemView.name_team1.setTextColor(Color.parseColor("#EFB135"))
             }
             itemView.rv_item_by_team_recommend.layoutManager =
-                GridLayoutManager(itemView.context, 6)
+                GridLayoutManager(itemView.context, 5)
             adapterShowByOriginAndClass =
                 AdapterShowByOriginAndClass(arrayListOf(), onItemClickListener)
             adapterShowByOriginAndClass?.addData(teamBuilder.champs)

@@ -11,6 +11,7 @@ class TeamDaoEntityMapper : Mapper<TeamListResponse?, TeamListDBO>() {
         val teamDBO = input?.feedTeam?.team?.filterNotNull().defaultEmpty().map { teamDBO ->
             TeamListDBO.TeamDBO(
                 name = teamDBO.name?.value.defaultEmpty(),
+                id = teamDBO.id?.value.defaultEmpty(),
                 listId = teamDBO.listID?.value.defaultEmpty()
             )
         }

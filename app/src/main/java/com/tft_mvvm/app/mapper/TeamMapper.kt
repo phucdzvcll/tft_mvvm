@@ -10,6 +10,7 @@ class TeamMapper : Mapper<TeamListEntity.Team, Team>() {
     override fun map(input: TeamListEntity.Team): Team {
         return Team(
             name = input.name,
+            id = input.id,
             listId = input.listId
         )
     }

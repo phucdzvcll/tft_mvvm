@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.tft_mvvm.data.local.model.ChampListDBO
 import com.tft_mvvm.data.local.model.TeamListDBO
 
-@Database(entities = [ChampListDBO.ChampDBO::class, TeamListDBO.TeamDBO::class], version = 1, exportSchema = false)
+@Database(entities = [ChampListDBO.ChampDBO::class, TeamListDBO.TeamDBO::class], version = 2)
 
 abstract class ChampRoomDatabase : RoomDatabase() {
 
@@ -27,6 +27,7 @@ abstract class ChampRoomDatabase : RoomDatabase() {
                     "Champ Manager"
                 )
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build()
             }
 

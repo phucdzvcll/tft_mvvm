@@ -19,6 +19,8 @@ data class GsxNameTeam (
 data class Team (
     @SerializedName("gsx\$name")
     val name: GsxNameTeam?,
+    @SerializedName("gsx\$id")
+    val id:GsxNameTeam?,
     @SerializedName("gsx\$listid")
     val listID : GsxNameTeam?
 

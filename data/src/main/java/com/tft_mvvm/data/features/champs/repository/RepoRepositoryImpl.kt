@@ -8,7 +8,6 @@ import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
 import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
 import com.tft_mvvm.data.features.champs.mapper.TeamDaoEntityMapper
 import com.tft_mvvm.data.features.champs.mapper.TeamListMapper
-import com.tft_mvvm.data.features.champs.model.Team
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.TeamDAO
@@ -71,14 +70,15 @@ class RepoRepositoryImpl(
 
     override suspend fun getTeams() =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            var dbTeamListEntity = TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
-            if (teamDAO.getAllTeam().isEmpty()) {
+            var dbTeamListEntity =
+                TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
+            if (teamDAO.getAllTeam().isNullOrEmpty()) {
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
                 teamDAO.insertTeam(teamListDBO.teamDBOs)
-                dbTeamListEntity = TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
+                dbTeamListEntity =
+                    TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
             }
-
             val listTeamBuilder: ArrayList<TeamBuilderListEntity.TeamsBuilder> = ArrayList()
             for (i in dbTeamListEntity.teams) {
                 val list = i.listId.split(",")
@@ -91,7 +91,7 @@ class RepoRepositoryImpl(
                 listTeamBuilder.add(teamBuilder)
             }
             return@runSuspendWithCatchError Either.Success(TeamBuilderListEntity(listTeamBuilder))
-
         }
+
 
 }

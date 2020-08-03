@@ -20,5 +20,4 @@ interface RepoRepository {
 
     suspend fun getTeams(
     ): Either<Failure, TeamBuilderListEntity>
-
 }

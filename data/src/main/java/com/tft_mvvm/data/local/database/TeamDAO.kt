@@ -3,6 +3,7 @@ package com.tft_mvvm.data.local.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.tft_mvvm.data.local.model.TeamListDBO
 
 @Dao
@@ -12,4 +13,5 @@ interface TeamDAO {
 
     @Insert
     suspend fun insertTeam(teamDBOs: List<TeamListDBO.TeamDBO>)
+
 }

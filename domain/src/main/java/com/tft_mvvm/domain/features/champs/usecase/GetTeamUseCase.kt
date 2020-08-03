@@ -5,7 +5,6 @@ import com.example.common_jvm.function.Either
 import com.tft_mvvm.domain.base.usecase.UseCase
 import com.tft_mvvm.domain.base.usecase.UseCaseParams
 import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
-import com.tft_mvvm.domain.features.champs.model.TeamListEntity
 import com.tft_mvvm.domain.features.champs.repository.RepoRepository
 
 class GetTeamUseCase(private val repoRepoRepository: RepoRepository) :
