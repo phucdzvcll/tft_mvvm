@@ -3,14 +3,15 @@ package com.tft_mvvm.app.features.champ.model
 import java.io.Serializable
 
 data class Champ (
-    var name : String,
-    var linkImg: String,
-    var coat : String,
-    var origin:String,
-    var classs:String,
-    var id :String,
-    var skillName:String,
-    var linkSkilAvatar:String,
-    var activated:String,
-    var linkChampCover:String
+    val name : String,
+    val linkImg: String,
+    val cost : String,
+    val origin:String,
+    val classs:String,
+    val id :String,
+    val skillName:String,
+    val linkSkilAvatar:String,
+    val activated:String,
+    val rankChamp:String,
+    val linkChampCover:String
 ):Serializable

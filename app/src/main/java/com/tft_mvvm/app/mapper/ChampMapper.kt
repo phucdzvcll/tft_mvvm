@@ -9,13 +9,14 @@ class ChampMapper : Mapper<ChampListEntity.Champ, Champ>() {
         return Champ(
             name = input.name,
             linkImg = input.linkImg,
-            coat = input.coat,
+            cost = input.cost,
             classs = input.classs,
             origin = input.origin,
             id = input.id,
             activated = input.activated,
             skillName = input.skillName,
             linkSkilAvatar = input.linkSkillAvatar,
+            rankChamp = input.rankChamp,
             linkChampCover = input.linkChampCover
         )
     }

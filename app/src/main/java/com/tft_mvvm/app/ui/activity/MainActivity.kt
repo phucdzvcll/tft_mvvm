@@ -1,74 +1,34 @@
 package com.tft_mvvm.app.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
-import com.tft_mvvm.app.features.champ.model.Champ
-import com.tft_mvvm.app.ui.adapter.MyAdapter
-import com.tft_mvvm.app.ui.OnItemClickListener
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.ViewPager
+import com.tft_mvvm.app.ui.adapter.ViewPagerAdapter
+import com.tft_mvvm.app.ui.fragment.ShowChampByGoldFragment
+import com.tft_mvvm.app.ui.fragment.ShowChampByRankFragment
+import com.tft_mvvm.app.ui.fragment.ShowRecommendTeamFragment
 import com.tft_mvvm.champ.R
+import com.tft_mvvm.champ.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(),
-    OnItemClickListener {
-    private val champViewModel: MainViewModel by viewModel()
-    private lateinit var adapter: MyAdapter
-    private lateinit var champs: ArrayList<Champ>
-    private var isLoading: Boolean? = null
+class MainActivity : AppCompatActivity() {
+    private var biding: ActivityMainBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setupUI()
-        getChamps()
-        sort()
-
+        biding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        addTab(viewPager)
+        biding?.tabLayout?.setupWithViewPager(viewPager)
     }
 
-    private fun setupUI() {
-        adapter = MyAdapter(arrayListOf(),this)
-        rv.layoutManager = GridLayoutManager(this, 4)
-        rv.adapter = adapter
-        swipe_refresh_layout.setOnRefreshListener {
-            getChamps()
-            group_radio_btn.clearCheck()
-            swipe_refresh_layout.isRefreshing = isLoading!!
-        }
-    }
-
-    private fun sort() {
-        btn_sort_by_name.setOnClickListener {
-            if(isLoading==false){
-                adapter.sortByName()
-            }
-        }
-        btn_sort_by_coat.setOnClickListener {
-            if(isLoading==false){
-                adapter.sortByCoat()
-            }
-        }
-    }
-
-    private fun getChamps() {
-        champs = ArrayList(arrayListOf())
-        champViewModel.getChamps()
-        champViewModel.getChampsLiveData()
-            .observe(this, Observer {
-                champs.clear()
-                champs.addAll(it)
-                adapter.addData(champs)
-            })
-        champViewModel.isRefresh()
-            .observe(this, Observer { isLoading = it })
-    }
-
-    override fun onClickListener(champ: Champ) {
-        val intent : Intent = Intent(this,
-            DetailsChamp::class.java)
-            intent.putExtra("champ",champ)
-        startActivity(intent)
+    private fun addTab(viewPager: ViewPager) {
+        val showChampByGoldFragment = ShowChampByGoldFragment()
+        val showChampByNameFragment = ShowChampByRankFragment()
+        val showRecommendTeamFragment = ShowRecommendTeamFragment()
+        val adapter = ViewPagerAdapter(supportFragmentManager, arrayListOf(), arrayListOf())
+        adapter.add(fragment = showChampByGoldFragment, title = "Tướng")
+        adapter.add(fragment = showChampByNameFragment, title = "Xếp Loại")
+        adapter.add(fragment = showRecommendTeamFragment, title = "Đội Hình")
+        viewPager.adapter = adapter
     }
 }

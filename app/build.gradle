@@ -1,10 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
+
+    android {
+        buildFeatures {
+            dataBinding true
+        }
+    }
 
     defaultConfig {
         applicationId "com.example.tft_mvm"
@@ -53,6 +60,8 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:28.0.0'
 
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
+
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
     //Nachos TextView
@@ -87,7 +96,6 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     // Koin AndroidX Fragment features
     implementation "org.koin:koin-androidx-fragment:$koin_version"
-
 
 
     testImplementation 'junit:junit:4.+'

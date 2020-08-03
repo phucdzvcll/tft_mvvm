@@ -11,12 +11,13 @@ data class ChampListDBO(val champDBOs:List<ChampDBO>){
         val id :String,
         val name : String,
         val linkImg: String,
-        val coat : String,
+        val cost : String,
         val origin:String,
         val classs:String,
         val skillName:String,
         val linkSkilAvatar:String,
         val activated:String,
+        val rankChamp:String,
         val linkChampCover:String
     )
 }

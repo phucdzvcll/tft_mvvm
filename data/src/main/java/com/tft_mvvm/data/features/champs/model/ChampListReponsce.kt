@@ -17,25 +17,27 @@ data class GsxName (
 
 data class Champ (
     @SerializedName("gsx\$name")
-        val name: GsxName,
+        val name: GsxName?,
     @SerializedName("gsx\$linkimg")
-        val linkImg : GsxName,
-    @SerializedName("gsx\$coat")
-        val coat : GsxName,
+        val linkImg : GsxName?,
+    @SerializedName("gsx\$cost")
+        val cost : GsxName?,
     @SerializedName("gsx\$origin")
-        val origin : GsxName,
+        val origin : GsxName?,
     @SerializedName("gsx\$classs")
-        val classs : GsxName,
+        val classs : GsxName?,
     @SerializedName("gsx\$id")
-        val id : GsxName,
+        val id : GsxName?,
     @SerializedName("gsx\$skillname")
-        val skillName : GsxName,
+        val skillName : GsxName?,
     @SerializedName("gsx\$linkskillavatar")
-        val linkSkillAvatar : GsxName,
+        val linkSkillAvatar : GsxName?,
     @SerializedName("gsx\$activated")
-        val activated : GsxName,
+        val activated : GsxName?,
+    @SerializedName("gsx\$rankchamp")
+        val rankChamp:GsxName?,
     @SerializedName("gsx\$linkchampcover")
-        val linkChampCover : GsxName
+        val linkChampCover : GsxName?
 )
 
 

@@ -1,16 +1,19 @@
-package com.tft_mvvm.data.local
+package com.tft_mvvm.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tft_mvvm.data.local.model.ChampListDBO
+import com.tft_mvvm.data.local.model.TeamListDBO
 
-@Database(entities = [ChampListDBO.ChampDBO::class], version = 1)
+@Database(entities = [ChampListDBO.ChampDBO::class, TeamListDBO.TeamDBO::class], version = 2)
 
 abstract class ChampRoomDatabase : RoomDatabase() {
 
     abstract fun champDAO(): ChampDAO
+
+    abstract fun teamDAO():TeamDAO
 
     companion object {
 
@@ -24,6 +27,7 @@ abstract class ChampRoomDatabase : RoomDatabase() {
                     "Champ Manager"
                 )
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build()
             }
 

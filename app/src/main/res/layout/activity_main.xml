@@ -1,50 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp"
-    android:orientation="vertical"
-    android:background="@color/background">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <RadioGroup
-            android:id="@+id/group_radio_btn"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background">
+
+        <com.google.android.material.tabs.TabLayout
+            android:background="@color/background_tablayout"
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#B8B8B8">
-            <RadioButton
-                android:id="@+id/btn_sort_by_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Theo tên"
-                android:textColor="#000"
-                android:textStyle="bold"
+            app:tabIndicatorColor="@color/underline_tablayout"
+            app:tabTextColor="@color/tab_text_color"
+            />
 
-                />
-            <RadioButton
-                android:id="@+id/btn_sort_by_coat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:text="Theo vàng"
-                android:textColor="#000"
-                android:textStyle="bold"
-                />
-        </RadioGroup>
-    </LinearLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.tft_mvvm.app.ui.activity.MainActivity"
-        android:padding="8dp">=
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</LinearLayout>
+    </LinearLayout>
+</layout>

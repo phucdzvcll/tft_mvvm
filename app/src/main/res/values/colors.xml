@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="background">#141F35</color>
+    <color name="Dialog_background_cardview">#FFEEDA</color>
+    <color name="text_acticated_color_dialog">#3C5295</color>
+    <color name="text_name_dialog_color">#0D1242</color>
+    <color name="text_name_champ_coloer">#001066</color>
+    <color name="underline_tablayout">#FF9F85</color>
+    <color name="background_tablayout">#234861</color>
+    <color name="tab_text_color">#C9E3FF</color>
+    <color name="backgroung_toolbar">#EFF8FD</color>
+    <color name="color_while">#fff</color>
+    <color name="color_background_title_toolbar">#2EA7F6</color>
+    <color name="color_background_cardview">#314670</color>
+    <color name="color_black">#000</color>
+    <color name="color_skillname">#BC5C5C</color>
+    <color name="color_skill_activated">#BFB2B2</color>
 </resources>
