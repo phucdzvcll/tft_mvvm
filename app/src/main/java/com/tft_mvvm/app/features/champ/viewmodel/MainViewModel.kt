@@ -29,8 +29,7 @@ class MainViewModel(
                 champsUseCase.execute(UseCaseParams.Empty)
             }
             champResult.either({
-                champLiveData.value = listOf()
-                loadChampByRankLiveData.value = loadChampByRankMapper.map(listOf())
+                //TODO error handle
                 isLoadingLiveData.value = false
             }) { (champs) ->
                 champLiveData.value = champListMapper.mapList(champs)

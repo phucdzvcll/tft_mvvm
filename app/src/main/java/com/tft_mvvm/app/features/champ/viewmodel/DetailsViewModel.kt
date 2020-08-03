@@ -20,6 +20,7 @@ class DetailsViewModel(
     private val champByOriginLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val champByClassLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val isLoadingByClassLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isLoadingByOriginLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getChampsByOrigin(origin: String) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -32,7 +33,7 @@ class DetailsViewModel(
             }
             champResult.either(
                 {
-                    champByOriginLiveData.value = listOf()
+                    //TODO error handle
                 })
             {
                 val champs = champListMapper.mapList(it.champs)
@@ -51,7 +52,7 @@ class DetailsViewModel(
             }
             champResult.either(
                 {
-                    champByClassLiveData.value = listOf()
+                    //TODO error handle
                 })
             {
                 val champs = champListMapper.mapList(it.champs)
@@ -72,6 +73,6 @@ class DetailsViewModel(
     }
 
     fun isLoadingByOrigin(): LiveData<Boolean> {
-        return isLoadingByClassLiveData
+        return isLoadingByOriginLiveData
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TFT_MVM</string>
+    <string name="app_name">TFT_MVVM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="origin">HỆ</string>
