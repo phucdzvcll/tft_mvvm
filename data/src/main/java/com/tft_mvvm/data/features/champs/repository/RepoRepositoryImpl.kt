@@ -12,6 +12,7 @@ import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.TeamDAO
 import com.tft_mvvm.domain.features.champs.model.ChampListEntity
+import com.tft_mvvm.domain.features.champs.model.ClassAndOriginListEntity
 import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
 import com.tft_mvvm.domain.features.champs.model.TeamListEntity
 import com.tft_mvvm.domain.features.champs.repository.RepoRepository
@@ -93,6 +94,10 @@ class RepoRepositoryImpl(
             }
             return@runSuspendWithCatchError Either.Success(TeamBuilderListEntity(listTeamBuilder))
         }
+
+    override suspend fun getClassAndOriginContent(classOrOriginName: String): Either<Failure, ClassAndOriginListEntity> {
+        TODO("Not yet implemented")
+    }
 
 
 }

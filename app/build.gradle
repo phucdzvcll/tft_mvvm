@@ -4,6 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\dgc\\Desktop\\New folder (4)\\tft_mvvm\\key-story.jks')
+            storePassword '0963580850'
+            keyAlias 'key'
+            keyPassword '0963580850'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
@@ -25,6 +34,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -98,7 +108,7 @@ dependencies {
     implementation "org.koin:koin-androidx-fragment:$koin_version"
 
 
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'

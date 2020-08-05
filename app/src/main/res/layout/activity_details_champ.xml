@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroung_toolbar"
+            android:background="@color/background_toolbar"
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/color_background_cardview"
+                    app:cardBackgroundColor="@color/color_background_card_view"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout
@@ -83,7 +83,7 @@
                                 android:layout_gravity="center"
                                 tools:text="skill name"
                                 android:textAlignment="center"
-                                android:textColor="@color/color_skillname"
+                                android:textColor="@color/color_skill_name"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/color_background_cardview"
+                    app:cardBackgroundColor="@color/color_background_card_view"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout

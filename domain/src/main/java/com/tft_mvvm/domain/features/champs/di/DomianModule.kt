@@ -25,4 +25,9 @@ val domainModule = module {
             repoRepoRepository = get()
         )
     }
+    single {
+        GetClassAndOriginContentUseCase(
+            repoRepository = get()
+        )
+    }
 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@color/color_background_cardview"
+    app:cardBackgroundColor="@color/color_background_card_view"
     android:layout_margin="8dp">
     <LinearLayout
         android:id="@+id/ly_item_team_recommend"
