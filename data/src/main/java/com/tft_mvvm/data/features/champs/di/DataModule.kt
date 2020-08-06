@@ -1,10 +1,7 @@
 package com.tft_mvvm.data.features.champs.di
 
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
-import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
-import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
-import com.tft_mvvm.data.features.champs.mapper.TeamDaoEntityMapper
-import com.tft_mvvm.data.features.champs.mapper.TeamListMapper
+import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
@@ -32,6 +29,14 @@ val dataModule = module {
 
     factory {
         TeamListMapper()
+    }
+
+    factory {
+        ClassAndOriginListMapper()
+    }
+
+    factory {
+        ClassAndOriginDaoEntityMapper()
     }
 
     factory {
@@ -70,6 +75,8 @@ val dataModule = module {
 
     single { get<ChampRoomDatabase>().teamDAO() }
 
+    single { get<ChampRoomDatabase>().classAndOriginDAO() }
+
 
     single<RepoRepository> {
         RepoRepositoryImpl(
@@ -80,6 +87,9 @@ val dataModule = module {
             remoteExceptionInterceptor = get(),
             champListMapper = get(),
             teamDAO = get(),
+            classAndOriginDAO = get(),
+            classAndOriginDaoEntityMapper = get(),
+            classAndOriginListMapper = get(),
             champDaoEntityMapper = get()
         )
     }

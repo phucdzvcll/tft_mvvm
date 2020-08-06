@@ -36,6 +36,7 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
             setupUI(champ)
             getChampByOrigin(champ)
             getChampByClass(champ)
+            getClassAndOriginContent(false, champ)
         }
     }
 
@@ -85,7 +86,17 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
             .observe(this, Observer {
                 adapterShowByClass?.addData(it)
             })
+    }
 
+    private fun getClassAndOriginContent(isForceLoadData: Boolean, champ: Champ) {
+        detailsViewModel.getClassContentLiveData().observe(this, Observer {
+            biding?.classContent?.text = it.content
+        })
+        detailsViewModel.getOriginContentLiveData().observe(this, Observer {
+            biding?.originContent?.text = it.content
+        })
+        detailsViewModel.getClassContent(isForceLoadData, champ.classs)
+        detailsViewModel.getOriginContent(isForceLoadData, champ.origin)
     }
 
     companion object {

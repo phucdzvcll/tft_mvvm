@@ -17,5 +17,8 @@
     <color name="color_background_card_view">#314670</color>
     <color name="color_black">#000</color>
     <color name="color_skill_name">#BC5C5C</color>
-    <color name="color_skill_activated">#BFB2B2</color>
+    <color name="color_skill_activated">#D8D8D8</color>
+    <color name="origin_name_color">#E2FFF3</color>
+    <color name="class_name_color">#FFD8F5</color>
+    <color name="content_of_classOrOrigin_color">#F3F3F3</color>
 </resources>

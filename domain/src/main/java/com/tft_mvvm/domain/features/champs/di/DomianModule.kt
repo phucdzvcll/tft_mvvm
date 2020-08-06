@@ -21,7 +21,7 @@ val domainModule = module {
         )
     }
     single {
-        GetTeamUseCase(
+        GetTeamBuilderUseCase(
             repoRepoRepository = get()
         )
     }

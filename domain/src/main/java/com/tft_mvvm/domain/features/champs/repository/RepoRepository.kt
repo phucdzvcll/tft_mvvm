@@ -21,10 +21,11 @@ interface RepoRepository {
     ): Either<Failure, ChampListEntity>
 
     suspend fun getTeams(
-        isForceLoadData:Boolean
+        isForceLoadData: Boolean
     ): Either<Failure, TeamBuilderListEntity>
 
     suspend fun getClassAndOriginContent(
-        classOrOriginName:String
-    ):Either<Failure, ClassAndOriginListEntity>
+        isForceLoadData: Boolean,
+        classOrOriginName: String
+    ): Either<Failure, ClassAndOriginListEntity.ClassAndOrigin>
 }

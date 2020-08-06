@@ -60,8 +60,8 @@
                             android:id="@+id/champ_cover"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
-                            android:scaleType="centerCrop"
-                            android:contentDescription="@string/cove_img"/>
+                            android:contentDescription="@string/cove_img"
+                            android:scaleType="centerCrop" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -81,21 +81,21 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                tools:text="skill name"
                                 android:textAlignment="center"
                                 android:textColor="@color/color_skill_name"
                                 android:textSize="20sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                tools:text="skill name" />
                         </LinearLayout>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/activated"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:text="activated"
                             android:layout_margin="6dp"
                             android:textColor="@color/color_skill_activated"
-                            android:textSize="17sp" />
+                            android:textSize="17sp"
+                            tools:text="activated" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -109,27 +109,27 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/origin"
-                            android:textAlignment="center"
-                            android:textColor="#E6CD99"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/origin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:textColor="#000"
+                            android:layout_margin="16dp"
+                            android:textColor="@color/origin_name_color"
                             android:textSize="25sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="origin" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/origin_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:textColor="@color/content_of_classOrOrigin_color"
+                            android:textSize="15sp"
+                            tools:text="aaaaaaaaaaaaaaaaaaaaaaa" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_origin"
@@ -138,23 +138,23 @@
                             android:layout_marginTop="8dp" />
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/class_text"
-                            android:textAlignment="center"
-                            android:textColor="#5ECCBF"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/classs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:textColor="#000"
+                            android:layout_margin="16dp"
+                            android:textColor="@color/class_name_color"
                             android:textSize="25sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="class" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/class_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:textColor="@color/content_of_classOrOrigin_color"
+                            android:textSize="15sp"
+                            tools:text="aaaaaaaaaaaaaaaaaaaaaaa" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_classs"
