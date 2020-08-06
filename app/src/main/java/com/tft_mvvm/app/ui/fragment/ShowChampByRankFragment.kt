@@ -7,80 +7,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
-import com.tft_mvvm.app.ui.adapter.section.MySection
+import com.tft_mvvm.app.ui.adapter.AdapterShowChampByRank
 import com.tft_mvvm.champ.R
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
+import kotlinx.android.synthetic.main.dialog_show_details_champ.*
 import kotlinx.android.synthetic.main.fragment_show_champ_by_rank.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     private val mainViewModel: MainViewModel by viewModel()
-    private var sectionedAdapter: SectionedRecyclerViewAdapter? = null
-    private var recyclerView: RecyclerView? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var adapterShowChampByRank: AdapterShowChampByRank? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_show_champ_by_rank, container, false)
-        createView(view)
-        return view
+        return inflater.inflate(R.layout.fragment_show_champ_by_rank, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         getChamp()
         setupUI()
-
-    }
-
-    private fun createView(view: View) {
-        sectionedAdapter = SectionedRecyclerViewAdapter()
-        recyclerView = view.findViewById(R.id.rv_by_name)
     }
 
     private fun setupUI() {
-        val glm = GridLayoutManager(requireContext(), 6)
-        glm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (sectionedAdapter?.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER) {
-                    6
-                } else 1
-            }
-        }
-        recyclerView?.layoutManager = glm
-        recyclerView?.adapter = sectionedAdapter
+        rv_by_rank?.layoutManager = GridLayoutManager(requireContext(), 6)
+        adapterShowChampByRank = AdapterShowChampByRank(arrayListOf(), this)
+        rv_by_rank?.adapter = adapterShowChampByRank
     }
 
     private fun getChamp() {
-        mainViewModel.loadChampByRank()
+        mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                for ((key, value) in it) {
-                    if (value.isNotEmpty()) {
-                        sectionedAdapter?.addSection(
-                            MySection(
-                                key,
-                                value.sortedBy { champ -> champ.cost },
-                                this
-                            )
-                        )
-                        sectionedAdapter?.notifyDataSetChanged()
-                    }
-                }
+                adapterShowChampByRank?.addData(it.sortedByDescending { champ: Champ -> champ.rankChamp })
             })
         mainViewModel.getChamps()
     }

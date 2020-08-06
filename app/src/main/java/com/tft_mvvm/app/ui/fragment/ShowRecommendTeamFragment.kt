@@ -12,49 +12,38 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.TeamRecommendViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowRecommendTeamBuilder
 import com.tft_mvvm.champ.R
+import kotlinx.android.synthetic.main.fragment_show_recommend_team.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
     private val teamRecommendViewModel: TeamRecommendViewModel by viewModel()
-    private var recyclerView: RecyclerView? = null
     private var adapterShowRecommendTeamBuilder: AdapterShowRecommendTeamBuilder? = null
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_show_recommend_team, container, false)
-        setupUi(view)
-        return view
+        return inflater.inflate(R.layout.fragment_show_recommend_team, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setupUi()
         getTeams(false)
     }
 
-    private fun setupUi(view: View) {
-        recyclerView = view.findViewById(R.id.rv_by_team_recommend)
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        adapterShowRecommendTeamBuilder = AdapterShowRecommendTeamBuilder(arrayListOf(), this)
-        recyclerView?.adapter = adapterShowRecommendTeamBuilder
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayoutTeamBuilderRecommend)
+    private fun setupUi() {
 
-        swipeRefreshLayout?.setOnRefreshListener {
-            Log.d("PHUC", "setOnRefreshListener")
+        rv_by_team_recommend?.layoutManager = LinearLayoutManager(requireContext())
+        adapterShowRecommendTeamBuilder = AdapterShowRecommendTeamBuilder(arrayListOf(), this)
+        rv_by_team_recommend?.adapter = adapterShowRecommendTeamBuilder
+        swipeRefreshLayoutTeamBuilderRecommend?.setOnRefreshListener {
             getTeams(true)
         }
     }
@@ -68,7 +57,7 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
             })
         teamRecommendViewModel.isLoading()
             .observe(viewLifecycleOwner, Observer {
-                swipeRefreshLayout?.isRefreshing = it
+                swipeRefreshLayoutTeamBuilderRecommend?.isRefreshing = it
             })
         teamRecommendViewModel.getTeams(isForceLoadData)
     }
