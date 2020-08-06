@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,15 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
+import com.tft_mvvm.app.ui.adapter.AdapterShowBonusOfClassOrOrigin
 import com.tft_mvvm.app.ui.adapter.AdapterShowByOriginAndClass
 import com.tft_mvvm.champ.R
 import com.tft_mvvm.champ.databinding.ActivityDetailsChampBinding
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
 
 class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
@@ -29,6 +31,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     private val detailsViewModel: DetailsViewModel by viewModel()
     private var adapterShowByOrigin: AdapterShowByOriginAndClass? = null
     private var adapterShowByClass: AdapterShowByOriginAndClass? = null
+    private var adapterShowBonusOfOrigin: AdapterShowBonusOfClassOrOrigin? = null
+    private var adapterShowBonusOfClass: AdapterShowBonusOfClassOrOrigin? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         biding = DataBindingUtil.setContentView(this, R.layout.activity_details_champ)
@@ -47,8 +51,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         toolbar.setNavigationOnClickListener {
             finish()
         }
-        biding?.origin?.text = champ.origin
-        biding?.classs?.text = champ.classs
+        biding?.origin?.text = champ.origin.toUpperCase(locale = Locale.ROOT)
+        biding?.classs?.text = champ.classs.toUpperCase(locale = Locale.ROOT)
         biding?.skillAvatar?.let {
             Glide.with(this)
                 .load(champ.linkSkilAvatar)
@@ -69,6 +73,14 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         biding?.rvClasss?.layoutManager = GridLayoutManager(this, 6)
         adapterShowByClass = AdapterShowByOriginAndClass(arrayListOf(), this)
         biding?.rvClasss?.adapter = adapterShowByClass
+
+        biding?.rvOriginBonus?.layoutManager = LinearLayoutManager(this)
+        adapterShowBonusOfOrigin = AdapterShowBonusOfClassOrOrigin(arrayListOf())
+        biding?.rvOriginBonus?.adapter = adapterShowBonusOfOrigin
+
+        biding?.rvClassBonus?.layoutManager = LinearLayoutManager(this)
+        adapterShowBonusOfClass = AdapterShowBonusOfClassOrOrigin(arrayListOf())
+        biding?.rvClassBonus?.adapter = adapterShowBonusOfClass
     }
 
     private fun getChampByOrigin(champ: Champ) {
@@ -90,9 +102,11 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun getClassAndOriginContent(isForceLoadData: Boolean, champ: Champ) {
         detailsViewModel.getClassContentLiveData().observe(this, Observer {
+            adapterShowBonusOfClass?.addData(it.bonus)
             biding?.classContent?.text = it.content
         })
         detailsViewModel.getOriginContentLiveData().observe(this, Observer {
+            adapterShowBonusOfOrigin?.addData(it.bonus)
             biding?.originContent?.text = it.content
         })
         detailsViewModel.getClassContent(isForceLoadData, champ.classs)

@@ -9,6 +9,7 @@ data class ClassAndOriginListDBO(val classAndOrigins: List<ClassAndOrigin>) {
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0,
         val classOrOriginName: String,
+        val bonus:String,
         val content: String
     )
 }

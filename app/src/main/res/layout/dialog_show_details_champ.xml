@@ -56,4 +56,5 @@
         android:layout_margin="6dp"
         android:textColor="@color/text_activated_color_dialog"
         android:textSize="17sp" />
+
 </LinearLayout>

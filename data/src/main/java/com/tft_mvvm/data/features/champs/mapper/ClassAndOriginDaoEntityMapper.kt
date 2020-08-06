@@ -12,6 +12,7 @@ class ClassAndOriginDaoEntityMapper : Mapper<ClassAndOriginListResponse?, ClassA
                 .map { classAndOrigin ->
                     ClassAndOriginListDBO.ClassAndOrigin(
                         classOrOriginName = classAndOrigin.classOrOriginName?.value.defaultEmpty(),
+                        bonus = classAndOrigin.bonus?.value.defaultEmpty(),
                         content = classAndOrigin.content?.value.defaultEmpty()
                     )
                 }

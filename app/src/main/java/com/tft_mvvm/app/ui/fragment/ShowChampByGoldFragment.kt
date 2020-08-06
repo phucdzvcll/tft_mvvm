@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tft_mvvm.app.features.champ.model.Champ
@@ -15,25 +13,20 @@ import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.activity.DetailsChampActivity
 import com.tft_mvvm.app.ui.adapter.AdapterShowByGold
 import com.tft_mvvm.champ.R
-import com.tft_mvvm.champ.databinding.FragmentShowChampByGoldBinding
+import kotlinx.android.synthetic.main.fragment_show_champ_by_gold.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
     private val mainViewModel: MainViewModel by viewModel()
     private var adapter: AdapterShowByGold? = null
 
-    var biding: FragmentShowChampByGoldBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        biding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_show_champ_by_gold,
-            container,
-            false
-        )
-        return biding!!.root
+        val view = inflater.inflate(R.layout.fragment_show_champ_by_gold, container, false)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,9 +37,9 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
 
     private fun setupUi() {
         adapter = AdapterShowByGold(arrayListOf(), this)
-        biding?.rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
-        biding?.rvByGold?.adapter = adapter
-        biding?.swipeRefreshLayoutByGold?.setOnRefreshListener {
+        rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
+        rvByGold?.adapter = adapter
+        swipeRefreshLayoutByGold?.setOnRefreshListener {
             getChamp()
         }
     }
@@ -58,7 +51,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
             })
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
-            Observer { biding?.swipeRefreshLayoutByGold?.isRefreshing = it })
+            Observer { swipeRefreshLayoutByGold?.isRefreshing = it })
         mainViewModel.getChamps()
     }
 

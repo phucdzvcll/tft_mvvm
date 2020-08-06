@@ -8,6 +8,7 @@ class ClassOrOriginMapper() : Mapper<ClassAndOriginListEntity.ClassAndOrigin, Cl
     override fun map(input: ClassAndOriginListEntity.ClassAndOrigin): ClassOrOrigin {
         return ClassOrOrigin(
             classOrOriginName = input.classOrOriginName,
+            bonus = input.bonus.split(","),
             content = input.content
         )
     }

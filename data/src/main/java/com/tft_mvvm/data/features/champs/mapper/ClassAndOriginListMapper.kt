@@ -9,6 +9,7 @@ class ClassAndOriginListMapper :
     override fun map(input: ClassAndOriginListDBO.ClassAndOrigin): ClassAndOriginListEntity.ClassAndOrigin {
         return ClassAndOriginListEntity.ClassAndOrigin(
             classOrOriginName = input.classOrOriginName,
+            bonus = input.bonus,
             content = input.content
         )
     }
