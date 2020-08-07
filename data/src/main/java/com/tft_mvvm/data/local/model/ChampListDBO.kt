@@ -18,6 +18,7 @@ data class ChampListDBO(val champDBOs:List<ChampDBO>){
         val linkSkilAvatar:String,
         val activated:String,
         val rankChamp:String,
+        val suitableItem:String,
         val linkChampCover:String
     )
 }

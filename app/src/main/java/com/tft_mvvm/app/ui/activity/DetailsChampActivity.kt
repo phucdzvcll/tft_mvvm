@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
+import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowBonusOfClassOrOrigin
@@ -41,6 +42,7 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
             getChampByOrigin(champ)
             getChampByClass(champ)
             getClassAndOriginContent(false, champ)
+            getListItemSuitable(true, champ)
         }
     }
 
@@ -108,6 +110,23 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         })
         detailsViewModel.getOriginContent(isForceLoadData, champ.origin, "origin")
         detailsViewModel.getOriginContent(false, champ.classs, "class")
+    }
+
+    private fun getListItemSuitable(isForceLoadData: Boolean, champ: Champ) {
+        detailsViewModel.getListItemSuitableLiveData().observe(this, Observer {
+            if (it.size == 3) {
+                Glide.with(suitable_item_img_1.context)
+                    .load(it[0].itemAvatar)
+                    .into(suitable_item_img_1)
+                Glide.with(suitable_item_img_2.context)
+                    .load(it[1].itemAvatar)
+                    .into(suitable_item_img_2)
+                Glide.with(suitable_item_img_3.context)
+                    .load(it[2].itemAvatar)
+                    .into(suitable_item_img_3)
+            }
+        })
+        detailsViewModel.getListItemSuitable(isForceLoadData, champ.suitableItem)
     }
 
     companion object {

@@ -43,6 +43,14 @@ val dataModule = module {
         RemoteExceptionInterceptor()
     }
 
+    factory {
+        ItemDaoEntityMapper()
+    }
+
+    factory {
+        ItemListMapper()
+    }
+
     factory<Interceptor> {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -77,6 +85,7 @@ val dataModule = module {
 
     single { get<ChampRoomDatabase>().classAndOriginDAO() }
 
+    single { get<ChampRoomDatabase>().itemDAO() }
 
     single<RepoRepository> {
         RepoRepositoryImpl(
@@ -90,6 +99,9 @@ val dataModule = module {
             classAndOriginDAO = get(),
             classAndOriginDaoEntityMapper = get(),
             classAndOriginListMapper = get(),
+            itemDAO = get(),
+            itemDaoEntityMapper = get(),
+            itemListMapper = get(),
             champDaoEntityMapper = get()
         )
     }

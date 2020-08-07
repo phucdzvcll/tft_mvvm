@@ -14,6 +14,7 @@ val presentationModule = module {
     factory { TeamMapper() }
     factory { TeamBuilderMapper(champMapper = get()) }
     factory { ClassOrOriginMapper() }
+    factory { ItemMapper() }
     viewModel {
         MainViewModel(
             champsUseCase = get(),
@@ -26,6 +27,8 @@ val presentationModule = module {
             champsByClassUseCase = get(),
             classAndOriginUseCase = get(),
             classOrOriginMapper = get(),
+            itemMapper = get(),
+            itemListSuitableItemUseCase = get(),
             champListMapper = get()
         )
     }

@@ -1,5 +1,6 @@
 package com.tft_mvvm.data.features.champs.repository
 
+import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -7,8 +8,10 @@ import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
+import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
 import com.tft_mvvm.domain.features.champs.model.ChampListEntity
+import com.tft_mvvm.domain.features.champs.model.ItemListEntity
 import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
 import com.tft_mvvm.domain.features.champs.model.TeamListEntity
 import com.tft_mvvm.domain.features.champs.repository.RepoRepository
@@ -17,6 +20,9 @@ class RepoRepositoryImpl(
     private val apiService: ApiService,
     private val champDAO: ChampDAO,
     private val teamDAO: TeamDAO,
+    private val itemDAO: ItemDAO,
+    private val itemDaoEntityMapper: ItemDaoEntityMapper,
+    private val itemListMapper: ItemListMapper,
     private val classAndOriginDAO: ClassAndOriginDAO,
     private val teamListMapper: TeamListMapper,
     private val teamDaoEntityMapper: TeamDaoEntityMapper,
@@ -115,5 +121,38 @@ class RepoRepositoryImpl(
                     )
                 )
             }
+        }
+
+    override suspend fun getListSuitableItem(
+        isForceLoadData: Boolean,
+        listId: String
+    ): Either<Failure, ItemListEntity> =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            val listIds = listId.split(",")
+            if (listIds.isNotEmpty()) {
+                val dbResult =
+                    ItemListEntity(
+                        iteam = itemListMapper.mapList(
+                            itemDAO.getListItemByListId(
+                                listIds
+                            )
+                        )
+                    )
+                if (dbResult.iteam.isNullOrEmpty() || isForceLoadData) {
+                    itemDAO.deleteAllItemTable()
+                    val itemListResponse = apiService.getItemListResponse()
+                    val itemListDBO = itemDaoEntityMapper.map(itemListResponse)
+                    itemDAO.insertItems(itemListDBO.items)
+                    val dbAfterInsert = ItemListEntity(
+                        iteam = itemListMapper.mapList(
+                            itemDAO.getListItemByListId(listIds)
+                        )
+                    )
+                    return@runSuspendWithCatchError Either.Success(dbAfterInsert)
+                } else {
+                    return@runSuspendWithCatchError Either.Success(dbResult)
+                }
+            }
+            return@runSuspendWithCatchError Either.Success(ItemListEntity(iteam = listOf()))
         }
 }

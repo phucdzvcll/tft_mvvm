@@ -6,11 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tft_mvvm.data.local.model.ChampListDBO
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
+import com.tft_mvvm.data.local.model.ItemListDBO
 import com.tft_mvvm.data.local.model.TeamListDBO
 
 @Database(
-    entities = [ChampListDBO.ChampDBO::class, TeamListDBO.TeamDBO::class, ClassAndOriginListDBO.ClassAndOrigin::class],
-    version = 3
+    entities = [
+        ChampListDBO.ChampDBO::class,
+        TeamListDBO.TeamDBO::class,
+        ClassAndOriginListDBO.ClassAndOrigin::class,
+        ItemListDBO.ItemDBO::class],
+    version = 4
 )
 
 abstract class ChampRoomDatabase : RoomDatabase() {
@@ -20,6 +25,8 @@ abstract class ChampRoomDatabase : RoomDatabase() {
     abstract fun teamDAO(): TeamDAO
 
     abstract fun classAndOriginDAO(): ClassAndOriginDAO
+
+    abstract fun itemDAO(): ItemDAO
 
     companion object {
 

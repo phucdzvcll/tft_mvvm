@@ -6,11 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.model.ClassOrOrigin
+import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.mapper.ClassOrOriginMapper
+import com.tft_mvvm.app.mapper.ItemMapper
 import com.tft_mvvm.domain.features.champs.usecase.GetChampsByClassUseCase
 import com.tft_mvvm.domain.features.champs.usecase.GetChampsByOriginUseCase
 import com.tft_mvvm.domain.features.champs.usecase.GetClassAndOriginContentUseCase
+import com.tft_mvvm.domain.features.champs.usecase.GetListSuitableItemUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,6 +22,8 @@ class DetailsViewModel(
     private val champsByOriginUseCase: GetChampsByOriginUseCase,
     private val champsByClassUseCase: GetChampsByClassUseCase,
     private val classAndOriginUseCase: GetClassAndOriginContentUseCase,
+    private val itemListSuitableItemUseCase: GetListSuitableItemUseCase,
+    private val itemMapper: ItemMapper,
     private val classOrOriginMapper: ClassOrOriginMapper,
     private val champListMapper: ChampMapper
 ) : BaseViewModel() {
@@ -26,7 +31,7 @@ class DetailsViewModel(
     private val champByClassLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val classContentLiveData: MutableLiveData<ClassOrOrigin> = MutableLiveData()
     private val originContentLiveData: MutableLiveData<ClassOrOrigin> = MutableLiveData()
-
+    private val listItemSuitableLiveData: MutableLiveData<List<Item>> = MutableLiveData()
     fun getChampsByOrigin(origin: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val champResult = withContext(Dispatchers.IO) {
@@ -87,6 +92,28 @@ class DetailsViewModel(
                 }
             }
         }
+
+    fun getListItemSuitable(isForceLoadData: Boolean, listId: String) =
+        viewModelScope.launch(Dispatchers.Main) {
+            val dbResult = withContext(Dispatchers.IO) {
+                itemListSuitableItemUseCase.execute(
+                    GetListSuitableItemUseCase.GetListSuitableItemUseCaseParam(
+                        isForceLoadData,
+                        listId
+                    )
+                )
+            }
+            dbResult.either({
+                //TODO error handle
+            })
+            {
+                listItemSuitableLiveData.value=itemMapper.mapList(it.iteam)
+            }
+        }
+
+    fun getListItemSuitableLiveData(): LiveData<List<Item>> {
+        return listItemSuitableLiveData
+    }
 
     fun getClassContentLiveData(): LiveData<ClassOrOrigin> {
         return classContentLiveData

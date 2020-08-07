@@ -102,16 +102,17 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@tools:sample/avatars[1]" />
+                            tools:src="@tools:sample/avatars[1]"
+                            android:background="@drawable/bg_underline"/>
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/skill_avatar"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="36dp"
+                            android:layout_marginTop="16dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/champ_cover"
+                            app:layout_constraintTop_toBottomOf="@+id/suitable_item_img_1"
                             tools:src="@tools:sample/avatars[0]" />
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -124,10 +125,10 @@
                             android:textColor="@color/color_skill_name"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/activated"
+                            app:layout_constraintBottom_toBottomOf="@+id/skill_avatar"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/skill_avatar"
-                            app:layout_constraintTop_toBottomOf="@+id/champ_cover"
+                            app:layout_constraintTop_toTopOf="@+id/skill_avatar"
                             tools:text="Skill Name" />
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -147,34 +148,39 @@
                             tools:text="Activated" />
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/appCompatImageView4"
+                            android:id="@+id/suitable_item_img_1"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
+                            android:layout_marginStart="8dp"
                             android:layout_marginTop="125dp"
-                            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView5"
-                            app:layout_constraintHorizontal_chainStyle="spread"
-                            app:layout_constraintStart_toStartOf="@id/skill_name"
+                            android:background="@drawable/background_5_gold"
+                            app:layout_constraintEnd_toStartOf="@+id/suitable_item_img_2"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toStartOf="@+id/champ_cover"
                             app:layout_constraintTop_toTopOf="@+id/champ_cover"
                             tools:src="@tools:sample/avatars[2]" />
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/appCompatImageView5"
+                            android:id="@+id/suitable_item_img_2"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView4"
-                            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView6"
-                            app:layout_constraintStart_toEndOf="@+id/appCompatImageView4"
-                            app:layout_constraintTop_toTopOf="@+id/appCompatImageView4"
-                            tools:src="@tools:sample/avatars[3]" />
+                            app:layout_constraintBottom_toBottomOf="@+id/suitable_item_img_1"
+                            app:layout_constraintEnd_toStartOf="@+id/suitable_item_img_3"
+                            app:layout_constraintStart_toEndOf="@+id/suitable_item_img_1"
+                            app:layout_constraintTop_toTopOf="@+id/suitable_item_img_1"
+                            tools:src="@tools:sample/avatars[3]"
+                            android:background="@drawable/background_5_gold"/>
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/appCompatImageView6"
+                            android:id="@+id/suitable_item_img_3"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView5"
-                            app:layout_constraintEnd_toEndOf="@+id/skill_name"
-                            app:layout_constraintStart_toEndOf="@+id/appCompatImageView5"
-                            app:layout_constraintTop_toTopOf="@+id/appCompatImageView5"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/background_5_gold"
+                            app:layout_constraintBottom_toBottomOf="@+id/suitable_item_img_2"
+                            app:layout_constraintEnd_toEndOf="@+id/champ_cover"
+                            app:layout_constraintStart_toEndOf="@+id/suitable_item_img_2"
+                            app:layout_constraintTop_toTopOf="@+id/suitable_item_img_2"
                             tools:src="@tools:sample/avatars[4]" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

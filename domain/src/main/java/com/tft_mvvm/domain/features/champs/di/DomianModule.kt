@@ -30,4 +30,10 @@ val domainModule = module {
             repoRepository = get()
         )
     }
+
+    single {
+        GetListSuitableItemUseCase(
+            repoRepository = get()
+        )
+    }
 }

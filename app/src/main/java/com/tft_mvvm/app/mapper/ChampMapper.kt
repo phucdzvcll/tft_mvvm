@@ -17,6 +17,7 @@ class ChampMapper : Mapper<ChampListEntity.Champ, Champ>() {
             skillName = input.skillName,
             linkSkilAvatar = input.linkSkillAvatar,
             rankChamp = input.rankChamp,
+            suitableItem = input.suitableItem,
             linkChampCover = input.linkChampCover
         )
     }

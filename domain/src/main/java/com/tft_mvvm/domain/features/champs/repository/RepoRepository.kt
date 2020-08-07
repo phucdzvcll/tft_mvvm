@@ -2,10 +2,7 @@ package com.tft_mvvm.domain.features.champs.repository
 
 import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
-import com.tft_mvvm.domain.features.champs.model.ChampListEntity
-import com.tft_mvvm.domain.features.champs.model.ClassAndOriginListEntity
-import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
-import com.tft_mvvm.domain.features.champs.model.TeamListEntity
+import com.tft_mvvm.domain.features.champs.model.*
 import java.awt.Stroke
 
 interface RepoRepository {
@@ -28,4 +25,9 @@ interface RepoRepository {
         isForceLoadData: Boolean,
         classOrOriginName: String
     ): Either<Failure, ClassAndOriginListEntity.ClassAndOrigin>
+
+    suspend fun getListSuitableItem(
+        isForceLoadData: Boolean,
+        listId: String
+    ): Either<Failure, ItemListEntity>
 }

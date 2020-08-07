@@ -80,9 +80,9 @@ class AdapterShowChampByRank(
         s.addAll(list)
         for (i in 0..s.size - 1) {
             if (i == 0) {
-                s.add(0, Champ("", "", "", "", "", "", "", "", "", s[1].rankChamp, ""))
+                s.add(0, Champ("", "", "", "", "", "", "", "", "", s[1].rankChamp, "",""))
             } else if (i != 0 && s[i].rankChamp != s[i + 1].rankChamp) {
-                s.add(i + 1, Champ("", "", "", "", "", "", "", "", "", s[i + 1].rankChamp, ""))
+                s.add(i + 1, Champ("", "", "", "", "", "", "", "", "", s[i + 1].rankChamp, "",""))
             }
         }
         champs.addAll(s)
