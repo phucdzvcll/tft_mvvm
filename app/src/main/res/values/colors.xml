@@ -22,4 +22,5 @@
     <color name="class_name_color">#FFD8F5</color>
     <color name="content_of_classOrOrigin_color">#FFFBD7</color>
     <color name="item_bonus_color">#B8B8B8</color>
+    <color name="champ_cost_text_color">#FFB700</color>
 </resources>

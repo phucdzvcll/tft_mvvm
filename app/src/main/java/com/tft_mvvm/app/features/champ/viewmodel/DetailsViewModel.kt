@@ -18,8 +18,7 @@ import kotlinx.coroutines.withContext
 class DetailsViewModel(
     private val champsByOriginUseCase: GetChampsByOriginUseCase,
     private val champsByClassUseCase: GetChampsByClassUseCase,
-    private val classContent: GetClassAndOriginContentUseCase,
-    private val originContent: GetClassAndOriginContentUseCase,
+    private val classAndOriginUseCase: GetClassAndOriginContentUseCase,
     private val classOrOriginMapper: ClassOrOriginMapper,
     private val champListMapper: ChampMapper
 ) : BaseViewModel() {
@@ -47,12 +46,12 @@ class DetailsViewModel(
             }
         }
 
-    fun getChampsByClass(classs: String) =
+    fun getChampsByClass(nameClassOrOrigin: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val champResult = withContext(Dispatchers.IO) {
                 champsByClassUseCase.execute(
                     GetChampsByClassUseCase.GetChampsByClassUseCaseParam(
-                        classs = classs
+                        classs = nameClassOrOrigin
                     )
                 )
             }
@@ -66,39 +65,26 @@ class DetailsViewModel(
             }
         }
 
-    fun getClassContent(isForceLoadData: Boolean, classs: String) =
+    fun getOriginContent(isForceLoadData: Boolean, nameClassOrOrigin: String, type: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val dbResult = withContext(Dispatchers.IO) {
-                classContent.execute(
+                classAndOriginUseCase.execute(
                     GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
                         isForceLoadData,
-                        classs
+                        nameClassOrOrigin
                     )
                 )
             }
             dbResult.either({
                 //TODO error handle
             })
-            {
-                classContentLiveData.value = classOrOriginMapper.map(it)
-            }
-        }
-
-    fun getOriginContent(isForceLoadData: Boolean, origin: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
-                originContent.execute(
-                    GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
-                        isForceLoadData,
-                        origin
-                    )
-                )
-            }
-            dbResult.either({
-                //TODO error handle
-            })
-            {
-                originContentLiveData.value = classOrOriginMapper.map(it)
+            { classOrOriginEntity ->
+                when (type) {
+                    "origin" -> originContentLiveData.value =
+                        classOrOriginMapper.map(classOrOriginEntity)
+                    "class" -> classContentLiveData.value =
+                        classOrOriginMapper.map(classOrOriginEntity)
+                }
             }
         }
 

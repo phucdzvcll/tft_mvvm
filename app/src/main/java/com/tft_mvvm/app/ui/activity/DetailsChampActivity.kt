@@ -46,11 +46,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun setupUI(champ: Champ) {
         biding?.toolbarTitle?.text = champ.name
-        setSupportActionBar(biding?.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            finish()
-        }
+        biding?.itemBtnBack?.setOnClickListener { finish() }
+        biding?.champCost?.text = champ.cost
         biding?.origin?.text = champ.origin.toUpperCase(locale = Locale.ROOT)
         biding?.classs?.text = champ.classs.toUpperCase(locale = Locale.ROOT)
         biding?.skillAvatar?.let {
@@ -109,8 +106,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
             adapterShowBonusOfOrigin?.addData(it.bonus)
             biding?.originContent?.text = it.content
         })
-        detailsViewModel.getClassContent(isForceLoadData, champ.classs)
-        detailsViewModel.getOriginContent(isForceLoadData, champ.origin)
+        detailsViewModel.getOriginContent(isForceLoadData, champ.origin, "origin")
+        detailsViewModel.getOriginContent(false, champ.classs, "class")
     }
 
     companion object {
@@ -137,6 +134,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         skillName.text = champ.skillName
         val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
         activated.text = champ.activated
+        val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
+        cost.text = champ.cost
         val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
         Glide.with(imgCover.context)
             .load(champ.linkChampCover)

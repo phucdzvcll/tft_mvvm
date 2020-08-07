@@ -72,6 +72,8 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
         skillName.text = champ.skillName
         val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
         activated.text = champ.activated
+        val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
+        cost.text=champ.cost
         val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
         Glide.with(imgCover.context)
             .load(champ.linkChampCover)

@@ -24,8 +24,7 @@ val presentationModule = module {
         DetailsViewModel(
             champsByOriginUseCase = get(),
             champsByClassUseCase = get(),
-            classContent = get(),
-            originContent = get(),
+            classAndOriginUseCase = get(),
             classOrOriginMapper = get(),
             champListMapper = get()
         )

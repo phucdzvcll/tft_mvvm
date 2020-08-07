@@ -41,7 +41,7 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setupUI() {
-        rv_by_rank?.layoutManager = GridLayoutManager(requireContext(), 6)
+        rv_by_rank?.layoutManager = GridLayoutManager(requireContext(), 5)
         adapterShowChampByRank = AdapterShowChampByRank(arrayListOf(), this)
         rv_by_rank?.adapter = adapterShowChampByRank
     }
@@ -64,6 +64,8 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         skillName.text = champ.skillName
         val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
         activated.text = champ.activated
+        val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
+        cost.text=champ.cost
         val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
         Glide.with(imgCover.context)
             .load(champ.linkChampCover)
