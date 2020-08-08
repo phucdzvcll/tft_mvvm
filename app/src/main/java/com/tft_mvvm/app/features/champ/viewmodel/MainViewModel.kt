@@ -7,6 +7,7 @@ import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.domain.base.usecase.UseCaseParams
+import com.tft_mvvm.domain.features.champs.model.ChampListEntity
 import com.tft_mvvm.domain.features.champs.usecase.GetChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,8 @@ class MainViewModel(
                 //TODO error handle
                 isLoadingLiveData.value = false
             }) { (champs) ->
-                champLiveData.value = champListMapper.mapList(champs)
+                champLiveData.value =
+                    champListMapper.mapList(champs.sortedBy { champ: ChampListEntity.Champ -> champ.cost })
                 isLoadingLiveData.value = false
             }
         }

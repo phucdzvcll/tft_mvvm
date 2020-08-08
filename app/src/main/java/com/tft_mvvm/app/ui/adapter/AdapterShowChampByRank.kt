@@ -11,6 +11,7 @@ import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_gold.view.*
+import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 import kotlin.collections.ArrayList
 
@@ -28,7 +29,7 @@ class AdapterShowChampByRank(
             SectionHeaderViewHolder(view)
         } else {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_show_by_gold, parent, false)
+                .inflate(R.layout.item_show_by_origin_class, parent, false)
             ItemViewHolder(view)
         }
     }
@@ -69,16 +70,15 @@ class AdapterShowChampByRank(
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(champ: Champ, onItemClickListener: OnItemClickListener) {
-            itemView.name.text = champ.name
-            Glide.with(itemView.img_show_by_gold.context)
+            Glide.with(itemView.imgShowByOriginClass.context)
                 .load(champ.linkImg)
-                .into(itemView.img_show_by_gold)
+                .into(itemView.imgShowByOriginClass)
             when (champ.cost) {
-                "1" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_1_gold)
-                "2" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_2_gold)
-                "3" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_3_gold)
-                "4" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_4_gold)
-                "5" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_5_gold)
+                "1" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_1_gold)
+                "2" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_2_gold)
+                "3" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_3_gold)
+                "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
+                "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
             itemView.setOnClickListener { onItemClickListener.onClickListener(champ) }
         }
@@ -92,16 +92,16 @@ class AdapterShowChampByRank(
 
     fun addData(list: List<Champ>) {
         champs.clear()
-        val s: ArrayList<Champ> = ArrayList()
-        s.addAll(list)
-        for (i in 0..s.size - 1) {
+        val data = ArrayList<Champ>()
+        data.addAll(list)
+        for (i in 0 until data.size) {
             if (i == 0) {
-                s.add(0, Champ("", "", "", "", "", "", "", "", "", s[1].rankChamp, "", ""))
-            } else if (i != 0 && s[i].rankChamp != s[i + 1].rankChamp) {
-                s.add(i + 1, Champ("", "", "", "", "", "", "", "", "", s[i + 1].rankChamp, "", ""))
+                data.add(0, data[i + 1])
+            } else if (i != 0 && data[i].rankChamp != data[i + 1].rankChamp) {
+                data.add(i + 1, data[i + 1])
             }
         }
-        champs.addAll(s)
+        champs.addAll(data)
         notifyDataSetChanged()
     }
 }

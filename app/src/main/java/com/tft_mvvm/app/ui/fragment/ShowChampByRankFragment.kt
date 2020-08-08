@@ -9,17 +9,14 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowChampByRank
 import com.tft_mvvm.champ.R
-import kotlinx.android.synthetic.main.dialog_show_details_champ.*
 import kotlinx.android.synthetic.main.fragment_show_champ_by_rank.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,12 +38,15 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setupUI() {
+        swipeRefreshLayoutByRank?.setOnRefreshListener {
+            getChamp()
+        }
         adapterShowChampByRank = AdapterShowChampByRank(arrayListOf(), this)
-        val mGridLayoutManager = GridLayoutManager(requireContext(), 5)
+        val mGridLayoutManager = GridLayoutManager(requireContext(), 6)
         mGridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (adapterShowChampByRank?.getItemViewType(position) == adapterShowChampByRank?.HEADER_TYPE) {
-                    5
+                    6
                 } else {
                     1
                 }
@@ -62,6 +62,9 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
             .observe(viewLifecycleOwner, Observer {
                 adapterShowChampByRank?.addData(it.sortedByDescending { champ -> champ.rankChamp })
             })
+        mainViewModel.isRefresh().observe(viewLifecycleOwner, Observer {
+            swipeRefreshLayoutByRank?.isRefreshing = it
+        })
         mainViewModel.getChamps()
     }
 

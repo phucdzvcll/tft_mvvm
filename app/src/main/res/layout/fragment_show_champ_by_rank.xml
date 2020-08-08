@@ -1,15 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayoutByRank"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
     tools:context="com.tft_mvvm.app.ui.fragment.ShowChampByGoldFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_by_rank"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
-        />
-
-</LinearLayout>
+        android:layout_height="match_parent" />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
