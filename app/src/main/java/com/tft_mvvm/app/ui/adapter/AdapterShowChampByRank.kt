@@ -1,5 +1,7 @@
 package com.tft_mvvm.app.ui.adapter
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +16,10 @@ import kotlin.collections.ArrayList
 
 class AdapterShowChampByRank(
     private val champs: ArrayList<Champ>,
-    private val onItemClickListener: OnItemClickListener,
-    private val ITEM_TYPE: Int = 1,
-    private val HEADER_TYPE: Int = 2
+    private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+    val ITEM_TYPE: Int = 1
+    val HEADER_TYPE: Int = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == HEADER_TYPE) {
@@ -33,10 +34,10 @@ class AdapterShowChampByRank(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0 || champs[position].rankChamp != champs[position - 1].rankChamp) {
-            return HEADER_TYPE
+        return if (position == 0 || champs[position].rankChamp != champs[position - 1].rankChamp) {
+            HEADER_TYPE
         } else {
-            return ITEM_TYPE
+            ITEM_TYPE
         }
     }
 
@@ -52,8 +53,17 @@ class AdapterShowChampByRank(
     }
 
     class SectionHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(header: String) {
-            itemView.tvTitle.text = header
+            val prefix = "Bậc "
+            itemView.tvTitle.text = prefix + header
+            when (header) {
+                "S" -> itemView.tvTitle.setTextColor(Color.YELLOW)
+                "A" -> itemView.tvTitle.setTextColor(Color.RED)
+                "B" -> itemView.tvTitle.setTextColor(Color.BLUE)
+                "C" -> itemView.tvTitle.setTextColor(Color.GREEN)
+                "D" -> itemView.tvTitle.setTextColor(Color.GRAY)
+            }
         }
     }
 
@@ -74,15 +84,21 @@ class AdapterShowChampByRank(
         }
     }
 
+    companion object {
+        fun emptyChamp(string: String): Champ {
+            return Champ("", "", "", "", "", "", "", "", "", string, "", "")
+        }
+    }
+
     fun addData(list: List<Champ>) {
         champs.clear()
-        val s = ArrayList<Champ>()
+        val s: ArrayList<Champ> = ArrayList()
         s.addAll(list)
         for (i in 0..s.size - 1) {
             if (i == 0) {
-                s.add(0, Champ("", "", "", "", "", "", "", "", "", s[1].rankChamp, "",""))
+                s.add(0, Champ("", "", "", "", "", "", "", "", "", s[1].rankChamp, "", ""))
             } else if (i != 0 && s[i].rankChamp != s[i + 1].rankChamp) {
-                s.add(i + 1, Champ("", "", "", "", "", "", "", "", "", s[i + 1].rankChamp, "",""))
+                s.add(i + 1, Champ("", "", "", "", "", "", "", "", "", s[i + 1].rankChamp, "", ""))
             }
         }
         champs.addAll(s)

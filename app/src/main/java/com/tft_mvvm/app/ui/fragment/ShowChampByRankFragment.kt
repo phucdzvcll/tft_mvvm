@@ -41,15 +41,26 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setupUI() {
-        rv_by_rank?.layoutManager = GridLayoutManager(requireContext(), 5)
         adapterShowChampByRank = AdapterShowChampByRank(arrayListOf(), this)
+        val mGridLayoutManager = GridLayoutManager(requireContext(), 5)
+        mGridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (adapterShowChampByRank?.getItemViewType(position) == adapterShowChampByRank?.HEADER_TYPE) {
+                    5
+                } else {
+                    1
+                }
+            }
+
+        }
+        rv_by_rank?.layoutManager = mGridLayoutManager
         rv_by_rank?.adapter = adapterShowChampByRank
     }
 
     private fun getChamp() {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                adapterShowChampByRank?.addData(it.sortedByDescending { champ: Champ -> champ.rankChamp })
+                adapterShowChampByRank?.addData(it.sortedByDescending { champ -> champ.rankChamp })
             })
         mainViewModel.getChamps()
     }
@@ -65,7 +76,7 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
         activated.text = champ.activated
         val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
-        cost.text=champ.cost
+        cost.text = champ.cost
         val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
         Glide.with(imgCover.context)
             .load(champ.linkChampCover)

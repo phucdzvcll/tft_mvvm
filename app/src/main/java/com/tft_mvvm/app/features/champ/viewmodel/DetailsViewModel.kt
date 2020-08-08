@@ -107,7 +107,10 @@ class DetailsViewModel(
                 //TODO error handle
             })
             {
-                listItemSuitableLiveData.value=itemMapper.mapList(it.iteam)
+                val listItem = itemMapper.mapList(it.iteam)
+                if (listItem.size == 3) {
+                    listItemSuitableLiveData.value = listItem
+                }
             }
         }
 
