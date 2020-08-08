@@ -10,19 +10,19 @@ import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.mapper.ClassOrOriginMapper
 import com.tft_mvvm.app.mapper.ItemMapper
-import com.tft_mvvm.domain.features.usecase.GetChampsByClassUseCase
-import com.tft_mvvm.domain.features.usecase.GetChampsByOriginUseCase
+import com.tft_mvvm.domain.features.usecase.GetListChampsByClassUseCase
+import com.tft_mvvm.domain.features.usecase.GetListChampsByOriginUseCase
 import com.tft_mvvm.domain.features.usecase.GetClassAndOriginContentUseCase
-import com.tft_mvvm.domain.features.usecase.GetListSuitableItemUseCase
+import com.tft_mvvm.domain.features.usecase.GetListSuitableItemsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
-    private val champsByOriginUseCase: GetChampsByOriginUseCase,
-    private val champsByClassUseCase: GetChampsByClassUseCase,
+    private val listChampsByOriginUseCase: GetListChampsByOriginUseCase,
+    private val listChampsByClassUseCase: GetListChampsByClassUseCase,
     private val classAndOriginUseCase: GetClassAndOriginContentUseCase,
-    private val itemListSuitableItemUseCase: GetListSuitableItemUseCase,
+    private val itemListSuitableItemsUseCase: GetListSuitableItemsUseCase,
     private val itemMapper: ItemMapper,
     private val classOrOriginMapper: ClassOrOriginMapper,
     private val champListMapper: ChampMapper
@@ -35,8 +35,8 @@ class DetailsViewModel(
     fun getChampsByOrigin(origin: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val champResult = withContext(Dispatchers.IO) {
-                champsByOriginUseCase.execute(
-                    GetChampsByOriginUseCase.GetChampsByOriginUseCaseParam(
+                listChampsByOriginUseCase.execute(
+                    GetListChampsByOriginUseCase.GetChampsByOriginUseCaseParam(
                         origin = origin
                     )
                 )
@@ -54,8 +54,8 @@ class DetailsViewModel(
     fun getChampsByClass(nameClassOrOrigin: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val champResult = withContext(Dispatchers.IO) {
-                champsByClassUseCase.execute(
-                    GetChampsByClassUseCase.GetChampsByClassUseCaseParam(
+                listChampsByClassUseCase.execute(
+                    GetListChampsByClassUseCase.GetChampsByClassUseCaseParam(
                         classs = nameClassOrOrigin
                     )
                 )
@@ -96,8 +96,8 @@ class DetailsViewModel(
     fun getListItemSuitable(isForceLoadData: Boolean, listId: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val dbResult = withContext(Dispatchers.IO) {
-                itemListSuitableItemUseCase.execute(
-                    GetListSuitableItemUseCase.GetListSuitableItemUseCaseParam(
+                itemListSuitableItemsUseCase.execute(
+                    GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam(
                         isForceLoadData,
                         listId
                     )

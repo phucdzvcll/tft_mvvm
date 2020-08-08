@@ -7,8 +7,8 @@ import com.tft_mvvm.domain.base.usecase.UseCaseParams
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
-class GetChampsByOriginUseCase(private val repoRepository: RepoRepository):
-    UseCase<GetChampsByOriginUseCase.GetChampsByOriginUseCaseParam, Either<Failure, ChampListEntity>>(){
+class GetListChampsByOriginUseCase(private val repoRepository: RepoRepository):
+    UseCase<GetListChampsByOriginUseCase.GetChampsByOriginUseCaseParam, Either<Failure, ChampListEntity>>(){
     override suspend fun executeInternal(params: GetChampsByOriginUseCaseParam): Either<Failure, ChampListEntity> {
         return repoRepository.getChampsByOrigin(
             origin = params.origin

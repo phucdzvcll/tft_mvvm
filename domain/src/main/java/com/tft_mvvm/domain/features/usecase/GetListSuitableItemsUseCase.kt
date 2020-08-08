@@ -7,8 +7,8 @@ import com.tft_mvvm.domain.base.usecase.UseCaseParams
 import com.tft_mvvm.domain.features.model.ItemListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
-class GetListSuitableItemUseCase(private val repoRepository: RepoRepository) :
-    UseCase<GetListSuitableItemUseCase.GetListSuitableItemUseCaseParam, Either<Failure, ItemListEntity>>() {
+class GetListSuitableItemsUseCase(private val repoRepository: RepoRepository) :
+    UseCase<GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam, Either<Failure, ItemListEntity>>() {
     data class GetListSuitableItemUseCaseParam(
         val isForceLoadData:Boolean,
         val listId:String

@@ -23,12 +23,12 @@ val presentationModule = module {
     }
     viewModel {
         DetailsViewModel(
-            champsByOriginUseCase = get(),
-            champsByClassUseCase = get(),
+            listChampsByOriginUseCase = get(),
+            listChampsByClassUseCase = get(),
             classAndOriginUseCase = get(),
             classOrOriginMapper = get(),
             itemMapper = get(),
-            itemListSuitableItemUseCase = get(),
+            itemListSuitableItemsUseCase = get(),
             champListMapper = get()
         )
     }
@@ -36,7 +36,7 @@ val presentationModule = module {
     viewModel {
         TeamRecommendViewModel(
             teamBuilderMapper = get(),
-            getTeamBuilderUseCase = get()
+            getListTeamBuilderUseCase = get()
         )
     }
 }
