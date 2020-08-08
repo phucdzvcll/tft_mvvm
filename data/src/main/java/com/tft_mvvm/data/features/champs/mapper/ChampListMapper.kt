@@ -3,7 +3,7 @@ package com.tft_mvvm.data.features.champs.mapper
 import com.example.common_jvm.mapper.Mapper
 
 import com.tft_mvvm.data.local.model.ChampListDBO
-import com.tft_mvvm.domain.features.champs.model.ChampListEntity
+import com.tft_mvvm.domain.features.model.ChampListEntity
 
 class ChampListMapper : Mapper<ChampListDBO.ChampDBO, ChampListEntity.Champ>() {
     override fun map(input: ChampListDBO.ChampDBO): ChampListEntity.Champ {

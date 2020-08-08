@@ -10,10 +10,10 @@ import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.mapper.ClassOrOriginMapper
 import com.tft_mvvm.app.mapper.ItemMapper
-import com.tft_mvvm.domain.features.champs.usecase.GetChampsByClassUseCase
-import com.tft_mvvm.domain.features.champs.usecase.GetChampsByOriginUseCase
-import com.tft_mvvm.domain.features.champs.usecase.GetClassAndOriginContentUseCase
-import com.tft_mvvm.domain.features.champs.usecase.GetListSuitableItemUseCase
+import com.tft_mvvm.domain.features.usecase.GetChampsByClassUseCase
+import com.tft_mvvm.domain.features.usecase.GetChampsByOriginUseCase
+import com.tft_mvvm.domain.features.usecase.GetClassAndOriginContentUseCase
+import com.tft_mvvm.domain.features.usecase.GetListSuitableItemUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

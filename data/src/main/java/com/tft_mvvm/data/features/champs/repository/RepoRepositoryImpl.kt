@@ -10,11 +10,11 @@ import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
 import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
-import com.tft_mvvm.domain.features.champs.model.ChampListEntity
-import com.tft_mvvm.domain.features.champs.model.ItemListEntity
-import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
-import com.tft_mvvm.domain.features.champs.model.TeamListEntity
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.model.ChampListEntity
+import com.tft_mvvm.domain.features.model.ItemListEntity
+import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
+import com.tft_mvvm.domain.features.model.TeamListEntity
+import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class RepoRepositoryImpl(
     private val apiService: ApiService,
@@ -35,7 +35,9 @@ class RepoRepositoryImpl(
 ) : RepoRepository {
     override suspend fun getChamps() =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val dbResult = ChampListEntity(champs = champListMapper.mapList(champDAO.getData()))
+            val dbResult = ChampListEntity(
+                champs = champListMapper.mapList(champDAO.getData())
+            )
             if (dbResult.champs.isNullOrEmpty()) {
                 val champListResponse = apiService.getChampList()
                 val champListDBO = champDaoEntityMapper.map(champListResponse)
@@ -77,14 +79,22 @@ class RepoRepositoryImpl(
     override suspend fun getTeams(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             var dbTeamListEntity =
-                TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
+                TeamListEntity(
+                    teams = teamListMapper.mapList(
+                        teamDAO.getAllTeam()
+                    )
+                )
             if (teamDAO.getAllTeam().isNullOrEmpty() || isForceLoadData) {
                 teamDAO.deleteAllTeam()
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
                 teamDAO.insertTeam(teamListDBO.teamDBOs)
                 dbTeamListEntity =
-                    TeamListEntity(teams = teamListMapper.mapList(teamDAO.getAllTeam()))
+                    TeamListEntity(
+                        teams = teamListMapper.mapList(
+                            teamDAO.getAllTeam()
+                        )
+                    )
             }
             val listTeamBuilder: ArrayList<TeamBuilderListEntity.TeamsBuilder> = ArrayList()
             for (i in dbTeamListEntity.teams) {
@@ -97,7 +107,11 @@ class RepoRepositoryImpl(
                 val teamBuilder = TeamBuilderListEntity.TeamsBuilder(i.name, champs)
                 listTeamBuilder.add(teamBuilder)
             }
-            return@runSuspendWithCatchError Either.Success(TeamBuilderListEntity(listTeamBuilder))
+            return@runSuspendWithCatchError Either.Success(
+                TeamBuilderListEntity(
+                    listTeamBuilder
+                )
+            )
         }
 
     override suspend fun getClassAndOriginContent(
@@ -143,16 +157,21 @@ class RepoRepositoryImpl(
                     val itemListResponse = apiService.getItemListResponse()
                     val itemListDBO = itemDaoEntityMapper.map(itemListResponse)
                     itemDAO.insertItems(itemListDBO.items)
-                    val dbAfterInsert = ItemListEntity(
-                        iteam = itemListMapper.mapList(
-                            itemDAO.getListItemByListId(listIds)
+                    val dbAfterInsert =
+                        ItemListEntity(
+                            iteam = itemListMapper.mapList(
+                                itemDAO.getListItemByListId(listIds)
+                            )
                         )
-                    )
                     return@runSuspendWithCatchError Either.Success(dbAfterInsert)
                 } else {
                     return@runSuspendWithCatchError Either.Success(dbResult)
                 }
             }
-            return@runSuspendWithCatchError Either.Success(ItemListEntity(iteam = listOf()))
+            return@runSuspendWithCatchError Either.Success(
+                ItemListEntity(
+                    iteam = listOf()
+                )
+            )
         }
 }

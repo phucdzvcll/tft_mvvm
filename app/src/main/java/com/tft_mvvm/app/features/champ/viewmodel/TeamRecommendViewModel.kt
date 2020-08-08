@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.champ.model.TeamBuilder
 import com.tft_mvvm.app.mapper.TeamBuilderMapper
-import com.tft_mvvm.domain.features.champs.usecase.GetTeamBuilderUseCase
+import com.tft_mvvm.domain.features.usecase.GetTeamBuilderUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,12 +1,11 @@
-package com.tft_mvvm.domain.features.champs.usecase
+package com.tft_mvvm.domain.features.usecase
 
 import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
-import com.sun.net.httpserver.Authenticator
 import com.tft_mvvm.domain.base.usecase.UseCase
 import com.tft_mvvm.domain.base.usecase.UseCaseParams
-import com.tft_mvvm.domain.features.champs.model.ItemListEntity
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.model.ItemListEntity
+import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class GetListSuitableItemUseCase(private val repoRepository: RepoRepository) :
     UseCase<GetListSuitableItemUseCase.GetListSuitableItemUseCaseParam, Either<Failure, ItemListEntity>>() {

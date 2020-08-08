@@ -1,11 +1,11 @@
-package com.tft_mvvm.domain.features.champs.usecase
+package com.tft_mvvm.domain.features.usecase
 
 import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.tft_mvvm.domain.base.usecase.UseCase
 import com.tft_mvvm.domain.base.usecase.UseCaseParams
-import com.tft_mvvm.domain.features.champs.model.TeamBuilderListEntity
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
+import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class GetTeamBuilderUseCase(private val repoRepoRepository: RepoRepository) :
     UseCase<GetTeamBuilderUseCase.GetTeamUseCaseParam, Either<Failure, TeamBuilderListEntity>>() {

@@ -7,8 +7,8 @@ import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.domain.base.usecase.UseCaseParams
-import com.tft_mvvm.domain.features.champs.model.ChampListEntity
-import com.tft_mvvm.domain.features.champs.usecase.GetChampsUseCase
+import com.tft_mvvm.domain.features.model.ChampListEntity
+import com.tft_mvvm.domain.features.usecase.GetChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

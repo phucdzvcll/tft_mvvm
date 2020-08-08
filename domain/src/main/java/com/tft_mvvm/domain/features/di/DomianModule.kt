@@ -1,6 +1,6 @@
-package com.tft_mvvm.domain.features.champs.di
+package com.tft_mvvm.domain.features.di
 
-import com.tft_mvvm.domain.features.champs.usecase.*
+import com.tft_mvvm.domain.features.usecase.*
 
 import org.koin.dsl.module
 

@@ -5,7 +5,7 @@ import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.repository.RepoRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

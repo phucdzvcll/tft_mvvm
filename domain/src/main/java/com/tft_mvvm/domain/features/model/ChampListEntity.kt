@@ -1,4 +1,4 @@
-package com.tft_mvvm.domain.features.champs.model
+package com.tft_mvvm.domain.features.model
 
 data class ChampListEntity (val champs:List<Champ>){
     data class Champ (
