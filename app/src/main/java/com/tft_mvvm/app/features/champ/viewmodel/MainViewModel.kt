@@ -20,11 +20,15 @@ class MainViewModel(
     private val champLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun getChamps() =
+    fun getChamps(isForceLoadData:Boolean) =
         viewModelScope.launch(Dispatchers.Main) {
             isLoadingLiveData.value = true
             val champResult = withContext(Dispatchers.IO) {
-                champsUseCase.execute(UseCaseParams.Empty)
+                champsUseCase.execute(
+                    GetChampsUseCase.GetAllChampUseCaseParam(
+                        isForceLoadData
+                    )
+                )
             }
             champResult.either({
                 //TODO error handle

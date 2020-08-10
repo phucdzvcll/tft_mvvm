@@ -1,17 +1,12 @@
 package com.tft_mvvm.app.ui.fragment
 
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
@@ -33,13 +28,13 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getChamp()
+        getChamp(false)
         setupUI()
     }
 
     private fun setupUI() {
         swipeRefreshLayoutByRank?.setOnRefreshListener {
-            getChamp()
+            getChamp(true)
         }
         adapterShowChampByRank = AdapterShowChampByRank(arrayListOf(), this)
         val mGridLayoutManager = GridLayoutManager(requireContext(), 6)
@@ -57,7 +52,7 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         rv_by_rank?.adapter = adapterShowChampByRank
     }
 
-    private fun getChamp() {
+    private fun getChamp(isForceLoadData:Boolean) {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
                 adapterShowChampByRank?.addData(it.sortedByDescending { champ -> champ.rankChamp })
@@ -65,30 +60,11 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         mainViewModel.isRefresh().observe(viewLifecycleOwner, Observer {
             swipeRefreshLayoutByRank?.isRefreshing = it
         })
-        mainViewModel.getChamps()
+        mainViewModel.getChamps(isForceLoadData)
     }
 
     override fun onClickListener(champ: Champ) {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_show_details_champ)
-        val nameChamp = dialog.findViewById(R.id.name_champ_dialog) as TextView
-        nameChamp.text = champ.name
-        val skillName = dialog.findViewById(R.id.skill_name_dialog) as TextView
-        skillName.text = champ.skillName
-        val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
-        activated.text = champ.activated
-        val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
-        cost.text = champ.cost
-        val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkChampCover)
-            .into(imgCover)
-        dialog.show()
-        val imgAvatar = dialog.findViewById(R.id.skill_avatar_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkSkilAvatar)
-            .into(imgAvatar)
+        val dialog = com.tft_mvvm.app.ui.Dialog(requireContext(), champ)
         dialog.show()
     }
 }

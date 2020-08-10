@@ -10,6 +10,7 @@ import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
 import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
+import com.tft_mvvm.data.local.model.ItemListDBO
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ItemListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
@@ -33,12 +34,15 @@ class RepoRepositoryImpl(
     private val champDaoEntityMapper: ChampDaoEntityMapper
 
 ) : RepoRepository {
-    override suspend fun getChamps() =
+    override suspend fun getChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             val dbResult = ChampListEntity(
                 champs = champListMapper.mapList(champDAO.getData())
             )
-            if (dbResult.champs.isNullOrEmpty()) {
+            if (dbResult.champs.isNullOrEmpty() || isForceLoadData) {
+                if (isForceLoadData) {
+                    champDAO.deleteAllChampTable()
+                }
                 val champListResponse = apiService.getChampList()
                 val champListDBO = champDaoEntityMapper.map(champListResponse)
                 champDAO.insertChamps(champListDBO.champDBOs)
@@ -142,36 +146,40 @@ class RepoRepositoryImpl(
         listId: String
     ): Either<Failure, ItemListEntity> =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val listIds = listId.split(",")
-            if (listIds.isNotEmpty()) {
-                val dbResult =
-                    ItemListEntity(
-                        iteam = itemListMapper.mapList(
-                            itemDAO.getListItemByListId(
-                                listIds
-                            )
-                        )
-                    )
-                if (dbResult.iteam.isNullOrEmpty() || isForceLoadData) {
-                    itemDAO.deleteAllItemTable()
-                    val itemListResponse = apiService.getItemListResponse()
-                    val itemListDBO = itemDaoEntityMapper.map(itemListResponse)
-                    itemDAO.insertItems(itemListDBO.items)
-                    val dbAfterInsert =
-                        ItemListEntity(
-                            iteam = itemListMapper.mapList(
-                                itemDAO.getListItemByListId(listIds)
-                            )
-                        )
-                    return@runSuspendWithCatchError Either.Success(dbAfterInsert)
+            if (listId.isNotBlank()) {
+                val list = listId.split(",")
+                if (itemDAO.getItemByListId(list).isNullOrEmpty() || isForceLoadData) {
+                    if (isForceLoadData) {
+                        itemDAO.deleteAllItemTable()
+                    }
+                    val listDBO = itemDaoEntityMapper.map(apiService.getItemListResponse())
+                    itemDAO.insertItems(listDBO.items)
+                    val dbAfterInsert = itemListMapper.mapList(itemDAO.getItemByListId(list))
+                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbAfterInsert))
                 } else {
-                    return@runSuspendWithCatchError Either.Success(dbResult)
+                    val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(list))
+                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
+                }
+            } else {
+                return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
+            }
+        }
+
+    override suspend fun updateChamp(id: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            val listChampDBO = champDaoEntityMapper.map(apiService.getChampList())
+            listChampDBO.champDBOs.forEach { champDBO ->
+                if (champDBO.id == id) {
+                    champDAO.updateChamp(champDBO)
                 }
             }
             return@runSuspendWithCatchError Either.Success(
-                ItemListEntity(
-                    iteam = listOf()
+                champListMapper.map(
+                    champDAO.getChampById(
+                        id
+                    )
                 )
             )
         }
+
 }

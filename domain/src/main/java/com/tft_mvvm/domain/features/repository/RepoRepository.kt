@@ -9,6 +9,7 @@ import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 
 interface RepoRepository {
     suspend fun getChamps(
+        isForceLoadData: Boolean
     ): Either<Failure, ChampListEntity>
 
     suspend fun getChampsByOrigin(
@@ -32,4 +33,8 @@ interface RepoRepository {
         isForceLoadData: Boolean,
         listId: String
     ): Either<Failure, ItemListEntity>
+
+    suspend fun updateChamp(
+        id: String
+    ): Either<Failure, ChampListEntity.Champ>
 }

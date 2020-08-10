@@ -36,4 +36,10 @@ val domainModule = module {
             repoRepository = get()
         )
     }
+
+    single {
+        UpdateChampUseCase(
+            repoRepository = get()
+        )
+    }
 }

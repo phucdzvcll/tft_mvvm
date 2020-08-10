@@ -8,10 +8,14 @@ import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class GetChampsUseCase(private val repoRepository: RepoRepository) :
-    UseCase<UseCaseParams.Empty, Either<Failure, ChampListEntity>>() {
-    override suspend fun executeInternal(params: UseCaseParams.Empty): Either<Failure, ChampListEntity> {
-        return repoRepository.getChamps()
+    UseCase<GetChampsUseCase.GetAllChampUseCaseParam, Either<Failure, ChampListEntity>>() {
+    override suspend fun executeInternal(params: GetAllChampUseCaseParam): Either<Failure, ChampListEntity> {
+        return repoRepository.getChamps(
+            isForceLoadData = params.isForceLoadData
+        )
     }
-
+    data class GetAllChampUseCaseParam(
+        val isForceLoadData: Boolean
+    ):UseCaseParams
 }
 

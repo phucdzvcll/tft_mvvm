@@ -29,6 +29,7 @@ val presentationModule = module {
             classOrOriginMapper = get(),
             itemMapper = get(),
             itemListSuitableItemsUseCase = get(),
+            updateChampUseCase = get(),
             champListMapper = get()
         )
     }

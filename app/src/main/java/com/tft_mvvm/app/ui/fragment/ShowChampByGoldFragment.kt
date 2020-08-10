@@ -31,7 +31,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        getChamp()
+        getChamp(true)
     }
 
     private fun setupUi() {
@@ -39,11 +39,11 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         adapter = AdapterShowByGold(arrayListOf(), this)
         rvByGold?.adapter = adapter
         swipeRefreshLayoutByGold?.setOnRefreshListener {
-            getChamp()
+            getChamp(true)
         }
     }
 
-    private fun getChamp() {
+    private fun getChamp(isForceLoadData:Boolean) {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
                 adapter?.addData(it.sortedBy { champ->champ.cost })
@@ -51,7 +51,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
             Observer { swipeRefreshLayoutByGold?.isRefreshing = it })
-        mainViewModel.getChamps()
+        mainViewModel.getChamps(isForceLoadData)
     }
 
     override fun onClickListener(champ: Champ) {

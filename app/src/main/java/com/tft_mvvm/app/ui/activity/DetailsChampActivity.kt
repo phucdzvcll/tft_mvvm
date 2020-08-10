@@ -1,13 +1,8 @@
 package com.tft_mvvm.app.ui.activity
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
-import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowBonusOfClassOrOrigin
@@ -37,13 +31,20 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         biding = DataBindingUtil.setContentView(this, R.layout.activity_details_champ)
+
         getChamp(intent)?.let { champ ->
             setupUI(champ)
-            getChampByOrigin(champ)
-            getChampByClass(champ)
-            getClassAndOriginContent(false, champ)
-            getListItemSuitable(true, champ)
+
         }
+
+        detailsViewModel.getChampAfterUpdateLiveData().observe(this, Observer {
+            getListItemSuitable(false, it)
+            setupUI(it)
+        })
+        detailsViewModel.isRefresh()
+            .observe(this, Observer { it ->
+                SwipeRefreshLayoutDetailsActivity.isRefreshing = it
+            })
     }
 
     private fun setupUI(champ: Champ) {
@@ -64,7 +65,6 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         }
         skill_name.text = champ.skillName
         activated.text = champ.activated
-
         biding?.rvOrigin?.layoutManager = GridLayoutManager(this, 6)
         adapterShowByOrigin = AdapterShowByOriginAndClass(arrayListOf(), this)
         biding?.rvOrigin?.adapter = adapterShowByOrigin
@@ -80,6 +80,15 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         biding?.rvClassBonus?.layoutManager = LinearLayoutManager(this)
         adapterShowBonusOfClass = AdapterShowBonusOfClassOrOrigin(arrayListOf())
         biding?.rvClassBonus?.adapter = adapterShowBonusOfClass
+
+        SwipeRefreshLayoutDetailsActivity.setOnRefreshListener {
+            detailsViewModel.updateChamp(champ.id)
+        }
+
+        getChampByOrigin(champ)
+        getChampByClass(champ)
+        getClassAndOriginContent(false, champ)
+        getListItemSuitable(true, champ)
     }
 
     private fun getChampByOrigin(champ: Champ) {
@@ -142,26 +151,7 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onClickListener(champ: Champ) {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_show_details_champ)
-        val nameChamp = dialog.findViewById(R.id.name_champ_dialog) as TextView
-        nameChamp.text = champ.name
-        val skillName = dialog.findViewById(R.id.skill_name_dialog) as TextView
-        skillName.text = champ.skillName
-        val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
-        activated.text = champ.activated
-        val cost = dialog.findViewById(R.id.champ_cost_dialog) as TextView
-        cost.text = champ.cost
-        val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkChampCover)
-            .into(imgCover)
-        dialog.show()
-        val imgAvatar = dialog.findViewById(R.id.skill_avatar_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkSkilAvatar)
-            .into(imgAvatar)
+        val dialog = com.tft_mvvm.app.ui.Dialog(this, champ)
         dialog.show()
     }
 

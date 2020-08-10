@@ -83,13 +83,7 @@ class AdapterShowChampByRank(
             itemView.setOnClickListener { onItemClickListener.onClickListener(champ) }
         }
     }
-
-    companion object {
-        fun emptyChamp(string: String): Champ {
-            return Champ("", "", "", "", "", "", "", "", "", string, "", "")
-        }
-    }
-
+    
     fun addData(list: List<Champ>) {
         champs.clear()
         val data = ArrayList<Champ>()
