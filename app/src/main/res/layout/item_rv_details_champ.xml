@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +14,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/origin"
+            android:id="@+id/origin_or_class_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -29,7 +28,7 @@
             tools:text="origin" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/origin_content"
+            android:id="@+id/origin_or_class_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -39,11 +38,11 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/origin"
+            app:layout_constraintTop_toBottomOf="@+id/origin_or_class_name"
             tools:text="origin content" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_origin"
+            android:id="@+id/rv_origin_or_class"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -51,10 +50,10 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/origin_content" />
+            app:layout_constraintTop_toBottomOf="@+id/origin_or_class_content" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_origin_bonus"
+            android:id="@+id/rv_origin_or_class_bonus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
@@ -63,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_origin" />
+            app:layout_constraintTop_toBottomOf="@+id/rv_origin_or_class" />
 
     </LinearLayout>
 

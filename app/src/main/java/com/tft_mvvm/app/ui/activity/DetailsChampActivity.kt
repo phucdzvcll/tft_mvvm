@@ -4,136 +4,94 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
-import com.tft_mvvm.app.ui.adapter.AdapterShowBonusOfClassOrOrigin
-import com.tft_mvvm.app.ui.adapter.AdapterShowByOriginAndClass
+import com.tft_mvvm.app.ui.adapter.AdapterShowDetailsChamp
+import com.tft_mvvm.app.ui.adapter.HeaderViewHolderModel
+import com.tft_mvvm.app.ui.adapter.ItemDetailsViewHolderModel
+import com.tft_mvvm.app.ui.adapter.ItemRv
 import com.tft_mvvm.champ.R
-import com.tft_mvvm.champ.databinding.ActivityDetailsChampBinding
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
-    private var biding: ActivityDetailsChampBinding? = null
     private val detailsViewModel: DetailsViewModel by viewModel()
-    private var adapterShowByOrigin: AdapterShowByOriginAndClass? = null
-    private var adapterShowByClass: AdapterShowByOriginAndClass? = null
-    private var adapterShowBonusOfOrigin: AdapterShowBonusOfClassOrOrigin? = null
-    private var adapterShowBonusOfClass: AdapterShowBonusOfClassOrOrigin? = null
+    private var adapterShowDetailsChamp: AdapterShowDetailsChamp? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        biding = DataBindingUtil.setContentView(this, R.layout.activity_details_champ)
 
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details_champ)
+
+        val list = ArrayList<ItemRv>()
         getChamp(intent)?.let { champ ->
             setupUI(champ)
-
+            observerViewModel(true, champ)
+            getData(champ, list)
         }
+    }
 
-        detailsViewModel.getChampAfterUpdateLiveData().observe(this, Observer {
-            getListItemSuitable(false, it)
-            setupUI(it)
+    private fun getData(champ: Champ, list: ArrayList<ItemRv>) {
+        detailsViewModel.getListItemSuitableLiveData().observe(this, Observer {
+            val headerViewHolderModel = HeaderViewHolderModel(
+                nameSkill = champ.skillName,
+                activated = champ.activated,
+                linkAvatarSkill = champ.linkSkilAvatar,
+                linkChampCover = champ.linkChampCover,
+                listSuitableItem = it
+            )
+            list.add(0, headerViewHolderModel)
+            adapterShowDetailsChamp?.addData(list.toList())
         })
-        detailsViewModel.isRefresh()
-            .observe(this, Observer { it ->
-                SwipeRefreshLayoutDetailsActivity.isRefreshing = it
+        detailsViewModel.getChampsByOriginLiveData().observe(this, Observer { listChamp ->
+            detailsViewModel.getOriginContentLiveData().observe(this, Observer { classOrOrigin ->
+                val itemDetailsViewHolderModel = ItemDetailsViewHolderModel(
+                    classOrOrigin = classOrOrigin,
+                    listChamp = listChamp
+                )
+                list.add(itemDetailsViewHolderModel)
+                adapterShowDetailsChamp?.addData(list.toList())
             })
+        })
+        detailsViewModel.getChampsByClassLiveData().observe(this, Observer { listChamp ->
+            detailsViewModel.getClassContentLiveData().observe(this, Observer { classOrOrigin ->
+                val itemDetailsViewHolderModel = ItemDetailsViewHolderModel(
+                    classOrOrigin = classOrOrigin,
+                    listChamp = listChamp
+                )
+                list.add(itemDetailsViewHolderModel)
+                adapterShowDetailsChamp?.addData(list.toList())
+            })
+        })
     }
 
     private fun setupUI(champ: Champ) {
-        biding?.toolbarTitle?.text = champ.name
-        biding?.itemBtnBack?.setOnClickListener { finish() }
-        biding?.champCost?.text = champ.cost
-        biding?.origin?.text = champ.origin.toUpperCase(locale = Locale.ROOT)
-        biding?.classs?.text = champ.classs.toUpperCase(locale = Locale.ROOT)
-        biding?.skillAvatar?.let {
-            Glide.with(this)
-                .load(champ.linkSkilAvatar)
-                .into(it)
-        }
-        biding?.champCover?.let {
-            Glide.with(this)
-                .load(champ.linkChampCover)
-                .into(it)
-        }
-        skill_name.text = champ.skillName
-        activated.text = champ.activated
-        biding?.rvOrigin?.layoutManager = GridLayoutManager(this, 6)
-        adapterShowByOrigin = AdapterShowByOriginAndClass(arrayListOf(), this)
-        biding?.rvOrigin?.adapter = adapterShowByOrigin
-
-        biding?.rvClasss?.layoutManager = GridLayoutManager(this, 6)
-        adapterShowByClass = AdapterShowByOriginAndClass(arrayListOf(), this)
-        biding?.rvClasss?.adapter = adapterShowByClass
-
-        biding?.rvOriginBonus?.layoutManager = LinearLayoutManager(this)
-        adapterShowBonusOfOrigin = AdapterShowBonusOfClassOrOrigin(arrayListOf())
-        biding?.rvOriginBonus?.adapter = adapterShowBonusOfOrigin
-
-        biding?.rvClassBonus?.layoutManager = LinearLayoutManager(this)
-        adapterShowBonusOfClass = AdapterShowBonusOfClassOrOrigin(arrayListOf())
-        biding?.rvClassBonus?.adapter = adapterShowBonusOfClass
-
+        adapterShowDetailsChamp = AdapterShowDetailsChamp(arrayListOf(), this)
+        rv_show_details_champ.layoutManager = LinearLayoutManager(this)
+        rv_show_details_champ.adapter = adapterShowDetailsChamp
+        item_btn_back.setOnClickListener { finish() }
+        champ_cost.text = champ.cost
+        toolbar_title.text = champ.name
         SwipeRefreshLayoutDetailsActivity.setOnRefreshListener {
-            detailsViewModel.updateChamp(champ.id)
+            detailsViewModel.getChampAfterUpdateLiveData().observe(this, Observer {
+
+            })
         }
-
-        getChampByOrigin(champ)
-        getChampByClass(champ)
-        getClassAndOriginContent(false, champ)
-        getListItemSuitable(true, champ)
-    }
-
-    private fun getChampByOrigin(champ: Champ) {
-        detailsViewModel.getChampsByOrigin(champ.origin)
-        detailsViewModel.getChampsByOriginLiveData()
-            .observe(this, Observer {
-                adapterShowByOrigin?.addData(it)
-            })
-
-    }
-
-    private fun getChampByClass(champ: Champ) {
-        detailsViewModel.getChampsByClass(champ.classs)
-        detailsViewModel.getChampsByClassLiveData()
-            .observe(this, Observer {
-                adapterShowByClass?.addData(it)
-            })
-    }
-
-    private fun getClassAndOriginContent(isForceLoadData: Boolean, champ: Champ) {
-        detailsViewModel.getClassContentLiveData().observe(this, Observer {
-            adapterShowBonusOfClass?.addData(it.bonus)
-            biding?.classContent?.text = it.content
+        detailsViewModel.isRefresh().observe(this, Observer {
+            SwipeRefreshLayoutDetailsActivity.isRefreshing = it
         })
-        detailsViewModel.getOriginContentLiveData().observe(this, Observer {
-            adapterShowBonusOfOrigin?.addData(it.bonus)
-            biding?.originContent?.text = it.content
-        })
+    }
+
+    private fun observerViewModel(isForceLoadData: Boolean, champ: Champ) {
         detailsViewModel.getOriginContent(isForceLoadData, champ.origin, "origin")
-        detailsViewModel.getOriginContent(false, champ.classs, "class")
-    }
-
-    private fun getListItemSuitable(isForceLoadData: Boolean, champ: Champ) {
-        detailsViewModel.getListItemSuitableLiveData().observe(this, Observer {
-            Glide.with(suitable_item_img_1.context)
-                .load(it[0].itemAvatar)
-                .into(suitable_item_img_1)
-            Glide.with(suitable_item_img_2.context)
-                .load(it[1].itemAvatar)
-                .into(suitable_item_img_2)
-            Glide.with(suitable_item_img_3.context)
-                .load(it[2].itemAvatar)
-                .into(suitable_item_img_3)
-        })
+        detailsViewModel.getOriginContent(isForceLoadData, champ.classs, "class")
         detailsViewModel.getListItemSuitable(isForceLoadData, champ.suitableItem)
+        detailsViewModel.getChampsByClass(champ.classs)
+        detailsViewModel.getChampsByOrigin(champ.origin)
+        detailsViewModel.updateChamp(champ.id)
     }
 
     companion object {
