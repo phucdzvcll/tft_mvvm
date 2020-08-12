@@ -1,14 +1,11 @@
 package com.tft_mvvm.data.features.champs.di
 
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
-import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
-import com.tft_mvvm.data.features.champs.mapper.ChampListMapper
-import com.tft_mvvm.data.features.champs.mapper.TeamDaoEntityMapper
-import com.tft_mvvm.data.features.champs.mapper.TeamListMapper
+import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.repository.RepoRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,7 +32,23 @@ val dataModule = module {
     }
 
     factory {
+        ClassAndOriginListMapper()
+    }
+
+    factory {
+        ClassAndOriginDaoEntityMapper()
+    }
+
+    factory {
         RemoteExceptionInterceptor()
+    }
+
+    factory {
+        ItemDaoEntityMapper()
+    }
+
+    factory {
+        ItemListMapper()
     }
 
     factory<Interceptor> {
@@ -70,6 +83,9 @@ val dataModule = module {
 
     single { get<ChampRoomDatabase>().teamDAO() }
 
+    single { get<ChampRoomDatabase>().classAndOriginDAO() }
+
+    single { get<ChampRoomDatabase>().itemDAO() }
 
     single<RepoRepository> {
         RepoRepositoryImpl(
@@ -80,6 +96,12 @@ val dataModule = module {
             remoteExceptionInterceptor = get(),
             champListMapper = get(),
             teamDAO = get(),
+            classAndOriginDAO = get(),
+            classAndOriginDaoEntityMapper = get(),
+            classAndOriginListMapper = get(),
+            itemDAO = get(),
+            itemDaoEntityMapper = get(),
+            itemListMapper = get(),
             champDaoEntityMapper = get()
         )
     }

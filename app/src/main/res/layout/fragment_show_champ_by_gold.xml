@@ -1,28 +1,21 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tft_mvvm.app.ui.fragment.ShowChampByGoldFragment">
 
-    <data>
-
-    </data>
-
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayoutByGold"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.tft_mvvm.app.ui.fragment.ShowChampByGoldFragment"
-        android:orientation="vertical">
+        android:padding="8dp"
+        tools:context="com.tft_mvvm.app.ui.activity.MainActivity">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayoutByGold"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvByGold"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.tft_mvvm.app.ui.activity.MainActivity"
-            android:padding="8dp">
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvByGold"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

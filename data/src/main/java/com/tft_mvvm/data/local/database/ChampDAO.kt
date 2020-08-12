@@ -1,8 +1,7 @@
 package com.tft_mvvm.data.local.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.tft_mvvm.data.features.champs.model.Champ
 import com.tft_mvvm.data.local.model.ChampListDBO
 import java.lang.ref.SoftReference
@@ -24,4 +23,12 @@ interface ChampDAO {
     @Query("SELECT * FROM champ WHERE id IN (:teamIds)")
     suspend fun getListChampByTeam(teamIds:List<String>):List<ChampListDBO.ChampDBO>
 
+    @Query("DELETE FROM champ")
+    suspend fun deleteAllChampTable()
+
+    @Update(onConflict = REPLACE)
+    suspend fun updateChamp(champ: ChampListDBO.ChampDBO)
+
+    @Query("SELECT * FROM champ WHERE id LIKE :id")
+    suspend fun getChampById(id:String):ChampListDBO.ChampDBO
 }

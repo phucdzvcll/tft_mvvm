@@ -9,16 +9,15 @@ import com.tft_mvvm.app.ui.fragment.ShowChampByGoldFragment
 import com.tft_mvvm.app.ui.fragment.ShowChampByRankFragment
 import com.tft_mvvm.app.ui.fragment.ShowRecommendTeamFragment
 import com.tft_mvvm.champ.R
-import com.tft_mvvm.champ.databinding.ActivityMainBinding
+
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var biding: ActivityMainBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        biding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         addTab(viewPager)
-        biding?.tabLayout?.setupWithViewPager(viewPager)
+        tabLayout?.setupWithViewPager(viewPager)
     }
 
     private fun addTab(viewPager: ViewPager) {

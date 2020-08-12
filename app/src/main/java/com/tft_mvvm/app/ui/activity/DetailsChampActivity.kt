@@ -1,91 +1,97 @@
 package com.tft_mvvm.app.ui.activity
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.view.Window
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
-import com.tft_mvvm.app.ui.adapter.AdapterShowByOriginAndClass
+import com.tft_mvvm.app.ui.adapter.AdapterShowDetailsChamp
+import com.tft_mvvm.app.ui.adapter.HeaderViewHolderModel
+import com.tft_mvvm.app.ui.adapter.ItemDetailsViewHolderModel
+import com.tft_mvvm.app.ui.adapter.ItemRv
 import com.tft_mvvm.champ.R
-import com.tft_mvvm.champ.databinding.ActivityDetailsChampBinding
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
-    private var biding: ActivityDetailsChampBinding? = null
     private val detailsViewModel: DetailsViewModel by viewModel()
-    private var adapterShowByOrigin: AdapterShowByOriginAndClass? = null
-    private var adapterShowByClass: AdapterShowByOriginAndClass? = null
+    private var adapterShowDetailsChamp: AdapterShowDetailsChamp? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        biding = DataBindingUtil.setContentView(this, R.layout.activity_details_champ)
+        setContentView(R.layout.activity_details_champ)
+
+        val list = ArrayList<ItemRv>()
         getChamp(intent)?.let { champ ->
             setupUI(champ)
-            getChampByOrigin(champ)
-            getChampByClass(champ)
+            observerViewModel(true, champ)
+            getData(champ, list)
         }
+    }
+
+    private fun getData(champ: Champ, list: ArrayList<ItemRv>) {
+        detailsViewModel.getListItemSuitableLiveData().observe(this, Observer {
+            val headerViewHolderModel = HeaderViewHolderModel(
+                nameSkill = champ.skillName,
+                activated = champ.activated,
+                linkAvatarSkill = champ.linkSkilAvatar,
+                linkChampCover = champ.linkChampCover,
+                listSuitableItem = it
+            )
+            list.add(0, headerViewHolderModel)
+            adapterShowDetailsChamp?.addData(list.toList())
+        })
+        detailsViewModel.getChampsByOriginLiveData().observe(this, Observer { listChamp ->
+            detailsViewModel.getOriginContentLiveData().observe(this, Observer { classOrOrigin ->
+                val itemDetailsViewHolderModel = ItemDetailsViewHolderModel(
+                    classOrOrigin = classOrOrigin,
+                    listChamp = listChamp
+                )
+                list.add(itemDetailsViewHolderModel)
+                adapterShowDetailsChamp?.addData(list.toList())
+            })
+        })
+        detailsViewModel.getChampsByClassLiveData().observe(this, Observer { listChamp ->
+            detailsViewModel.getClassContentLiveData().observe(this, Observer { classOrOrigin ->
+                val itemDetailsViewHolderModel = ItemDetailsViewHolderModel(
+                    classOrOrigin = classOrOrigin,
+                    listChamp = listChamp
+                )
+                list.add(itemDetailsViewHolderModel)
+                adapterShowDetailsChamp?.addData(list.toList())
+            })
+        })
     }
 
     private fun setupUI(champ: Champ) {
-        biding?.toolbarTitle?.text = champ.name
-        setSupportActionBar(biding?.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            finish()
-        }
-        biding?.origin?.text = champ.origin
-        biding?.classs?.text = champ.classs
-        biding?.skillAvatar?.let {
-            Glide.with(this)
-                .load(champ.linkSkilAvatar)
-                .into(it)
-        }
-        biding?.champCover?.let {
-            Glide.with(this)
-                .load(champ.linkChampCover)
-                .into(it)
-        }
-        skill_name.text = champ.skillName
-        activated.text = champ.activated
+        adapterShowDetailsChamp = AdapterShowDetailsChamp(arrayListOf(), this)
+        rv_show_details_champ.layoutManager = LinearLayoutManager(this)
+        rv_show_details_champ.adapter = adapterShowDetailsChamp
+        item_btn_back.setOnClickListener { finish() }
+        champ_cost.text = champ.cost
+        toolbar_title.text = champ.name
+        SwipeRefreshLayoutDetailsActivity.setOnRefreshListener {
+            detailsViewModel.getChampAfterUpdateLiveData().observe(this, Observer {
 
-        biding?.rvOrigin?.layoutManager = GridLayoutManager(this, 6)
-        adapterShowByOrigin = AdapterShowByOriginAndClass(arrayListOf(), this)
-        biding?.rvOrigin?.adapter = adapterShowByOrigin
-
-        biding?.rvClasss?.layoutManager = GridLayoutManager(this, 6)
-        adapterShowByClass = AdapterShowByOriginAndClass(arrayListOf(), this)
-        biding?.rvClasss?.adapter = adapterShowByClass
-    }
-
-    private fun getChampByOrigin(champ: Champ) {
-        detailsViewModel.getChampsByOrigin(champ.origin)
-        detailsViewModel.getChampsByOriginLiveData()
-            .observe(this, Observer {
-                adapterShowByOrigin?.addData(it)
             })
-
+        }
+        detailsViewModel.isRefresh().observe(this, Observer {
+            SwipeRefreshLayoutDetailsActivity.isRefreshing = it
+        })
     }
 
-    private fun getChampByClass(champ: Champ) {
+    private fun observerViewModel(isForceLoadData: Boolean, champ: Champ) {
+        detailsViewModel.getOriginContent(isForceLoadData, champ.origin, "origin")
+        detailsViewModel.getOriginContent(isForceLoadData, champ.classs, "class")
+        detailsViewModel.getListItemSuitable(isForceLoadData, champ.suitableItem)
         detailsViewModel.getChampsByClass(champ.classs)
-        detailsViewModel.getChampsByClassLiveData()
-            .observe(this, Observer {
-                adapterShowByClass?.addData(it)
-            })
-
+        detailsViewModel.getChampsByOrigin(champ.origin)
+        detailsViewModel.updateChamp(champ.id)
     }
 
     companion object {
@@ -103,24 +109,7 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onClickListener(champ: Champ) {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_show_details_champ)
-        val nameChamp = dialog.findViewById(R.id.name_champ_dialog) as TextView
-        nameChamp.text = champ.name
-        val skillName = dialog.findViewById(R.id.skill_name_dialog) as TextView
-        skillName.text = champ.skillName
-        val activated = dialog.findViewById<TextView>(R.id.activated_dialog)
-        activated.text = champ.activated
-        val imgCover = dialog.findViewById(R.id.champ_cover_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkChampCover)
-            .into(imgCover)
-        dialog.show()
-        val imgAvatar = dialog.findViewById(R.id.skill_avatar_dialog) as ImageView
-        Glide.with(imgCover.context)
-            .load(champ.linkSkilAvatar)
-            .into(imgAvatar)
+        val dialog = com.tft_mvvm.app.ui.Dialog(this, champ)
         dialog.show()
     }
 

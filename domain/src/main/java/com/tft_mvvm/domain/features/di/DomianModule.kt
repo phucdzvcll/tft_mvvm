@@ -1,6 +1,6 @@
-package com.tft_mvvm.domain.features.champs.di
+package com.tft_mvvm.domain.features.di
 
-import com.tft_mvvm.domain.features.champs.usecase.*
+import com.tft_mvvm.domain.features.usecase.*
 
 import org.koin.dsl.module
 
@@ -11,22 +11,34 @@ val domainModule = module {
         )
     }
     single {
-        GetChampsByOriginUseCase(
+        GetListChampsByOriginUseCase(
             repoRepository = get()
         )
     }
     single {
-        GetChampsByClassUseCase(
+        GetListChampsByClassUseCase(
             repoRepository = get()
         )
     }
     single {
-        GetTeamUseCase(
+        GetListTeamBuilderUseCase(
             repoRepoRepository = get()
         )
     }
     single {
         GetClassAndOriginContentUseCase(
+            repoRepository = get()
+        )
+    }
+
+    single {
+        GetListSuitableItemsUseCase(
+            repoRepository = get()
+        )
+    }
+
+    single {
+        UpdateChampUseCase(
             repoRepository = get()
         )
     }
