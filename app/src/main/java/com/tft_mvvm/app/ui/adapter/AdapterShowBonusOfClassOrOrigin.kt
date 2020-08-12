@@ -13,9 +13,14 @@ class AdapterShowBonusOfClassOrOrigin(
 
     class ViewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(string: String) {
-            val item = string.split(":")
-            itemView.item_bonus_count.text = item[0]
-            itemView.item_bonus.text = item[1]
+            if (string.isEmpty()) {
+                itemView.item_bonus_count.visibility = View.GONE
+                itemView.item_bonus.visibility = View.GONE
+            } else {
+                val item = string.split(":")
+                itemView.item_bonus_count.text = item[0]
+                itemView.item_bonus.text = item[1]
+            }
         }
     }
 

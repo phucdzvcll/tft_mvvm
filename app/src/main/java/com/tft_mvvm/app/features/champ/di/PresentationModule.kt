@@ -11,24 +11,25 @@ import org.koin.dsl.module
 val presentationModule = module {
 
     factory { ChampMapper() }
-    factory { LoadChampByRankMapper(champListMapper = get()) }
     factory { TeamMapper() }
     factory { TeamBuilderMapper(champMapper = get()) }
     factory { ClassOrOriginMapper() }
+    factory { ItemMapper() }
     viewModel {
         MainViewModel(
             champsUseCase = get(),
-            loadChampByRankMapper = get(),
             champListMapper = get()
         )
     }
     viewModel {
         DetailsViewModel(
-            champsByOriginUseCase = get(),
-            champsByClassUseCase = get(),
-            classContent = get(),
-            originContent = get(),
+            listChampsByOriginUseCase = get(),
+            listChampsByClassUseCase = get(),
+            classAndOriginUseCase = get(),
             classOrOriginMapper = get(),
+            itemMapper = get(),
+            itemListSuitableItemsUseCase = get(),
+            updateChampUseCase = get(),
             champListMapper = get()
         )
     }
@@ -36,7 +37,7 @@ val presentationModule = module {
     viewModel {
         TeamRecommendViewModel(
             teamBuilderMapper = get(),
-            getTeamBuilderUseCase = get()
+            getListTeamBuilderUseCase = get()
         )
     }
 }

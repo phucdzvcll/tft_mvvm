@@ -5,7 +5,7 @@ import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
-import com.tft_mvvm.domain.features.champs.repository.RepoRepository
+import com.tft_mvvm.domain.features.repository.RepoRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,6 +43,14 @@ val dataModule = module {
         RemoteExceptionInterceptor()
     }
 
+    factory {
+        ItemDaoEntityMapper()
+    }
+
+    factory {
+        ItemListMapper()
+    }
+
     factory<Interceptor> {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -77,6 +85,7 @@ val dataModule = module {
 
     single { get<ChampRoomDatabase>().classAndOriginDAO() }
 
+    single { get<ChampRoomDatabase>().itemDAO() }
 
     single<RepoRepository> {
         RepoRepositoryImpl(
@@ -90,6 +99,9 @@ val dataModule = module {
             classAndOriginDAO = get(),
             classAndOriginDaoEntityMapper = get(),
             classAndOriginListMapper = get(),
+            itemDAO = get(),
+            itemDaoEntityMapper = get(),
+            itemListMapper = get(),
             champDaoEntityMapper = get()
         )
     }

@@ -24,27 +24,26 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_show_champ_by_gold, container, false)
 
-        return view
+        return inflater.inflate(R.layout.fragment_show_champ_by_gold, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getChamp()
         setupUi()
+        getChamp(true)
     }
 
     private fun setupUi() {
-        adapter = AdapterShowByGold(arrayListOf(), this)
         rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
+        adapter = AdapterShowByGold(arrayListOf(), this)
         rvByGold?.adapter = adapter
         swipeRefreshLayoutByGold?.setOnRefreshListener {
-            getChamp()
+            getChamp(true)
         }
     }
 
-    private fun getChamp() {
+    private fun getChamp(isForceLoadData:Boolean) {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
                 adapter?.addData(it.sortedBy { champ->champ.cost })
@@ -52,7 +51,7 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
             Observer { swipeRefreshLayoutByGold?.isRefreshing = it })
-        mainViewModel.getChamps()
+        mainViewModel.getChamps(isForceLoadData)
     }
 
     override fun onClickListener(champ: Champ) {

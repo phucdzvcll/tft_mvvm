@@ -6,13 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.champ.model.TeamBuilder
 import com.tft_mvvm.app.mapper.TeamBuilderMapper
-import com.tft_mvvm.domain.features.champs.usecase.GetTeamBuilderUseCase
+import com.tft_mvvm.domain.features.usecase.GetListTeamBuilderUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TeamRecommendViewModel(
-    private val getTeamBuilderUseCase: GetTeamBuilderUseCase,
+    private val getListTeamBuilderUseCase: GetListTeamBuilderUseCase,
     private val teamBuilderMapper: TeamBuilderMapper
 ) : BaseViewModel() {
     private val listTeamBuilderLiveData: MutableLiveData<List<TeamBuilder>> = MutableLiveData()
@@ -21,8 +21,8 @@ class TeamRecommendViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             isLoadingLiveData.value = true
             val champResult = withContext(Dispatchers.IO) {
-                getTeamBuilderUseCase.execute(
-                    GetTeamBuilderUseCase.GetTeamUseCaseParam(
+                getListTeamBuilderUseCase.execute(
+                    GetListTeamBuilderUseCase.GetTeamUseCaseParam(
                         isForceLoadData
                     )
                 )

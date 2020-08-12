@@ -36,6 +36,8 @@ data class Champ (
         val activated : GsxName?,
     @SerializedName("gsx\$rankchamp")
         val rankChamp:GsxName?,
+    @SerializedName("gsx\$suitableitem")
+        val suitableItem:GsxName?,
     @SerializedName("gsx\$linkchampcover")
         val linkChampCover : GsxName?
 )

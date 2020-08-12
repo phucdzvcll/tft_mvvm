@@ -2,7 +2,7 @@ package com.tft_mvvm.data.features.champs.mapper
 
 import com.example.common_jvm.mapper.Mapper
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
-import com.tft_mvvm.domain.features.champs.model.ClassAndOriginListEntity
+import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
 
 class ClassAndOriginListMapper :
     Mapper<ClassAndOriginListDBO.ClassAndOrigin, ClassAndOriginListEntity.ClassAndOrigin>() {
