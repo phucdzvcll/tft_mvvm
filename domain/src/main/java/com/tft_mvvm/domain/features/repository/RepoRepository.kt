@@ -37,4 +37,8 @@ interface RepoRepository {
     suspend fun updateChamp(
         id: String
     ): Either<Failure, ChampListEntity.Champ>
+
+    suspend fun getChampById(
+        id: String
+    ): Either<Failure, ChampListEntity.Champ>
 }

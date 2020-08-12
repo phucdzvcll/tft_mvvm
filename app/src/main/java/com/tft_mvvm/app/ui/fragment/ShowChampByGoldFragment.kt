@@ -1,13 +1,12 @@
 package com.tft_mvvm.app.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.activity.DetailsChampActivity
@@ -43,10 +42,10 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    private fun getChamp(isForceLoadData:Boolean) {
+    private fun getChamp(isForceLoadData: Boolean) {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                adapter?.addData(it.sortedBy { champ->champ.cost })
+                adapter?.addData(it.sortedBy { champ -> champ.cost })
             })
         mainViewModel.isRefresh().observe(
             viewLifecycleOwner,
@@ -54,8 +53,8 @@ class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
         mainViewModel.getChamps(isForceLoadData)
     }
 
-    override fun onClickListener(champ: Champ) {
-        startActivity(DetailsChampActivity.newIntent(requireContext(), champ))
+    override fun onClickListener(id: String) {
+        startActivity(DetailsChampActivity.newIntent(requireContext(), id))
     }
 
 }

@@ -15,10 +15,11 @@ val presentationModule = module {
     factory { TeamBuilderMapper(champMapper = get()) }
     factory { ClassOrOriginMapper() }
     factory { ItemMapper() }
+    factory { ChampByGoldMapper() }
     viewModel {
         MainViewModel(
             champsUseCase = get(),
-            champListMapper = get()
+            champByGoldMapper = get()
         )
     }
     viewModel {

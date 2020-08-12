@@ -1,13 +1,12 @@
 package com.tft_mvvm.app.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.app.features.champ.viewmodel.MainViewModel
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.app.ui.adapter.AdapterShowChampByRank
@@ -52,10 +51,9 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         rv_by_rank?.adapter = adapterShowChampByRank
     }
 
-    private fun getChamp(isForceLoadData:Boolean) {
+    private fun getChamp(isForceLoadData: Boolean) {
         mainViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                adapterShowChampByRank?.addData(it.sortedByDescending { champ -> champ.rankChamp })
             })
         mainViewModel.isRefresh().observe(viewLifecycleOwner, Observer {
             swipeRefreshLayoutByRank?.isRefreshing = it
@@ -63,8 +61,6 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
         mainViewModel.getChamps(isForceLoadData)
     }
 
-    override fun onClickListener(champ: Champ) {
-        val dialog = com.tft_mvvm.app.ui.Dialog(requireContext(), champ)
-        dialog.show()
+    override fun onClickListener(id: String) {
     }
 }

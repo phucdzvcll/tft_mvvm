@@ -10,7 +10,6 @@ import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
 import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
-import com.tft_mvvm.data.local.model.ItemListDBO
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ItemListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
@@ -180,6 +179,12 @@ class RepoRepositoryImpl(
                     )
                 )
             )
+        }
+
+    override suspend fun getChampById(id: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            val dbResult = champListMapper.map(champDAO.getChampById(id))
+            return@runSuspendWithCatchError Either.Success(dbResult)
         }
 
 }

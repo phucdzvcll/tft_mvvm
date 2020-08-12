@@ -26,12 +26,8 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_champ)
 
-        val list = ArrayList<ItemRv>()
-        getChamp(intent)?.let { champ ->
-            setupUI(champ)
-            observerViewModel(true, champ)
-            getData(champ, list)
-        }
+
+
     }
 
     private fun getData(champ: Champ, list: ArrayList<ItemRv>) {
@@ -95,22 +91,20 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     companion object {
-        private const val CHAMP_EXTRA = "champ_extra"
+        private const val CHAMP_EXTRA = "id_extra"
 
-        fun newIntent(context: Context, champ: Champ): Intent {
+        fun newIntent(context: Context, id: String): Intent {
             val intent = Intent(context, DetailsChampActivity::class.java)
-            intent.putExtra(CHAMP_EXTRA, champ)
+            intent.putExtra(CHAMP_EXTRA, id)
             return intent
         }
 
-        fun getChamp(intent: Intent): Champ? {
-            return intent.getSerializableExtra(CHAMP_EXTRA) as? Champ
+        fun getChamp(intent: Intent): String? {
+            return intent.getStringExtra(CHAMP_EXTRA)
         }
     }
 
-    override fun onClickListener(champ: Champ) {
-        val dialog = com.tft_mvvm.app.ui.Dialog(this, champ)
-        dialog.show()
+    override fun onClickListener(id: String) {
     }
 
 }

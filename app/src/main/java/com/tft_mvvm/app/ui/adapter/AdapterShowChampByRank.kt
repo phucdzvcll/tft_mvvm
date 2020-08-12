@@ -80,7 +80,7 @@ class AdapterShowChampByRank(
                 "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
                 "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
-            itemView.setOnClickListener { onItemClickListener.onClickListener(champ) }
+            itemView.setOnClickListener { onItemClickListener.onClickListener(champ.id) }
         }
     }
     

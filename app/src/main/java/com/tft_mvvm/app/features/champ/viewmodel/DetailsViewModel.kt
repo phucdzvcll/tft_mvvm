@@ -35,6 +35,7 @@ class DetailsViewModel(
     private val originContentLiveData: MutableLiveData<ClassOrOrigin> = MutableLiveData()
     private val listItemSuitableLiveData: MutableLiveData<List<Item>> = MutableLiveData()
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+
     fun getChampsByOrigin(origin: String) =
         viewModelScope.launch(Dispatchers.Main) {
             val champResult = withContext(Dispatchers.IO) {
