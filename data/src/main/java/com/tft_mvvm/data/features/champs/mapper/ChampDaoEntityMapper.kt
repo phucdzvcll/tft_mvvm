@@ -20,7 +20,7 @@ class ChampDaoEntityMapper : Mapper<ChampListResponse?, ChampListDBO>() {
                 name = champDBO.name?.value.defaultEmpty(),
                 rankChamp = champDBO.rankChamp?.value.defaultEmpty(),
                 suitableItem = champDBO.suitableItem?.value.defaultEmpty(),
-                linkSkilAvatar = champDBO.linkSkillAvatar?.value.defaultEmpty()
+                linkSkillAvatar = champDBO.linkSkillAvatar?.value.defaultEmpty()
             )
         }
         return ChampListDBO(champDBOs = champDBO)

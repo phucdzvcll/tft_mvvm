@@ -8,15 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.champ.model.Champ
-import com.tft_mvvm.app.features.champ.model.ClassOrOrigin
 import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_header_rv_details_champ.view.*
 import kotlinx.android.synthetic.main.item_rv_details_champ.view.*
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
-
 class AdapterShowDetailsChamp(
     private val listItemRv: ArrayList<ItemRv>,
     private val onItemClickListener: OnItemClickListener
@@ -128,4 +124,10 @@ data class HeaderViewHolderModel(
 data class ItemDetailsViewHolderModel(
     val classOrOrigin: ClassOrOrigin,
     val listChamp: List<Champ>
-) : ItemRv()
+) : ItemRv(){
+    data class ClassOrOrigin(
+        val classOrOriginName: String,
+        val bonus:List<String>,
+        val content: String
+    )
+}

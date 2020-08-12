@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampByGoldMapper
 import com.tft_mvvm.app.ui.adapter.AdapterShowByGold
-import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.usecase.GetChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,7 +34,7 @@ class MainViewModel(
                 isLoadingLiveData.value = false
             }) { (champs) ->
                 champLiveData.value =
-                    champByGoldMapper.mapList(champs.sortedBy { champ: ChampListEntity.Champ -> champ.cost })
+                    champByGoldMapper.mapList(champs.sortedBy { champByGold -> champByGold.cost })
                 isLoadingLiveData.value = false
             }
         }

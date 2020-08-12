@@ -3,16 +3,15 @@ package com.tft_mvvm.app.features.champ.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.common_jvm.exception.Failure
-import com.example.common_jvm.function.Either
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.champ.model.Champ
-import com.tft_mvvm.app.features.champ.model.ClassOrOrigin
 import com.tft_mvvm.app.features.champ.model.Item
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.mapper.ClassOrOriginMapper
+import com.tft_mvvm.app.mapper.DetailsChampMapper
 import com.tft_mvvm.app.mapper.ItemMapper
-import com.tft_mvvm.domain.features.model.ChampListEntity
+import com.tft_mvvm.app.ui.activity.DetailsChampActivity
+import com.tft_mvvm.app.ui.adapter.ItemDetailsViewHolderModel
 import com.tft_mvvm.domain.features.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,17 +23,23 @@ class DetailsViewModel(
     private val classAndOriginUseCase: GetClassAndOriginContentUseCase,
     private val itemListSuitableItemsUseCase: GetListSuitableItemsUseCase,
     private val updateChampUseCase: UpdateChampUseCase,
+    private val detailsChampMapper: DetailsChampMapper,
     private val itemMapper: ItemMapper,
+    private val champByIdUseCase: GetChampByIdUseCase,
     private val classOrOriginMapper: ClassOrOriginMapper,
     private val champListMapper: ChampMapper
 ) : BaseViewModel() {
     private val champByOriginLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val champByClassLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
     private val champAfterUpdateLiveData: MutableLiveData<Champ> = MutableLiveData()
-    private val classContentLiveData: MutableLiveData<ClassOrOrigin> = MutableLiveData()
-    private val originContentLiveData: MutableLiveData<ClassOrOrigin> = MutableLiveData()
+    private val classContentLiveData: MutableLiveData<ItemDetailsViewHolderModel.ClassOrOrigin> =
+        MutableLiveData()
+    private val originContentLiveData: MutableLiveData<ItemDetailsViewHolderModel.ClassOrOrigin> =
+        MutableLiveData()
     private val listItemSuitableLiveData: MutableLiveData<List<Item>> = MutableLiveData()
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val champByIdLiveData: MutableLiveData<DetailsChampActivity.DetailsChamp> =
+        MutableLiveData()
 
     fun getChampsByOrigin(origin: String) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -74,7 +79,11 @@ class DetailsViewModel(
             }
         }
 
-    fun getOriginContent(isForceLoadData: Boolean, nameClassOrOrigin: String, type: String) =
+    fun getClassAndOriginContent(
+        isForceLoadData: Boolean,
+        nameClassOrOrigin: String,
+        type: String
+    ) =
         viewModelScope.launch(Dispatchers.Main) {
             val dbResult = withContext(Dispatchers.IO) {
                 classAndOriginUseCase.execute(
@@ -97,26 +106,6 @@ class DetailsViewModel(
             }
         }
 
-    fun getListItemSuitable(isForceLoadData: Boolean, listId: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
-                itemListSuitableItemsUseCase.execute(
-                    GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam(
-                        isForceLoadData,
-                        listId
-                    )
-                )
-            }
-            dbResult.either({
-                //TODO error handle
-            })
-            {
-                val listItem = itemMapper.mapList(it.item)
-                if (listItem.size == 3) {
-                    listItemSuitableLiveData.value = listItem
-                }
-            }
-        }
 
     fun updateChamp(id: String) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -136,7 +125,26 @@ class DetailsViewModel(
             }
         }
 
-    fun getChampAfterUpdateLiveData():LiveData<Champ>{
+    fun getChampById(id: String) = viewModelScope.launch(Dispatchers.Main) {
+        val dbResult = withContext(Dispatchers.IO) {
+            champByIdUseCase.execute(
+                GetChampByIdUseCase.GetChampByIdUseCaseParam(
+                    id
+                )
+            )
+        }
+        dbResult.either({
+            //TODO error handle
+        }) {
+            champByIdLiveData.value = detailsChampMapper.map(it)
+        }
+    }
+
+    fun getChampByIdLiveData(): LiveData<DetailsChampActivity.DetailsChamp> {
+        return champByIdLiveData
+    }
+
+    fun getChampAfterUpdateLiveData(): LiveData<Champ> {
         return champAfterUpdateLiveData
     }
 
@@ -148,11 +156,11 @@ class DetailsViewModel(
         return listItemSuitableLiveData
     }
 
-    fun getClassContentLiveData(): LiveData<ClassOrOrigin> {
+    fun getClassContentLiveData(): LiveData<ItemDetailsViewHolderModel.ClassOrOrigin> {
         return classContentLiveData
     }
 
-    fun getOriginContentLiveData(): LiveData<ClassOrOrigin> {
+    fun getOriginContentLiveData(): LiveData<ItemDetailsViewHolderModel.ClassOrOrigin> {
         return originContentLiveData
     }
 

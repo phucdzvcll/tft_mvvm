@@ -9,7 +9,7 @@ import java.lang.ref.SoftReference
 @Dao
 interface ChampDAO {
     @Query("SELECT * FROM champ")
-    suspend fun getData():List<ChampListDBO.ChampDBO>
+    suspend fun getAllChamp():List<ChampListDBO.ChampDBO>
 
     @Query("SELECT * FROM champ WHERE origin LIKE:origin")
     suspend fun getDataByOrigin(origin:String):List<ChampListDBO.ChampDBO>

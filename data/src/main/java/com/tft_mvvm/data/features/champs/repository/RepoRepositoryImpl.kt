@@ -35,26 +35,33 @@ class RepoRepositoryImpl(
 ) : RepoRepository {
     override suspend fun getChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val dbResult = ChampListEntity(
-                champs = champListMapper.mapList(champDAO.getData())
+            var dbResult = ChampListEntity(
+                champs = champListMapper.mapList(champDAO.getAllChamp())
             )
             if (dbResult.champs.isNullOrEmpty() || isForceLoadData) {
                 if (isForceLoadData) {
                     champDAO.deleteAllChampTable()
                 }
+                champDAO.deleteAllChampTable()
                 val champListResponse = apiService.getChampList()
                 val champListDBO = champDaoEntityMapper.map(champListResponse)
                 champDAO.insertChamps(champListDBO.champDBOs)
-                return@runSuspendWithCatchError Either.Success(
-                    ChampListEntity(
-                        champs = champListMapper.mapList(
-                            champDAO.getData()
+                dbResult = ChampListEntity(
+                    champs = champListMapper.mapList(champDAO.getAllChamp())
+                )
+            }
+            for (i in dbResult.champs) {
+                i.suitableItem.addAll(
+                    itemListMapper.mapList(
+                        itemDAO.getItemByListId(
+                            champDAO.getChampById(i.id).suitableItem.split(
+                                ","
+                            )
                         )
                     )
                 )
-            } else {
-                return@runSuspendWithCatchError Either.Success(dbResult)
             }
+            return@runSuspendWithCatchError Either.Success(dbResult)
         }
 
     override suspend fun getChampsByOrigin(origin: String) =

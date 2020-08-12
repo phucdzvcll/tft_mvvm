@@ -10,7 +10,7 @@ class ChampListMapper : Mapper<ChampListDBO.ChampDBO, ChampListEntity.Champ>() {
         return ChampListEntity.Champ(
             name = input.name,
             skillName = input.skillName,
-            linkSkillAvatar = input.linkSkilAvatar,
+            linkSkillAvatar = input.linkSkillAvatar,
             origin = input.origin,
             id = input.id,
             classs = input.classs,
@@ -18,7 +18,7 @@ class ChampListMapper : Mapper<ChampListDBO.ChampDBO, ChampListEntity.Champ>() {
             linkChampCover = input.linkChampCover,
             cost = input.cost,
             rankChamp = input.rankChamp,
-            suitableItem = input.suitableItem,
+            suitableItem = arrayListOf(),
             linkImg = input.linkImg
         )
     }

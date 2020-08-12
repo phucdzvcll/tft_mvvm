@@ -10,12 +10,13 @@ import org.koin.dsl.module
 
 val presentationModule = module {
 
-    factory { ChampMapper() }
+    factory { ChampMapper(itemMapper = get()) }
     factory { TeamMapper() }
     factory { TeamBuilderMapper(champMapper = get()) }
     factory { ClassOrOriginMapper() }
     factory { ItemMapper() }
     factory { ChampByGoldMapper() }
+    factory { DetailsChampMapper(itemMapper = get()) }
     viewModel {
         MainViewModel(
             champsUseCase = get(),
@@ -31,6 +32,8 @@ val presentationModule = module {
             itemMapper = get(),
             itemListSuitableItemsUseCase = get(),
             updateChampUseCase = get(),
+            champByIdUseCase = get(),
+            detailsChampMapper = get(),
             champListMapper = get()
         )
     }

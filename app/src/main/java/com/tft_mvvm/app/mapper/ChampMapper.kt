@@ -4,7 +4,7 @@ import com.example.common_jvm.mapper.Mapper
 import com.tft_mvvm.app.features.champ.model.Champ
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
-class ChampMapper : Mapper<ChampListEntity.Champ, Champ>() {
+class ChampMapper(private val itemMapper: ItemMapper) : Mapper<ChampListEntity.Champ, Champ>() {
     override fun map(input: ChampListEntity.Champ): Champ {
         return Champ(
             name = input.name,
@@ -17,7 +17,7 @@ class ChampMapper : Mapper<ChampListEntity.Champ, Champ>() {
             skillName = input.skillName,
             linkSkilAvatar = input.linkSkillAvatar,
             rankChamp = input.rankChamp,
-            suitableItem = input.suitableItem,
+            suitableItem = itemMapper.mapList(input.suitableItem),
             linkChampCover = input.linkChampCover
         )
     }

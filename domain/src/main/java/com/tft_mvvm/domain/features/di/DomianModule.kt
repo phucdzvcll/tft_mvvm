@@ -42,4 +42,10 @@ val domainModule = module {
             repoRepository = get()
         )
     }
+
+    single {
+        GetChampByIdUseCase(
+            repository = get()
+        )
+    }
 }

@@ -15,7 +15,7 @@ data class ChampListDBO(val champDBOs:List<ChampDBO>){
         val origin:String,
         val classs:String,
         val skillName:String,
-        val linkSkilAvatar:String,
+        val linkSkillAvatar:String,
         val activated:String,
         val rankChamp:String,
         val suitableItem:String,
