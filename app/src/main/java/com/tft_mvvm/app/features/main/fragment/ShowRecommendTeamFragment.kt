@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
 import com.tft_mvvm.app.features.main.adapter.AdapterShowRecommendTeamBuilder
 import com.tft_mvvm.app.features.main.viewmodel.ShowTeamRecommendViewModel
-import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.fragment_show_recommend_team.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
+class ShowRecommendTeamFragment : Fragment(),
+    OnItemClickListener {
     private val showTeamRecommendViewModel: ShowTeamRecommendViewModel by viewModel()
     private var adapterShowRecommendTeamBuilder: AdapterShowRecommendTeamBuilder? = null
 
@@ -58,6 +60,8 @@ class ShowRecommendTeamFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onClickListener(id: String) {
+        val dialog = DialogShowDetailsChamp.newInstance(id)
+        dialog.show(childFragmentManager, "DialogShowDetailsChamp")
     }
 
 

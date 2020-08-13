@@ -1,4 +1,4 @@
-package com.tft_mvvm.app.ui
+package com.tft_mvvm.app
 
 import android.app.Application
 import com.tft_mvvm.app.di.getAppKoinModule

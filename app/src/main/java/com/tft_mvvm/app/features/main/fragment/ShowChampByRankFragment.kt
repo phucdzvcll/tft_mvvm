@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
 import com.tft_mvvm.app.features.main.adapter.AdapterShowChampByRank
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByRankViewModel
-import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.fragment_show_champ_by_rank.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ShowChampByRankFragment : Fragment(), OnItemClickListener {
+class ShowChampByRankFragment : Fragment(),
+    OnItemClickListener {
     private val showChampByRankViewModel: ShowChampByRankViewModel by viewModel()
     private var adapterShowChampByRank: AdapterShowChampByRank? = null
 
@@ -67,5 +69,7 @@ class ShowChampByRankFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onClickListener(id: String) {
+        val dialog = DialogShowDetailsChamp.newInstance(id)
+        dialog.show(childFragmentManager, "DialogShowDetailsChamp")
     }
 }

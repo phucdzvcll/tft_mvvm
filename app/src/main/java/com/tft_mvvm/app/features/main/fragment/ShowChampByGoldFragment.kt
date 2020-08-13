@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.DetailsChampActivity
 import com.tft_mvvm.app.features.main.adapter.AdapterShowByGold
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByGoldViewModel
-import com.tft_mvvm.app.ui.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.fragment_show_champ_by_gold.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ShowChampByGoldFragment : Fragment(), OnItemClickListener {
+class ShowChampByGoldFragment : Fragment(),
+    OnItemClickListener {
     private val showChampByGoldViewModel: ShowChampByGoldViewModel by viewModel()
     private var adapter: AdapterShowByGold? = null
 

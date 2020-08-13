@@ -5,21 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tft_mvvm.app.ui.OnItemClickListener
+import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_gold.view.*
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class AdapterShowByGold(
-    private val champs: ArrayList<ItemViewHolder.ChampByGold>,
+    private val champs: ArrayList<Champ>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(champ: ChampByGold, onItemClickListener: OnItemClickListener) {
+        fun bind(champ: Champ, onItemClickListener: OnItemClickListener) {
             itemView.name.text = champ.name
             Glide.with(itemView.img_show_by_gold.context)
-                .load(champ.linkImg)
+                .load(champ.imgUrl)
                 .into(itemView.img_show_by_gold)
             when (champ.cost) {
                 "1" -> itemView.img_show_by_gold.setBackgroundResource(R.drawable.background_1_gold)
@@ -31,12 +32,6 @@ class AdapterShowByGold(
             itemView.setOnClickListener { onItemClickListener.onClickListener(champ.id) }
         }
 
-        data class ChampByGold(
-            val name: String,
-            val linkImg: String,
-            val cost: String,
-            val id: String
-        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -49,7 +44,7 @@ class AdapterShowByGold(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
         (holder as ItemViewHolder).bind(champs[position], onItemClickListener)
 
-    fun addData(list: List<ItemViewHolder.ChampByGold>) {
+    fun addData(list: List<Champ>) {
         champs.clear()
         champs.addAll(list)
         notifyDataSetChanged()

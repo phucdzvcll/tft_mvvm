@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tft_mvvm.app.ui.OnItemClickListener
+import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
 class AdapterShowChampByRank(
-    private val champs: ArrayList<ChampByRank>,
+    private val champs: ArrayList<Champ>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val ITEM_TYPE: Int = 1
@@ -70,7 +71,7 @@ class AdapterShowChampByRank(
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(champ: ChampByRank, onItemClickListener: OnItemClickListener) {
+        fun bind(champ: Champ, onItemClickListener: OnItemClickListener) {
             Glide.with(itemView.imgShowByOriginClass.context)
                 .load(champ.imgUrl)
                 .into(itemView.imgShowByOriginClass)
@@ -85,9 +86,9 @@ class AdapterShowChampByRank(
         }
     }
 
-    fun addData(list: List<ChampByRank>) {
+    fun addData(list: List<Champ>) {
         champs.clear()
-        val data = ArrayList<ChampByRank>()
+        val data = ArrayList<Champ>()
         data.addAll(list)
         for (i in 0 until data.size) {
             if (i == 0) {
@@ -100,11 +101,4 @@ class AdapterShowChampByRank(
         notifyDataSetChanged()
     }
 
-    data class ChampByRank(
-        val id: String,
-        val name: String,
-        val imgUrl: String,
-        val cost: String,
-        val rank: String
-    )
 }

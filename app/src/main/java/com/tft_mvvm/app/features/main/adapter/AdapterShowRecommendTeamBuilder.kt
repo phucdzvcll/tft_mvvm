@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tft_mvvm.app.model.Champ
 
-import com.tft_mvvm.app.ui.OnItemClickListener
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
 import kotlinx.android.synthetic.main.iteam_team_recommend.view.name_team as name_team1
@@ -58,15 +59,7 @@ class AdapterShowRecommendTeamBuilder(
 
     data class TeamBuilder(
         val name: String,
-        val listChamp: List<ChampByRank>
-    )
-
-    data class ChampByRank(
-        val id: String,
-        val name: String,
-        val imgUrl: String,
-        val cost: String,
-        val rank: String
+        val listChamp: List<Champ>
     )
 }
 

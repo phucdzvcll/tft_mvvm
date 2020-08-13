@@ -1,5 +1,7 @@
 package com.tft_mvvm.app.features.details.model
 
+import com.tft_mvvm.app.model.Champ
+
 data class ItemHolderViewHolder(
     val classOrOrigin: ClassOrOrigin,
     val listChamp: List<Champ>
@@ -10,11 +12,4 @@ data class ItemHolderViewHolder(
         val content: String
     )
 
-    data class Champ(
-        val id: String,
-        val name: String,
-        val imgUrl: String,
-        val cost: String,
-        val rank: String
-    )
 }

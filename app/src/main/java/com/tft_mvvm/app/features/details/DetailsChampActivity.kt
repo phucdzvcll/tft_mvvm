@@ -7,16 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tft_mvvm.app.features.details.adapter.AdapterShowDetailsChamp
-import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
-import com.tft_mvvm.app.ui.OnItemClickListener
+import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
+import com.tft_mvvm.app.base.OnItemClickListener
 
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
+class DetailsChampActivity : AppCompatActivity(),
+    OnItemClickListener {
     private val detailsViewModel: DetailsViewModel by viewModel()
     private var adapterShowDetailsChamp: AdapterShowDetailsChamp? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +28,6 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
 
         getChamp(intent)?.let {
             detailsViewModel.getChampById(it)
-
         }
     }
 
@@ -62,21 +62,9 @@ class DetailsChampActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onClickListener(id: String) {
+        val dialog = DialogShowDetailsChamp.newInstance(id)
+        dialog.show(supportFragmentManager, "DialogShowDetailsChamp")
     }
-
-    data class DetailsChamp(
-        val name: String,
-        val id: String,
-        val origin: String,
-        val classs: String,
-        val activated: String,
-        val skillName: String,
-        val linkCover: String,
-        val linkAvatarSkill: String,
-        //val listIdItem: List<Item>,
-        val cost: String
-    )
-
 }
 
 
