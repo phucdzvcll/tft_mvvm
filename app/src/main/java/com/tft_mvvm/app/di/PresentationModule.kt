@@ -1,5 +1,6 @@
 package com.tft_mvvm.app.di
 
+import com.tft_mvvm.app.features.details.mapper.ItemMapper
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.main.mapper.ChampByGoldMapper
 import com.tft_mvvm.app.features.main.mapper.ChampByRankMapper
@@ -18,6 +19,7 @@ val presentationModule = module {
     factory { ChampByGoldMapper() }
     factory { ChampByRankMapper() }
     factory { TeamBuilderRecommendMapper() }
+    factory { ItemMapper() }
     viewModel {
         MainViewModel(
             champsUseCase = get()
@@ -25,13 +27,9 @@ val presentationModule = module {
     }
     viewModel {
         DetailsViewModel(
-            listChampsByOriginUseCase = get(),
-            listChampsByClassUseCase = get(),
-            classAndOriginUseCase = get(),
-            itemListSuitableItemsUseCase = get(),
-            updateChampUseCase = get(),
-            champByIdUseCase = get(),
-            champListMapper = get()
+            getChampByIdUseCase = get(),
+            itemMapper = get(),
+            getListSuitableItemsUseCase = get()
         )
     }
 

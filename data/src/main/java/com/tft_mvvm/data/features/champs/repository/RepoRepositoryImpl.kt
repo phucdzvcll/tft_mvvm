@@ -139,23 +139,17 @@ class RepoRepositoryImpl(
 
     override suspend fun getListSuitableItem(
         isForceLoadData: Boolean,
-        listId: String
+        listId: List<String>
     ): Either<Failure, ItemListEntity> =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            if (listId.isNotBlank()) {
-                val list = listId.split(",")
-                if (itemDAO.getItemByListId(list).isNullOrEmpty() || isForceLoadData) {
-                    if (isForceLoadData) {
-                        itemDAO.deleteAllItemTable()
-                    }
-                    val listDBO = itemDaoEntityMapper.map(apiService.getItemListResponse())
-                    itemDAO.insertItems(listDBO.items)
-                    val dbAfterInsert = itemListMapper.mapList(itemDAO.getItemByListId(list))
-                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbAfterInsert))
-                } else {
-                    val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(list))
-                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
-                }
+
+            if (isForceLoadData || itemDAO.getAllItem().isEmpty()) {
+                val listDBO = itemDaoEntityMapper.map(apiService.getItemListResponse())
+                itemDAO.insertItems(listDBO.items)
+            }
+            if (listId.isNotEmpty()) {
+                val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(listId))
+                return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
             } else {
                 return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
             }

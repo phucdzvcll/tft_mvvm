@@ -31,7 +31,7 @@ interface RepoRepository {
 
     suspend fun getListSuitableItem(
         isForceLoadData: Boolean,
-        listId: String
+        listId: List<String>
     ): Either<Failure, ItemListEntity>
 
     suspend fun updateChamp(

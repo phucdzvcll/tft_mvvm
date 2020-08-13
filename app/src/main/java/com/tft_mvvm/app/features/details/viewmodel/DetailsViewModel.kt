@@ -1,5 +1,6 @@
 package com.tft_mvvm.app.features.details.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,9 @@ import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 //import com.tft_mvvm.app.mapper.ClassOrOriginMapper
 import com.tft_mvvm.app.features.details.DetailsChampActivity
+import com.tft_mvvm.app.features.details.mapper.ItemMapper
+import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
+import com.tft_mvvm.app.features.details.model.ItemRv
 
 import com.tft_mvvm.domain.features.usecase.*
 import kotlinx.coroutines.Dispatchers
@@ -15,158 +19,87 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
-    private val listChampsByOriginUseCase: GetListChampsByOriginUseCase,
-    private val listChampsByClassUseCase: GetListChampsByClassUseCase,
-    private val classAndOriginUseCase: GetClassAndOriginContentUseCase,
-    private val itemListSuitableItemsUseCase: GetListSuitableItemsUseCase,
-    private val updateChampUseCase: UpdateChampUseCase,
-    //private val detailsChampMapper: DetailsChampMapper,
-    //private val itemMapper: ItemMapper,
-    private val champByIdUseCase: GetChampByIdUseCase,
-    //private val classOrOriginMapper: ClassOrOriginMapper,
-    private val champListMapper: ChampMapper
+    private val getChampByIdUseCase: GetChampByIdUseCase,
+    private val getListSuitableItemsUseCase: GetListSuitableItemsUseCase,
+    private val itemMapper: ItemMapper
 ) : BaseViewModel() {
-//    private val champByOriginLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
-//    private val champByClassLiveData: MutableLiveData<List<Champ>> = MutableLiveData()
-//    private val champAfterUpdateLiveData: MutableLiveData<Champ> = MutableLiveData()
-//    private val classContentLiveData: MutableLiveData<ItemDetailsViewHolderModel.ClassOrOrigin> =
-//        MutableLiveData()
-//    private val originContentLiveData: MutableLiveData<ItemDetailsViewHolderModel.ClassOrOrigin> =
-//        MutableLiveData()
-//    private val listItemSuitableLiveData: MutableLiveData<List<Item>> = MutableLiveData()
-    private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val champByIdLiveData: MutableLiveData<DetailsChampActivity.DetailsChamp> =
-        MutableLiveData()
 
-    fun getChampsByOrigin(origin: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val champResult = withContext(Dispatchers.IO) {
-                listChampsByOriginUseCase.execute(
-                    GetListChampsByOriginUseCase.GetChampsByOriginUseCaseParam(
-                        origin = origin
-                    )
-                )
-            }
-            champResult.either(
-                {
-                    //TODO error handle
-                })
-            {
-                val champs = champListMapper.mapList(it.champs)
-               // champByOriginLiveData.value = champs
-            }
-        }
-
-    fun getChampsByClass(nameClassOrOrigin: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val champResult = withContext(Dispatchers.IO) {
-                listChampsByClassUseCase.execute(
-                    GetListChampsByClassUseCase.GetChampsByClassUseCaseParam(
-                        classs = nameClassOrOrigin
-                    )
-                )
-            }
-            champResult.either(
-                {
-                    //TODO error handle
-                })
-            {
-                val champs = champListMapper.mapList(it.champs)
-               // champByClassLiveData.value = champs
-            }
-        }
-
-    fun getClassAndOriginContent(
-        isForceLoadData: Boolean,
-        nameClassOrOrigin: String,
-        type: String
-    ) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
-                classAndOriginUseCase.execute(
-                    GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
-                        isForceLoadData,
-                        nameClassOrOrigin
-                    )
-                )
-            }
-            dbResult.either({
-                //TODO error handle
-            })
-            { classOrOriginEntity ->
-                when (type) {
-                   // "origin" -> originContentLiveData.value =
-                     //   classOrOriginMapper.map(classOrOriginEntity)
-                  //  "class" -> classContentLiveData.value =
-                      //  classOrOriginMapper.map(classOrOriginEntity)
-                }
-            }
-        }
-
-
-    fun updateChamp(id: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            isLoadingLiveData.value = true
-            val dbResult = withContext(Dispatchers.IO) {
-                updateChampUseCase.execute(
-                    UpdateChampUseCase.UpdateChampUseCaseParam(
-                        id
-                    )
-                )
-            }
-            dbResult.either({
-                //TODO error handle
-            }) {
-              //  champAfterUpdateLiveData.value = champListMapper.map(it)
-                isLoadingLiveData.value = false
-            }
-        }
+    private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
+    private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
+    var headerViewHolderModel = HeaderViewHolderModel(
+        nameSkill = "",
+        linkChampCover = "",
+        activated = "",
+        linkAvatarSkill = "",
+        name = "",
+        cost = "",
+        listSuitableItem = listOf()
+    )
+    var listItemRv = mutableListOf<ItemRv>()
 
     fun getChampById(id: String) = viewModelScope.launch(Dispatchers.Main) {
         val dbResult = withContext(Dispatchers.IO) {
-            champByIdUseCase.execute(
+            getChampByIdUseCase.execute(
                 GetChampByIdUseCase.GetChampByIdUseCaseParam(
                     id
                 )
             )
         }
         dbResult.either({
-            //TODO error handle
+            //TODO handel error
+            Log.d("Phuc", "$it")
         }) {
-            //champByIdLiveData.value = detailsChampMapper.map(it)
+            Log.d("Phuc", "$it")
+            updateHeaderViewHolderModel(
+                headerViewHolderModel.copy(
+                    nameSkill = it.skillName,
+                    linkAvatarSkill = it.linkSkillAvatar,
+                    activated = it.activated,
+                    name = it.name,
+                    cost = it.cost,
+                    linkChampCover = it.linkChampCover
+                )
+            )
+            getListItemSuitable(it.suitableItem, false)
         }
     }
 
-    fun getChampByIdLiveData(): LiveData<DetailsChampActivity.DetailsChamp> {
-        return champByIdLiveData
+    private fun getListItemSuitable(
+        listId: List<String>,
+        isForceLoadData: Boolean
+    ) =
+        viewModelScope.launch(Dispatchers.Main) {
+            val dbResult = withContext(Dispatchers.IO) {
+                getListSuitableItemsUseCase.execute(
+                    GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam(
+                        isForceLoadData = isForceLoadData,
+                        listId = listId
+                    )
+                )
+            }
+            dbResult.either({
+                //TODO handel error
+                Log.d("Phuc","$it")
+            }) {
+                listItemRv.add(
+                    headerViewHolderModel.copy(
+                        listSuitableItem = itemMapper.mapList(it.item)
+                    )
+                )
+                listItemRvLiveData.value = listItemRv.toList()
+            }
+        }
+
+    private fun updateHeaderViewHolderModel(model: HeaderViewHolderModel) {
+        headerViewHolderModel = model
+        headerViewHolderModelLiveData.value = headerViewHolderModel
     }
 
-//    fun getChampAfterUpdateLiveData(): LiveData<Champ> {
-//        return champAfterUpdateLiveData
-//    }
-//
-//    fun isRefresh(): LiveData<Boolean> {
-//        return isLoadingLiveData
-//    }
-//
-//    fun getListItemSuitableLiveData(): LiveData<List<Item>> {
-//        return listItemSuitableLiveData
-//    }
-//
-//    fun getClassContentLiveData(): LiveData<ItemDetailsViewHolderModel.ClassOrOrigin> {
-//        return classContentLiveData
-//    }
-//
-//    fun getOriginContentLiveData(): LiveData<ItemDetailsViewHolderModel.ClassOrOrigin> {
-//        return originContentLiveData
-//    }
-//
-//    fun getChampsByOriginLiveData(): LiveData<List<Champ>> {
-//        return champByOriginLiveData
-//    }
-//
-//    fun getChampsByClassLiveData(): LiveData<List<Champ>> {
-//        return champByClassLiveData
-//    }
+    fun getHeaderViewHolderModel(): LiveData<HeaderViewHolderModel> {
+        return headerViewHolderModelLiveData
+    }
 
+    fun getListItemRvLiveData(): LiveData<List<ItemRv>> {
+        return listItemRvLiveData
+    }
 }

@@ -11,7 +11,7 @@ class GetListSuitableItemsUseCase(private val repoRepository: RepoRepository) :
     UseCase<GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam, Either<Failure, ItemListEntity>>() {
     data class GetListSuitableItemUseCaseParam(
         val isForceLoadData:Boolean,
-        val listId:String
+        val listId:List<String>
     ) : UseCaseParams
 
     override suspend fun executeInternal(params: GetListSuitableItemUseCaseParam): Either<Failure, ItemListEntity> {
