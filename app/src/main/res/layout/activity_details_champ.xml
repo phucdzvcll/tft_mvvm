@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="com.tft_mvvm.app.ui.activity.DetailsChampActivity">
+    tools:context="com.tft_mvvm.app.features.details.DetailsChampActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

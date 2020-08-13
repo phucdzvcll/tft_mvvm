@@ -50,17 +50,6 @@ class RepoRepositoryImpl(
                     champs = champListMapper.mapList(champDAO.getAllChamp())
                 )
             }
-            for (i in dbResult.champs) {
-                i.suitableItem.addAll(
-                    itemListMapper.mapList(
-                        itemDAO.getItemByListId(
-                            champDAO.getChampById(i.id).suitableItem.split(
-                                ","
-                            )
-                        )
-                    )
-                )
-            }
             return@runSuspendWithCatchError Either.Success(dbResult)
         }
 
@@ -94,7 +83,7 @@ class RepoRepositoryImpl(
                         teamDAO.getAllTeam()
                     )
                 )
-            if (teamDAO.getAllTeam().isNullOrEmpty() || isForceLoadData) {
+            if (dbTeamListEntity.teams.isNullOrEmpty() || isForceLoadData) {
                 teamDAO.deleteAllTeam()
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
@@ -106,15 +95,16 @@ class RepoRepositoryImpl(
                         )
                     )
             }
-            val listTeamBuilder: ArrayList<TeamBuilderListEntity.TeamsBuilder> = ArrayList()
-            for (i in dbTeamListEntity.teams) {
-                val list = i.listId.split(",")
+
+            val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
+
+            dbTeamListEntity.teams.forEach { team ->
                 val champs = ChampListEntity(
                     champs = champListMapper.mapList(
-                        champDAO.getListChampByTeam(list)
+                        champDAO.getListChampByTeam(team.listId)
                     )
                 )
-                val teamBuilder = TeamBuilderListEntity.TeamsBuilder(i.name, champs)
+                val teamBuilder = TeamBuilderListEntity.TeamsBuilder(team.name, champs)
                 listTeamBuilder.add(teamBuilder)
             }
             return@runSuspendWithCatchError Either.Success(

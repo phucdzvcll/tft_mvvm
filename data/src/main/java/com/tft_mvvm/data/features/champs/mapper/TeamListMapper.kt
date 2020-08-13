@@ -9,7 +9,7 @@ class TeamListMapper: Mapper<TeamListDBO.TeamDBO, TeamListEntity.Team>() {
         return TeamListEntity.Team(
             name = input.name,
             id = input.id,
-            listId = input.listId
+            listId = input.listId.split(",")
         )
     }
 }

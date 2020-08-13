@@ -17,7 +17,7 @@ interface ChampDAO {
     @Query("SELECT * FROM champ WHERE classs LIKE:classs")
     suspend fun getDataByClass(classs:String):List<ChampListDBO.ChampDBO>
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     suspend fun insertChamps(userDBOS: List<ChampListDBO.ChampDBO>)
 
     @Query("SELECT * FROM champ WHERE id IN (:teamIds)")

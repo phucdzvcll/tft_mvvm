@@ -1,7 +1,6 @@
 package com.tft_mvvm.app.di
 
 
-import com.tft_mvvm.app.features.champ.di.getPresentationKoinModule
 import com.tft_mvvm.data.di.getDataKoinModule
 import com.tft_mvvm.domain.di.getDomainKoinModule
 import org.koin.core.module.Module
