@@ -6,11 +6,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.adapter.AdapterShowDetailsChamp
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
-import com.tft_mvvm.app.base.OnItemClickListener
-
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -20,14 +19,16 @@ class DetailsChampActivity : AppCompatActivity(),
     OnItemClickListener {
     private val detailsViewModel: DetailsViewModel by viewModel()
     private var adapterShowDetailsChamp: AdapterShowDetailsChamp? = null
+    private var champId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_champ)
-        setupUi()
+        champId = getChamp(intent)
         observerViewModel()
+        setupUi()
+        if (champId != null) {
+            detailsViewModel.getChampById(champId!!, false)
 
-        getChamp(intent)?.let {
-            detailsViewModel.getChampById(it)
         }
     }
 
@@ -39,12 +40,20 @@ class DetailsChampActivity : AppCompatActivity(),
         detailsViewModel.getListItemRvLiveData().observe(this, Observer {
             adapterShowDetailsChamp?.addData(it)
         })
+        detailsViewModel.isRefresh().observe(this, Observer {
+            SwipeRefreshLayoutDetailsActivity?.isRefreshing = it
+        })
     }
 
     private fun setupUi() {
         rv_show_details_champ?.layoutManager = LinearLayoutManager(this)
         adapterShowDetailsChamp = AdapterShowDetailsChamp(arrayListOf(), this)
         rv_show_details_champ?.adapter = adapterShowDetailsChamp
+        SwipeRefreshLayoutDetailsActivity.setOnRefreshListener {
+            if (champId != null) {
+                detailsViewModel.getChampById(champId!!, true)
+            }
+        }
     }
 
     companion object {

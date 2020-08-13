@@ -27,6 +27,7 @@ class DetailsViewModel(
     private val itemMapper: ItemMapper
 ) : BaseViewModel() {
 
+    private val isLoading = MutableLiveData<Boolean>(false)
     private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
     private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
     var headerViewHolderModel = HeaderViewHolderModel(
@@ -56,33 +57,40 @@ class DetailsViewModel(
     )
     var listItemRv = mutableListOf<ItemRv>()
 
-    fun getChampById(id: String) = viewModelScope.launch(Dispatchers.Main) {
-        val dbResult = withContext(Dispatchers.IO) {
-            getChampByIdUseCase.execute(
-                GetChampByIdUseCase.GetChampByIdUseCaseParam(
-                    id
+    fun getChampById(id: String, isRefresh: Boolean) =
+        viewModelScope.launch(Dispatchers.Main) {
+            if (isRefresh) {
+                listItemRv.clear()
+            }
+            isLoading.value = true
+            val dbResult = withContext(Dispatchers.IO) {
+                getChampByIdUseCase.execute(
+                    GetChampByIdUseCase.GetChampByIdUseCaseParam(
+                        id
+                    )
                 )
-            )
-        }
-        dbResult.either({
-            //TODO handel error
-            Log.d("Phuc", "$it")
-        }) {
-            updateHeaderViewHolderModel(
-                headerViewHolderModel.copy(
-                    nameSkill = it.skillName,
-                    linkAvatarSkill = it.linkSkillAvatar,
-                    activated = it.activated,
-                    name = it.name,
-                    cost = it.cost,
-                    linkChampCover = it.linkChampCover
+            }
+            dbResult.either({
+                //TODO handel error
+                Log.d("Phuc", "$it")
+                isLoading.value = false
+            }) {
+                updateHeaderViewHolderModel(
+                    headerViewHolderModel.copy(
+                        nameSkill = it.skillName,
+                        linkAvatarSkill = it.linkSkillAvatar,
+                        activated = it.activated,
+                        name = it.name,
+                        cost = it.cost,
+                        linkChampCover = it.linkChampCover
+                    )
                 )
-            )
-            getListItemSuitable(it.suitableItem, false)
-            getOriginContent(it.origin, false)
-            getClassContent(it.classs, false)
+                isLoading.value = false
+                getListItemSuitable(it.suitableItem, false)
+                getOriginContent(it.origin, false)
+                getClassContent(it.classs, false)
+            }
         }
-    }
 
     private fun getListItemSuitable(
         listId: List<String>,
@@ -124,11 +132,13 @@ class DetailsViewModel(
             dbResult.either({
                 //TODO handle error
             }) {
-                itemOriginHolderViewHolder.copy(
-                    classOrOrigin = ItemHolderViewHolder.ClassOrOrigin(
-                        classOrOriginName = it.classOrOriginName,
-                        content = it.content,
-                        bonus = it.bonus.split(",")
+                updateItemOriginHolderViewHolder(
+                    itemOriginHolderViewHolder.copy(
+                        classOrOrigin = ItemHolderViewHolder.ClassOrOrigin(
+                            classOrOriginName = it.classOrOriginName,
+                            content = it.content,
+                            bonus = it.bonus.split(",")
+                        )
                     )
                 )
                 getListChampsByOrigin(it.classOrOriginName)
@@ -166,7 +176,17 @@ class DetailsViewModel(
             }
             dbResult.either({
                 //TODO handle error
+                Log.d("Phuc", "$it")
             }) {
+                updateItemClassHolderViewHolder(
+                    itemClassHolderViewHolder.copy(
+                        classOrOrigin = ItemHolderViewHolder.ClassOrOrigin(
+                            classOrOriginName = it.classOrOriginName,
+                            bonus = it.bonus.split(","),
+                            content = it.content
+                        )
+                    )
+                )
                 getListChampsByClass(it.classOrOriginName)
             }
         }
@@ -193,6 +213,18 @@ class DetailsViewModel(
     private fun updateHeaderViewHolderModel(model: HeaderViewHolderModel) {
         headerViewHolderModel = model
         headerViewHolderModelLiveData.value = headerViewHolderModel
+    }
+
+    private fun updateItemOriginHolderViewHolder(model: ItemHolderViewHolder) {
+        itemOriginHolderViewHolder = model
+    }
+
+    private fun updateItemClassHolderViewHolder(model: ItemHolderViewHolder) {
+        itemClassHolderViewHolder = model
+    }
+
+    fun isRefresh(): LiveData<Boolean> {
+        return isLoading
     }
 
     fun getHeaderViewHolderModel(): LiveData<HeaderViewHolderModel> {
