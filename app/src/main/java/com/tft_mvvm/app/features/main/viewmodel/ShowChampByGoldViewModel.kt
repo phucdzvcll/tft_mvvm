@@ -1,11 +1,9 @@
 package com.tft_mvvm.app.features.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
-import com.tft_mvvm.app.features.main.adapter.AdapterShowByGold
 import com.tft_mvvm.app.features.main.mapper.ChampMapper
 import com.tft_mvvm.app.model.Champ
 import com.tft_mvvm.domain.features.usecase.GetChampsUseCase
@@ -24,7 +22,9 @@ class ShowChampByGoldViewModel(
 
     fun getChamps(isForceLoadData: Boolean) =
         viewModelScope.launch(Dispatchers.Main) {
-            isLoadingLiveData.value = true
+            if (isForceLoadData) {
+                isLoadingLiveData.value = true
+            }
             val champResult = withContext(Dispatchers.IO) {
                 champsUseCase.execute(
                     GetChampsUseCase.GetAllChampUseCaseParam(
@@ -35,10 +35,9 @@ class ShowChampByGoldViewModel(
             champResult.either({
                 //TODO error handle
                 isLoadingLiveData.value = false
-            }) { (champs) ->
-                Log.d("PHUC", "$champs")
+            }) {
                 champByGoldLiveData.value =
-                    champMapper.mapList(champs.sortedBy { champ -> champ.cost })
+                    champMapper.mapList(it.champs.sortedBy { champ -> champ.cost })
                 isLoadingLiveData.value = false
             }
         }

@@ -26,10 +26,9 @@ class DetailsViewModel(
     private val champMapper: ChampMapper,
     private val itemMapper: ItemMapper
 ) : BaseViewModel() {
-
-    private val isLoading = MutableLiveData<Boolean>(false)
     private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
     private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
+
     var headerViewHolderModel = HeaderViewHolderModel(
         nameSkill = "",
         linkChampCover = "",
@@ -57,12 +56,8 @@ class DetailsViewModel(
     )
     var listItemRv = mutableListOf<ItemRv>()
 
-    fun getChampById(id: String, isRefresh: Boolean) =
+    fun getChampById(id: String) =
         viewModelScope.launch(Dispatchers.Main) {
-            if (isRefresh) {
-                listItemRv.clear()
-            }
-            isLoading.value = true
             val dbResult = withContext(Dispatchers.IO) {
                 getChampByIdUseCase.execute(
                     GetChampByIdUseCase.GetChampByIdUseCaseParam(
@@ -73,7 +68,6 @@ class DetailsViewModel(
             dbResult.either({
                 //TODO handel error
                 Log.d("Phuc", "$it")
-                isLoading.value = false
             }) {
                 updateHeaderViewHolderModel(
                     headerViewHolderModel.copy(
@@ -85,7 +79,6 @@ class DetailsViewModel(
                         linkChampCover = it.linkChampCover
                     )
                 )
-                isLoading.value = false
                 getListItemSuitable(it.suitableItem, false)
                 getOriginContent(it.origin, false)
                 getClassContent(it.classs, false)
@@ -221,10 +214,6 @@ class DetailsViewModel(
 
     private fun updateItemClassHolderViewHolder(model: ItemHolderViewHolder) {
         itemClassHolderViewHolder = model
-    }
-
-    fun isRefresh(): LiveData<Boolean> {
-        return isLoading
     }
 
     fun getHeaderViewHolderModel(): LiveData<HeaderViewHolderModel> {

@@ -27,8 +27,7 @@ class DetailsChampActivity : AppCompatActivity(),
         observerViewModel()
         setupUi()
         if (champId != null) {
-            detailsViewModel.getChampById(champId!!, false)
-
+            detailsViewModel.getChampById(champId!!)
         }
     }
 
@@ -40,19 +39,16 @@ class DetailsChampActivity : AppCompatActivity(),
         detailsViewModel.getListItemRvLiveData().observe(this, Observer {
             adapterShowDetailsChamp?.addData(it)
         })
-        detailsViewModel.isRefresh().observe(this, Observer {
-            SwipeRefreshLayoutDetailsActivity?.isRefreshing = it
-        })
+
     }
 
     private fun setupUi() {
         rv_show_details_champ?.layoutManager = LinearLayoutManager(this)
         adapterShowDetailsChamp = AdapterShowDetailsChamp(arrayListOf(), this)
         rv_show_details_champ?.adapter = adapterShowDetailsChamp
-        SwipeRefreshLayoutDetailsActivity.setOnRefreshListener {
-            if (champId != null) {
-                detailsViewModel.getChampById(champId!!, true)
-            }
+
+        item_btn_back?.setOnClickListener {
+            finish()
         }
     }
 

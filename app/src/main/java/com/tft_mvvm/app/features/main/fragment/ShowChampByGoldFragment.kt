@@ -31,8 +31,7 @@ class ShowChampByGoldFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         observerViewModel()
-
-        showChampByGoldViewModel.getChamps(true)
+        showChampByGoldViewModel.getChamps(false)
     }
 
     private fun observerViewModel() {
@@ -46,10 +45,7 @@ class ShowChampByGoldFragment : Fragment(),
 
     private fun setupUi() {
         rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
-        adapter = AdapterShowByGold(
-            arrayListOf(),
-            this
-        )
+        adapter = AdapterShowByGold(arrayListOf(), this)
         rvByGold?.adapter = adapter
         swipeRefreshLayoutByGold?.setOnRefreshListener {
             showChampByGoldViewModel.getChamps(true)

@@ -68,6 +68,8 @@ class AdapterShowChampByRank(
                 "D" -> itemView.tvTitle.setTextColor(Color.GRAY)
             }
         }
+
+
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -90,14 +92,14 @@ class AdapterShowChampByRank(
         champs.clear()
         val data = ArrayList<Champ>()
         data.addAll(list)
-        for (i in 0 until data.size) {
-            if (i == 0) {
-                data.add(0, data[i + 1])
-            } else if (i != 0 && data[i].rank != data[i + 1].rank) {
-                data.add(i + 1, data[i + 1])
-            }
-        }
-        champs.addAll(data)
+//        for (i in 0 until data.size) {
+//            if (i == 0) {
+//                data.add(0, data[i + 1])
+//            } else if (i != 0 && data[i].rank != data[i + 1].rank) {
+//                data.add(i + 1, data[i + 1])
+//            }
+//        }
+        champs.addAll(list)
         notifyDataSetChanged()
     }
 

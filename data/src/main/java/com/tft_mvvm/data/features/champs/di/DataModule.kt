@@ -1,5 +1,6 @@
 package com.tft_mvvm.data.features.champs.di
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
