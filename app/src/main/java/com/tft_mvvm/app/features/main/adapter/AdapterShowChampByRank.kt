@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tft_mvvm.app.model.Champ
 import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.details.model.ItemRv
+import com.tft_mvvm.app.model.Champ
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
 class AdapterShowChampByRank(
-    private val champs: ArrayList<Champ>,
+    private val champs: ArrayList<ItemRv>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val ITEM_TYPE: Int = 1
@@ -37,10 +38,10 @@ class AdapterShowChampByRank(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0 || champs[position].rank != champs[position - 1].rank) {
-            HEADER_TYPE
-        } else {
+        return if (champs[position] is Champ) {
             ITEM_TYPE
+        } else {
+            HEADER_TYPE
         }
     }
 
@@ -49,18 +50,18 @@ class AdapterShowChampByRank(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemViewType = getItemViewType(position)
         if (itemViewType == ITEM_TYPE) {
-            (holder as ItemViewHolder).bind(champs[position], onItemClickListener)
+            (holder as ItemViewHolder).bind(champs[position] as Champ, onItemClickListener)
         } else {
-            (holder as SectionHeaderViewHolder).bind(champs[position].rank)
+            (holder as SectionHeaderViewHolder).bind(champs[position] as SectionHeaderViewHolder.SectionModel)
         }
     }
 
     class SectionHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
-        fun bind(header: String) {
+        fun bind(header: SectionModel) {
             val prefix = "Bậc "
-            itemView.tvTitle.text = prefix + header
-            when (header) {
+            itemView.tvTitle.text = prefix + header.title
+            when (header.title) {
                 "S" -> itemView.tvTitle.setTextColor(Color.YELLOW)
                 "A" -> itemView.tvTitle.setTextColor(Color.RED)
                 "B" -> itemView.tvTitle.setTextColor(Color.BLUE)
@@ -69,6 +70,9 @@ class AdapterShowChampByRank(
             }
         }
 
+        data class SectionModel(
+            val title: String
+        ) : ItemRv()
 
     }
 
@@ -88,17 +92,20 @@ class AdapterShowChampByRank(
         }
     }
 
-    fun addData(list: List<Champ>) {
+    fun addData(list: List<ItemRv>) {
         champs.clear()
-        val data = ArrayList<Champ>()
+        val data = ArrayList<ItemRv>()
         data.addAll(list)
-//        for (i in 0 until data.size) {
-//            if (i == 0) {
-//                data.add(0, data[i + 1])
-//            } else if (i != 0 && data[i].rank != data[i + 1].rank) {
-//                data.add(i + 1, data[i + 1])
-//            }
-//        }
+        for (i in 0 until data.size) {
+            if (i == 0) {
+                data.add(0, SectionHeaderViewHolder.SectionModel(((i + 1) as Champ).rank))
+            } else if (i != 0 && SectionHeaderViewHolder.SectionModel((i as Champ).rank) != SectionHeaderViewHolder.SectionModel(
+                    ((i + 1) as Champ).rank
+                )
+            ) {
+                data.add(i + 1, SectionHeaderViewHolder.SectionModel(((i + 1) as Champ).rank))
+            }
+        }
         champs.addAll(list)
         notifyDataSetChanged()
     }
