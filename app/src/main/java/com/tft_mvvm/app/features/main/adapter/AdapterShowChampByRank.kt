@@ -92,21 +92,21 @@ class AdapterShowChampByRank(
         }
     }
 
-    fun addData(list: List<ItemRv>) {
-        champs.clear()
-        val data = ArrayList<ItemRv>()
+    fun setData(list: List<ItemRv>) {
+        val data = mutableListOf<ItemRv>()
         data.addAll(list)
-        for (i in 0 until data.size) {
-            if (i == 0) {
-                data.add(0, SectionHeaderViewHolder.SectionModel(((i + 1) as Champ).rank))
-            } else if (i != 0 && SectionHeaderViewHolder.SectionModel((i as Champ).rank) != SectionHeaderViewHolder.SectionModel(
-                    ((i + 1) as Champ).rank
-                )
-            ) {
-                data.add(i + 1, SectionHeaderViewHolder.SectionModel(((i + 1) as Champ).rank))
+
+        data.size
+        data.add(0, SectionHeaderViewHolder.SectionModel((data[0] as Champ).rank))
+        for (i in data.indices) {
+            if (data[i] is Champ && data[i - 1] is Champ) {
+                if ((data[i] as Champ).rank != (data[i - 1] as Champ).rank) {
+                    data.add(i, SectionHeaderViewHolder.SectionModel((data[i] as Champ).rank))
+                }
             }
         }
-        champs.addAll(list)
+        champs.clear()
+        champs.addAll(data)
         notifyDataSetChanged()
     }
 

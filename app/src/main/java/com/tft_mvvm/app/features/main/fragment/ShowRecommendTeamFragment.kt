@@ -31,7 +31,7 @@ class ShowRecommendTeamFragment : Fragment(),
         super.onActivityCreated(savedInstanceState)
         setupUi()
         observeViewModel()
-        showTeamRecommendViewModel.getListTeamBuilder(false)
+        showTeamRecommendViewModel.getListTeamBuilder(true)
     }
 
     private fun setupUi() {

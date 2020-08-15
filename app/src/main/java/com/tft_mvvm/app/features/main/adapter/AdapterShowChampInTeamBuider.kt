@@ -48,4 +48,19 @@ class AdapterShowChampInTeamBuilder(
         champs.addAll(list)
         notifyDataSetChanged()
     }
+
+    data class Champ(
+        val id: String,
+        val name: String,
+        val imgUrl: String,
+        val cost: String,
+        val itemSuitable: List<Item>
+    ) {
+        data class Item(
+            val id: String,
+            val itemName: String,
+            val itemAvatar: String
+        )
+    }
 }
+

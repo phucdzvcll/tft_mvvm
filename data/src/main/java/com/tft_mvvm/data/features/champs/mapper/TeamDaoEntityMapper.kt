@@ -11,6 +11,8 @@ class TeamDaoEntityMapper : Mapper<TeamListResponse?, TeamListDBO>() {
             TeamListDBO.TeamDBO(
                 name = teamDBO.name?.value.defaultEmpty(),
                 id = teamDBO.id?.value.defaultEmpty(),
+                idChampMain = teamDBO.idChampMain?.value.defaultEmpty(),
+                idItemSuitable = teamDBO.idItemSuitable?.value.defaultEmpty(),
                 listId = teamDBO.listID?.value.defaultEmpty()
             )
         }

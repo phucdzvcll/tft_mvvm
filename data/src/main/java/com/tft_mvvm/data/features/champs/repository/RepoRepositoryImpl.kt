@@ -145,11 +145,16 @@ class RepoRepositoryImpl(
 
             if (isForceLoadData || itemDAO.getAllItem().isEmpty()) {
                 val listDBO = itemDaoEntityMapper.map(apiService.getItemListResponse())
+                if (isForceLoadData) {
+                    itemDAO.deleteAllItemTable()
+                }
                 itemDAO.insertItems(listDBO.items)
-            }
-            if (listId.isNotEmpty()) {
-                val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(listId))
-                return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
+                if (listId.isNotEmpty()) {
+                    val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(listId))
+                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
+                } else {
+                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
+                }
             } else {
                 return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
             }

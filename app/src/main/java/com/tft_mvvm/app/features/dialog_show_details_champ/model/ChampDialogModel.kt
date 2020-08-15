@@ -1,4 +1,4 @@
-package com.tft_mvvm.app.features.dialog_show_details_champ
+package com.tft_mvvm.app.features.dialog_show_details_champ.model
 
 data class ChampDialogModel(
     val name: String,

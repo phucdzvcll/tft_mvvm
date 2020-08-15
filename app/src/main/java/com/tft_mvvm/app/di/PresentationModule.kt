@@ -7,8 +7,8 @@ import com.tft_mvvm.app.features.main.mapper.TeamBuilderRecommendMapper
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByGoldViewModel
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByRankViewModel
 import com.tft_mvvm.app.features.main.viewmodel.ShowTeamRecommendViewModel
-import com.tft_mvvm.app.features.dialog_show_details_champ.ChampDialogModelMapper
-import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChampViewModel
+import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ChampDialogModelMapper
+import com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel.DialogShowDetailsChampViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module

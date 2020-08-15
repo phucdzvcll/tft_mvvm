@@ -1,12 +1,12 @@
-package com.tft_mvvm.app.features.dialog_show_details_champ
+package com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
-import com.tft_mvvm.app.features.dialog_show_details_champ.ChampDialogModel
-import com.tft_mvvm.app.features.dialog_show_details_champ.ChampDialogModelMapper
+import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ChampDialogModelMapper
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.domain.features.usecase.GetChampByIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

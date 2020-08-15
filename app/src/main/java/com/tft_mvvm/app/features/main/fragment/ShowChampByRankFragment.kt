@@ -61,7 +61,7 @@ class ShowChampByRankFragment : Fragment(),
     private fun observeViewModel() {
         showChampByRankViewModel.getChampsLiveData()
             .observe(viewLifecycleOwner, Observer {
-                adapterShowChampByRank?.addData(it)
+                adapterShowChampByRank?.setData(it)
             })
         showChampByRankViewModel.isRefresh().observe(viewLifecycleOwner, Observer {
             swipeRefreshLayoutByRank?.isRefreshing = it

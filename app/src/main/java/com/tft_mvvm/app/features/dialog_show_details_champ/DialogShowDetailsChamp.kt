@@ -8,6 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
+import com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel.DialogShowDetailsChampViewModel
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.dialog_show_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel

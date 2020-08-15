@@ -1,6 +1,7 @@
-package com.tft_mvvm.app.features.dialog_show_details_champ
+package com.tft_mvvm.app.features.dialog_show_details_champ.mapper
 
 import com.example.common_jvm.mapper.Mapper
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
 class ChampDialogModelMapper :
