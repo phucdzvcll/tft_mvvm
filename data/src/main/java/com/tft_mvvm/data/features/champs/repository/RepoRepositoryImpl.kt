@@ -1,5 +1,6 @@
 package com.tft_mvvm.data.features.champs.repository
 
+import android.util.Log
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -232,21 +233,76 @@ class RepoRepositoryImpl(
                     listItem.add(itemListMapper.map(itemDAO.getItemById(i)))
                 }
             }
-            val dbResult = ChampListEntity.Champ(
-                id = champDBO.id,
-                cost = champDBO.cost,
-                linkImg = champDBO.linkImg,
-                activated = champDBO.activated,
-                linkChampCover = champDBO.linkChampCover,
-                classs = champDBO.classs,
-                origin = champDBO.origin,
-                skillName = champDBO.skillName,
-                linkSkillAvatar = champDBO.linkSkillAvatar,
-                rankChamp = champDBO.rankChamp,
-                suitableItem = listItem,
-                name = champDBO.name
-            )
-            return@runSuspendWithCatchError Either.Success(dbResult)
+            val champ = createChamp(champDBO, listItem)
+            return@runSuspendWithCatchError Either.Success(champ)
+        }
+
+    override suspend fun getTeamRecommendForChamp(id: String) =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            var teamListEntity =
+                TeamListEntity(
+                    teams = teamListMapper.mapList(
+                        teamDAO.getAllTeam()
+                    )
+                )
+            if (teamListEntity.teams.isNullOrEmpty()) {
+                val listItemResponse = apiService.getItemListResponse()
+                val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
+                itemDAO.insertItems(listItemDBO.items)
+                teamListEntity =
+                    TeamListEntity(
+                        teams = teamListMapper.mapList(
+                            teamDAO.getAllTeam()
+                        )
+                    )
+            }
+            val dbTeamListEntityResult = mutableListOf<TeamListEntity.Team>()
+            for (team in teamListEntity.teams) {
+
+                for (idChamp in team.listIdChamp) {
+                    if (id == idChamp) {
+                        dbTeamListEntityResult.add(team)
+                    }
+                }
+            }
+            val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
+            dbTeamListEntityResult.size
+            dbTeamListEntityResult.forEach { team ->
+                val listChampEntity = mutableListOf<ChampListEntity.Champ>()
+                val listChampMainDbo = champDAO.getListChampByTeam(team.listIdChampMain)
+                val listIdChampCommon = mutableListOf<String>()
+                listIdChampCommon.addAll(team.listIdChamp)
+                for (position in listChampMainDbo.indices) {
+                    val listItem = mutableListOf<ChampListEntity.Champ.Item>()
+                    val listIdItem = team.listIdSuitable[position].split(",")
+                    for (idItem in listIdItem) {
+                        val item = itemListMapper.map(itemDAO.getItemById(idItem))
+                        listItem.add(item)
+                    }
+                    listChampEntity.add(createChamp(listChampMainDbo[position], listItem))
+                    val index = mutableListOf<Int>()
+                    for (positionIdChampCommon in listIdChampCommon.indices) {
+                        if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {
+                            index.add(positionIdChampCommon)
+                        }
+                    }
+                    for (p in index) {
+                        listIdChampCommon.removeAt(p)
+                    }
+                }
+                val listChampCommon =
+                    champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
+                listChampEntity.addAll(listChampCommon)
+                listTeamBuilder.add(
+                    TeamBuilderListEntity.TeamsBuilder(
+                        team.nameTeam,
+                        ChampListEntity(champs = listChampEntity)
+                    )
+                )
+
+            }
+            Log.d("phuc", "$listTeamBuilder")
+            return@runSuspendWithCatchError Either.Success(TeamBuilderListEntity(teamBuilders = listTeamBuilder))
         }
 
 }

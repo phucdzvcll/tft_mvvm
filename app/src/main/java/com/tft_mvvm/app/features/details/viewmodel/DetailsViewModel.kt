@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
 import com.tft_mvvm.app.features.details.mapper.ItemMapper
+import com.tft_mvvm.app.features.details.mapper.TeamRecommendForChampMapper
 import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
 import com.tft_mvvm.app.features.details.model.ItemRv
+import com.tft_mvvm.app.features.details.model.TeamRecommendForChamp
 import com.tft_mvvm.app.features.main.mapper.ChampMapper
 import com.tft_mvvm.domain.features.usecase.*
 import kotlinx.coroutines.Dispatchers
@@ -23,12 +25,14 @@ class DetailsViewModel(
     private val getListChampsByClassUseCase: GetListChampsByClassUseCase,
     private val getListChampsByOriginUseCase: GetListChampsByOriginUseCase,
     private val getClassAndOriginContentUseCase: GetClassAndOriginContentUseCase,
+    private val getTeamRecommendForChampUseCase: GetTeamRecommendForChampUseCase,
+    private val teamRecommendForChampMapper: TeamRecommendForChampMapper,
     private val itemHeaderMapper: ItemHeaderMapper,
     private val champMapper: ChampMapper
 ) : BaseViewModel() {
     private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
     private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
-
+    private val listTeamRecommendForChamp = MutableLiveData<List<TeamRecommendForChamp>>()
     var itemOriginHolderViewHolder = ItemHolderViewHolder(
         ItemHolderViewHolder.ClassOrOrigin(
             classOrOriginName = "",
@@ -156,6 +160,23 @@ class DetailsViewModel(
                     listChamp = champMapper.mapList(it.champs)
                 )
             )
+        }
+    }
+
+    fun getTeamRecommendForChampLiveData(id: String) = viewModelScope.launch(Dispatchers.Main) {
+        val dbResult = withContext(Dispatchers.IO) {
+            getTeamRecommendForChampUseCase.execute(
+                GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
+                    id = id
+                )
+            )
+        }
+        dbResult.either({
+            //TODO handle error
+        }) {
+            for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
+                updateListItemRv(team)
+            }
         }
     }
 

@@ -41,4 +41,10 @@ val domainModule = module {
             repository = get()
         )
     }
+
+    single {
+        GetTeamRecommendForChampUseCase(
+            repoRepository = get()
+        )
+    }
 }

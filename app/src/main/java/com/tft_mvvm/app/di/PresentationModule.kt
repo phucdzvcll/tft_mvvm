@@ -1,7 +1,6 @@
 package com.tft_mvvm.app.di
 
-import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
-import com.tft_mvvm.app.features.details.mapper.ItemMapper
+import com.tft_mvvm.app.features.details.mapper.*
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.main.mapper.ChampMapper
 import com.tft_mvvm.app.features.main.mapper.TeamBuilderRecommendMapper
@@ -25,6 +24,9 @@ val presentationModule = module {
     factory { ItemHeaderMapper(itemMapper = get()) }
     factory { ChampOfTeamMapper(itemOfTeamMapper = get()) }
     factory { ItemOfTeamMapper() }
+    factory { ItemSuitableTeamRecommendForChampMapper() }
+    factory { ChampOfTeamRecommendForChampMapper(itemSuitableTeamRecommendForChampMapper = get()) }
+    factory { TeamRecommendForChampMapper(champOfTeamRecommendForChampMapper = get()) }
     viewModel {
         DetailsViewModel(
             getChampByIdUseCase = get(),
@@ -32,6 +34,8 @@ val presentationModule = module {
             getClassAndOriginContentUseCase = get(),
             getListChampsByClassUseCase = get(),
             getListChampsByOriginUseCase = get(),
+            getTeamRecommendForChampUseCase = get(),
+            teamRecommendForChampMapper = get(),
             itemHeaderMapper = get()
         )
     }

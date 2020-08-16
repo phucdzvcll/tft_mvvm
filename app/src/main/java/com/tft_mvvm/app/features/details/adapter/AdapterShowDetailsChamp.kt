@@ -1,5 +1,6 @@
 package com.tft_mvvm.app.features.details.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,11 @@ import com.bumptech.glide.Glide
 import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
 import com.tft_mvvm.app.features.details.model.ItemRv
-
 import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.details.model.TeamRecommendForChamp
+import com.tft_mvvm.app.features.main.adapter.AdapterShowChampInTeamBuilder
 import com.tft_mvvm.champ.R
+import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
 import kotlinx.android.synthetic.main.item_header_rv_details_champ.view.*
 import kotlinx.android.synthetic.main.item_rv_details_champ.view.*
 
@@ -23,18 +26,25 @@ class AdapterShowDetailsChamp(
 
     val HEADER_TYPE: Int = 1
     val ITEM_TYPE: Int = 2
+    val TEAM_TYPE: Int = 3
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return if (viewType == HEADER_TYPE) {
-            HeaderViewHolder(
+        if (viewType == HEADER_TYPE) {
+            return HeaderViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_header_rv_details_champ, parent, false)
             )
-        } else {
-            ItemViewHolder(
+        }
+        if (viewType == ITEM_TYPE) {
+            return ItemViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_rv_details_champ, parent, false)
+            )
+        } else {
+            return TeamViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.iteam_team_recommend, parent, false)
             )
         }
     }
@@ -42,10 +52,13 @@ class AdapterShowDetailsChamp(
     override fun getItemCount() = listItemRv.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (listItemRv[position] is HeaderViewHolderModel) {
-            HEADER_TYPE
+        if (listItemRv[position] is HeaderViewHolderModel) {
+            return HEADER_TYPE
+        }
+        if (listItemRv[position] is ItemHolderViewHolder) {
+            return ITEM_TYPE
         } else {
-            ITEM_TYPE
+            return TEAM_TYPE
         }
     }
 
@@ -56,9 +69,16 @@ class AdapterShowDetailsChamp(
                 listItemRv[position] as HeaderViewHolderModel,
                 onItemClickListener
             )
-        } else {
+        }
+        if (itemType == ITEM_TYPE) {
             (holder as ItemViewHolder).bind(
                 listItemRv[position] as ItemHolderViewHolder,
+                onItemClickListener
+            )
+        }
+        if (itemType == TEAM_TYPE) {
+            (holder as TeamViewHolder).bind(
+                listItemRv[position] as TeamRecommendForChamp,
                 onItemClickListener
             )
         }
@@ -111,6 +131,30 @@ class AdapterShowDetailsChamp(
             adapterShowBonusOfClassOrOrigin.addData(itemDetailsViewHolderModel.classOrOrigin.bonus)
             itemView.rv_origin_or_class_bonus.layoutManager = LinearLayoutManager(itemView.context)
             itemView.rv_origin_or_class_bonus.adapter = adapterShowBonusOfClassOrOrigin
+        }
+    }
+
+    class TeamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(
+            teamBuilder: TeamRecommendForChamp,
+            onItemClickListener: OnItemClickListener
+        ) {
+            itemView.name_team.text = teamBuilder.name
+            when (teamBuilder.name) {
+                "D" -> itemView.name_team.setTextColor(Color.parseColor("#C5C1C1"))
+                "C" -> itemView.name_team.setTextColor(Color.parseColor("#7FDF5F"))
+                "B" -> itemView.name_team.setTextColor(Color.parseColor("#0099FF"))
+                "A" -> itemView.name_team.setTextColor(Color.parseColor("#D152F4"))
+                "S" -> itemView.name_team.setTextColor(Color.parseColor("#EFB135"))
+            }
+            itemView.rv_item_by_team_recommend?.layoutManager =
+                GridLayoutManager(itemView.context, 5)
+            val adapterShowByOriginAndClass = AdapterShowByOriginAndClass(
+                arrayListOf(),
+                onItemClickListener
+            )
+            adapterShowByOriginAndClass.addData(teamBuilder.listChamp)
+            itemView.rv_item_by_team_recommend?.adapter = adapterShowByOriginAndClass
         }
     }
 
