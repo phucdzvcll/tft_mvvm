@@ -8,8 +8,10 @@ class TeamListDBO(val teamDBOs: List<TeamDBO>) {
     @Entity(tableName = "team")
     data class TeamDBO(
         @PrimaryKey
-        val id: String,
-        val name: String,
-        val listId: String
+        val idTeam: String,
+        val nameTeam: String,
+        val idChampMain: String,
+        val idItemSuitable: String,
+        val listIdChamp: String
     )
 }

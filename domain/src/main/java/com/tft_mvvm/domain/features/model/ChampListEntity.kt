@@ -12,7 +12,13 @@ data class ChampListEntity (val champs:List<Champ>){
         val linkSkillAvatar:String,
         val activated:String,
         val rankChamp:String,
-        val suitableItem:String,
+        val suitableItem:List<Item>,
         val linkChampCover:String
-    )
+    ){
+        data class Item(
+            val itemId: String,
+            val itemName: String,
+            val itemAvatar: String
+        )
+    }
 }

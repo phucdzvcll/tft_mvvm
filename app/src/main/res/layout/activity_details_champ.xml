@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="com.tft_mvvm.app.ui.activity.DetailsChampActivity">
+    tools:context="com.tft_mvvm.app.features.details.DetailsChampActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -66,14 +66,8 @@
             app:layout_constraintTop_toTopOf="@+id/toolbar_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/SwipeRefreshLayoutDetailsActivity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_show_details_champ"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

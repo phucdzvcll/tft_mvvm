@@ -9,9 +9,11 @@ class TeamDaoEntityMapper : Mapper<TeamListResponse?, TeamListDBO>() {
     override fun map(input: TeamListResponse?): TeamListDBO {
         val teamDBO = input?.feedTeam?.team?.filterNotNull().defaultEmpty().map { teamDBO ->
             TeamListDBO.TeamDBO(
-                name = teamDBO.name?.value.defaultEmpty(),
-                id = teamDBO.id?.value.defaultEmpty(),
-                listId = teamDBO.listID?.value.defaultEmpty()
+                nameTeam = teamDBO.nameTeam?.value.defaultEmpty(),
+                idTeam = teamDBO.idTeam?.value.defaultEmpty(),
+                idChampMain = teamDBO.idChampMain?.value.defaultEmpty(),
+                idItemSuitable = teamDBO.idItemSuitable?.value.defaultEmpty(),
+                listIdChamp = teamDBO.listIdChamp?.value.defaultEmpty()
             )
         }
         return TeamListDBO(teamDBOs = teamDBO)
