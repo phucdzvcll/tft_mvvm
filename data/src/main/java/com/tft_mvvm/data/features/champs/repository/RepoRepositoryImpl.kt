@@ -54,6 +54,7 @@ class RepoRepositoryImpl(
     override suspend fun getChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             val listChampDBO = mutableListOf<ChampListDBO.ChampDBO>()
+            listChampDBO.addAll(champDAO.getAllChamp())
             val listChampEntity = mutableListOf<ChampListEntity.Champ>()
             if (champDAO.getAllChamp().isNullOrEmpty() || isForceLoadData) {
                 if (isForceLoadData) {

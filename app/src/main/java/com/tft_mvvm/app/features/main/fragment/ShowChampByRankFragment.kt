@@ -31,7 +31,7 @@ class ShowChampByRankFragment : Fragment(),
         super.onActivityCreated(savedInstanceState)
         setupUI()
         observeViewModel()
-        showChampByRankViewModel.getChamps(true)
+        showChampByRankViewModel.getChamps(false)
     }
 
     private fun setupUI() {
