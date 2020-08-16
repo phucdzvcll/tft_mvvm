@@ -31,7 +31,7 @@ class ShowChampByGoldFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         observerViewModel()
-        showChampByGoldViewModel.getChamps(false)
+        showChampByGoldViewModel.getChamps(true)
     }
 
     private fun observerViewModel() {

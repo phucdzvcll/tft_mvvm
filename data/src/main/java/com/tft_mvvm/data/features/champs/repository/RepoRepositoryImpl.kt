@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.repository
 
-import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -10,10 +9,8 @@ import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
 import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
-import com.tft_mvvm.domain.features.model.ChampListEntity
-import com.tft_mvvm.domain.features.model.ItemListEntity
-import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
-import com.tft_mvvm.domain.features.model.TeamListEntity
+import com.tft_mvvm.data.local.model.ChampListDBO
+import com.tft_mvvm.domain.features.model.*
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class RepoRepositoryImpl(
@@ -33,24 +30,61 @@ class RepoRepositoryImpl(
     private val champDaoEntityMapper: ChampDaoEntityMapper
 
 ) : RepoRepository {
+
+    private fun createChamp(
+        champDBO: ChampListDBO.ChampDBO,
+        listItem: MutableList<ChampListEntity.Champ.Item>
+    ): ChampListEntity.Champ {
+        return ChampListEntity.Champ(
+            id = champDBO.id,
+            cost = champDBO.cost,
+            linkImg = champDBO.linkImg,
+            activated = champDBO.activated,
+            linkChampCover = champDBO.linkChampCover,
+            classs = champDBO.classs,
+            origin = champDBO.origin,
+            skillName = champDBO.skillName,
+            linkSkillAvatar = champDBO.linkSkillAvatar,
+            rankChamp = champDBO.rankChamp,
+            suitableItem = listItem,
+            name = champDBO.name
+        )
+    }
+
     override suspend fun getChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            var dbResult = ChampListEntity(
-                champs = champListMapper.mapList(champDAO.getAllChamp())
-            )
-            if (dbResult.champs.isNullOrEmpty() || isForceLoadData) {
+            val listChampDBO = mutableListOf<ChampListDBO.ChampDBO>()
+            val listChampEntity = mutableListOf<ChampListEntity.Champ>()
+            if (champDAO.getAllChamp().isNullOrEmpty() || isForceLoadData) {
                 if (isForceLoadData) {
                     champDAO.deleteAllChampTable()
                 }
-                champDAO.deleteAllChampTable()
-                val champListResponse = apiService.getChampList()
-                val champListDBO = champDaoEntityMapper.map(champListResponse)
-                champDAO.insertChamps(champListDBO.champDBOs)
-                dbResult = ChampListEntity(
-                    champs = champListMapper.mapList(champDAO.getAllChamp())
+                val listChampResponse = apiService.getChampList()
+                val listChampDbo = champDaoEntityMapper.map(listChampResponse)
+                champDAO.insertChamps(listChampDbo.champDBOs)
+                listChampDBO.addAll(champDAO.getAllChamp())
+            }
+
+            if (itemDAO.getAllItem().isNullOrEmpty()) {
+                val listItemResponse = apiService.getItemListResponse()
+                val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
+                itemDAO.insertItems(listItemDBO.items)
+            }
+            for (i in listChampDBO) {
+                val listItem = mutableListOf<ChampListEntity.Champ.Item>()
+                if (i.suitableItem.isNotBlank()) {
+                    val listIdItem = i.suitableItem.split(",")
+                    for (j in listIdItem) {
+                        listItem.add(itemListMapper.map(itemDAO.getItemById(j)))
+                    }
+                }
+
+                listChampEntity.add(
+                    createChamp(i, listItem)
                 )
             }
-            return@runSuspendWithCatchError Either.Success(dbResult)
+            listChampEntity.size
+            return@runSuspendWithCatchError Either.Success(ChampListEntity(champs = listChampEntity))
         }
 
     override suspend fun getChampsByOrigin(origin: String) =
@@ -84,7 +118,9 @@ class RepoRepositoryImpl(
                     )
                 )
             if (dbTeamListEntity.teams.isNullOrEmpty() || isForceLoadData) {
-                teamDAO.deleteAllTeam()
+                if (isForceLoadData) {
+                    teamDAO.deleteAllTeam()
+                }
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
                 teamDAO.insertTeam(teamListDBO.teamDBOs)
@@ -95,17 +131,47 @@ class RepoRepositoryImpl(
                         )
                     )
             }
-
+            dbTeamListEntity.teams.size
+            if (itemDAO.getAllItem().isNullOrEmpty()) {
+                val listItemResponse = apiService.getItemListResponse()
+                val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
+                itemDAO.insertItems(listItemDBO.items)
+            }
             val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
 
             dbTeamListEntity.teams.forEach { team ->
-                val champs = ChampListEntity(
-                    champs = champListMapper.mapList(
-                        champDAO.getListChampByTeam(team.listId)
+                val listChampEntity = mutableListOf<ChampListEntity.Champ>()
+                val listChampMainDbo = champDAO.getListChampByTeam(team.listIdChampMain)
+                val listIdChampCommon = mutableListOf<String>()
+                listIdChampCommon.addAll(team.listIdChamp)
+                for (position in listChampMainDbo.indices) {
+                    val listItem = mutableListOf<ChampListEntity.Champ.Item>()
+                    val listIdItem = team.listIdSuitable[position].split(",")
+                    for (idItem in listIdItem) {
+                        val item = itemListMapper.map(itemDAO.getItemById(idItem))
+                        listItem.add(item)
+                    }
+                    listChampEntity.add(createChamp(listChampMainDbo[position], listItem))
+                    val index = mutableListOf<Int>()
+                    for (positionIdChampCommon in listIdChampCommon.indices) {
+                        if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {
+                            index.add(positionIdChampCommon)
+                        }
+                    }
+                    for (p in index) {
+                        listIdChampCommon.removeAt(p)
+                    }
+                }
+                val listChampCommon =
+                    champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
+                listChampEntity.addAll(listChampCommon)
+                listTeamBuilder.add(
+                    TeamBuilderListEntity.TeamsBuilder(
+                        team.nameTeam,
+                        ChampListEntity(champs = listChampEntity)
                     )
                 )
-                val teamBuilder = TeamBuilderListEntity.TeamsBuilder(team.name, champs)
-                listTeamBuilder.add(teamBuilder)
+
             }
             return@runSuspendWithCatchError Either.Success(
                 TeamBuilderListEntity(
@@ -137,28 +203,6 @@ class RepoRepositoryImpl(
             }
         }
 
-    override suspend fun getListSuitableItem(
-        isForceLoadData: Boolean,
-        listId: List<String>
-    ): Either<Failure, ItemListEntity> =
-        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-
-            if (isForceLoadData || itemDAO.getAllItem().isEmpty()) {
-                val listDBO = itemDaoEntityMapper.map(apiService.getItemListResponse())
-                if (isForceLoadData) {
-                    itemDAO.deleteAllItemTable()
-                }
-                itemDAO.insertItems(listDBO.items)
-                if (listId.isNotEmpty()) {
-                    val dbResult = itemListMapper.mapList(itemDAO.getItemByListId(listId))
-                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = dbResult))
-                } else {
-                    return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
-                }
-            } else {
-                return@runSuspendWithCatchError Either.Success(ItemListEntity(item = listOf()))
-            }
-        }
 
     override suspend fun updateChamp(id: String) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
@@ -179,7 +223,28 @@ class RepoRepositoryImpl(
 
     override suspend fun getChampById(id: String) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val dbResult = champListMapper.map(champDAO.getChampById(id))
+            val champDBO = champDAO.getChampById(id)
+            val listItem = mutableListOf<ChampListEntity.Champ.Item>()
+            if (champDBO.suitableItem.isNotBlank()) {
+                val listIdItem = champDBO.suitableItem.split(",")
+                for (i in listIdItem) {
+                    listItem.add(itemListMapper.map(itemDAO.getItemById(i)))
+                }
+            }
+            val dbResult = ChampListEntity.Champ(
+                id = champDBO.id,
+                cost = champDBO.cost,
+                linkImg = champDBO.linkImg,
+                activated = champDBO.activated,
+                linkChampCover = champDBO.linkChampCover,
+                classs = champDBO.classs,
+                origin = champDBO.origin,
+                skillName = champDBO.skillName,
+                linkSkillAvatar = champDBO.linkSkillAvatar,
+                rankChamp = champDBO.rankChamp,
+                suitableItem = listItem,
+                name = champDBO.name
+            )
             return@runSuspendWithCatchError Either.Success(dbResult)
         }
 

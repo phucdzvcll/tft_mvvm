@@ -23,23 +23,29 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/suitable_item_of_team1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:visibility="gone"
+            android:layout_margin="1dp"
+            android:background="@drawable/background_boder_skill_avatar"
             tools:src="@tools:sample/avatars" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/suitable_item_of_team2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:visibility="gone"
+            android:layout_margin="1dp"
+            android:background="@drawable/background_boder_skill_avatar"
             tools:src="@tools:sample/avatars" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/suitable_item_of_team3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:visibility="gone"
+            android:layout_margin="1dp"
+            android:background="@drawable/background_boder_skill_avatar"
             tools:src="@tools:sample/avatars" />
 
     </LinearLayout>

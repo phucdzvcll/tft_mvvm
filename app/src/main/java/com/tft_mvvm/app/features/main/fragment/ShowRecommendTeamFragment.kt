@@ -26,12 +26,11 @@ class ShowRecommendTeamFragment : Fragment(),
     ): View? {
         return inflater.inflate(R.layout.fragment_show_recommend_team, container, false)
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupUi()
         observeViewModel()
-        showTeamRecommendViewModel.getListTeamBuilder(true)
+        showTeamRecommendViewModel.getListTeamBuilder(false)
     }
 
     private fun setupUi() {

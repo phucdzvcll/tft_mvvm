@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
+import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
 import com.tft_mvvm.app.features.details.mapper.ItemMapper
 import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
@@ -19,25 +20,15 @@ import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
     private val getChampByIdUseCase: GetChampByIdUseCase,
-    private val getListSuitableItemsUseCase: GetListSuitableItemsUseCase,
     private val getListChampsByClassUseCase: GetListChampsByClassUseCase,
     private val getListChampsByOriginUseCase: GetListChampsByOriginUseCase,
     private val getClassAndOriginContentUseCase: GetClassAndOriginContentUseCase,
-    private val champMapper: ChampMapper,
-    private val itemMapper: ItemMapper
+    private val itemHeaderMapper: ItemHeaderMapper,
+    private val champMapper: ChampMapper
 ) : BaseViewModel() {
     private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
     private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
 
-    var headerViewHolderModel = HeaderViewHolderModel(
-        nameSkill = "",
-        linkChampCover = "",
-        activated = "",
-        linkAvatarSkill = "",
-        name = "",
-        cost = "",
-        listSuitableItem = listOf()
-    )
     var itemOriginHolderViewHolder = ItemHolderViewHolder(
         ItemHolderViewHolder.ClassOrOrigin(
             classOrOriginName = "",
@@ -69,48 +60,13 @@ class DetailsViewModel(
                 //TODO handel error
                 Log.d("Phuc", "$it")
             }) {
-                updateHeaderViewHolderModel(
-                    headerViewHolderModel.copy(
-                        nameSkill = it.skillName,
-                        linkAvatarSkill = it.linkSkillAvatar,
-                        activated = it.activated,
-                        name = it.name,
-                        cost = it.cost,
-                        linkChampCover = it.linkChampCover
-                    )
-                )
-                getListItemSuitable(it.suitableItem, false)
+                listItemRv.add(0, itemHeaderMapper.map(it))
+                headerViewHolderModelLiveData.value = itemHeaderMapper.map(it)
                 getOriginContent(it.origin, false)
                 getClassContent(it.classs, false)
             }
         }
 
-    private fun getListItemSuitable(
-        listId: List<String>,
-        isForceLoadData: Boolean
-    ) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
-                getListSuitableItemsUseCase.execute(
-                    GetListSuitableItemsUseCase.GetListSuitableItemUseCaseParam(
-                        isForceLoadData = isForceLoadData,
-                        listId = listId
-                    )
-                )
-            }
-            dbResult.either({
-                //TODO handel error
-                Log.d("Phuc", "$it")
-            }) {
-                listItemRv.add(
-                    0,
-                    headerViewHolderModel.copy(
-                        listSuitableItem = itemMapper.mapList(it.item)
-                    )
-                )
-                listItemRvLiveData.value = listItemRv
-            }
-        }
 
     private fun getOriginContent(name: String, isForceLoadData: Boolean) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -203,10 +159,6 @@ class DetailsViewModel(
         }
     }
 
-    private fun updateHeaderViewHolderModel(model: HeaderViewHolderModel) {
-        headerViewHolderModel = model
-        headerViewHolderModelLiveData.value = headerViewHolderModel
-    }
 
     private fun updateItemOriginHolderViewHolder(model: ItemHolderViewHolder) {
         itemOriginHolderViewHolder = model

@@ -2,9 +2,11 @@ package com.tft_mvvm.domain.features.model
 
 data class TeamListEntity(val teams: List<Team>) {
     data class Team(
-        val name: String,
-        val id: String,
-        val listId: List<String>
+        val nameTeam: String,
+        val idTeam: String,
+        val listIdChampMain : List<String>,
+        val listIdSuitable : List<String>,
+        val listIdChamp: List<String>
     )
 
 }

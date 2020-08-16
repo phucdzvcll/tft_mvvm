@@ -4,7 +4,6 @@ import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
-import com.tft_mvvm.domain.features.model.ItemListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 
 interface RepoRepository {
@@ -28,11 +27,6 @@ interface RepoRepository {
         isForceLoadData: Boolean,
         classOrOriginName: String
     ): Either<Failure, ClassAndOriginListEntity.ClassAndOrigin>
-
-    suspend fun getListSuitableItem(
-        isForceLoadData: Boolean,
-        listId: List<String>
-    ): Either<Failure, ItemListEntity>
 
     suspend fun updateChamp(
         id: String

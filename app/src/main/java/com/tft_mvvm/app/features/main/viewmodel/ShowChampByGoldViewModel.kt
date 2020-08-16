@@ -6,13 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.main.mapper.ChampMapper
 import com.tft_mvvm.app.model.Champ
-import com.tft_mvvm.domain.features.usecase.GetChampsUseCase
+import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShowChampByGoldViewModel(
-    private val champsUseCase: GetChampsUseCase,
+    private val listChampsUseCase: GetListChampsUseCase,
     private val champMapper: ChampMapper
 ) : BaseViewModel() {
 
@@ -26,8 +26,8 @@ class ShowChampByGoldViewModel(
                 isLoadingLiveData.value = true
             }
             val champResult = withContext(Dispatchers.IO) {
-                champsUseCase.execute(
-                    GetChampsUseCase.GetAllChampUseCaseParam(
+                listChampsUseCase.execute(
+                    GetListChampsUseCase.GetAllChampUseCaseParam(
                         isForceLoadData
                     )
                 )

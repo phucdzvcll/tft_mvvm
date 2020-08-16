@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 val domainModule = module {
     single {
-        GetChampsUseCase(
+        GetListChampsUseCase(
             repoRepository = get()
         )
     }
@@ -30,13 +30,6 @@ val domainModule = module {
             repoRepository = get()
         )
     }
-
-    single {
-        GetListSuitableItemsUseCase(
-            repoRepository = get()
-        )
-    }
-
     single {
         UpdateChampUseCase(
             repoRepository = get()

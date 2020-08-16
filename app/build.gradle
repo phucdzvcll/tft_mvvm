@@ -16,12 +16,6 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
-    android {
-        buildFeatures {
-            dataBinding true
-        }
-    }
-
     defaultConfig {
         applicationId "com.example.tft_mvm"
         minSdkVersion 26
