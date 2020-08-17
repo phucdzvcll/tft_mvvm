@@ -11,7 +11,9 @@ import com.tft_mvvm.data.local.database.ClassAndOriginDAO
 import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
 import com.tft_mvvm.data.local.model.ChampListDBO
-import com.tft_mvvm.domain.features.model.*
+import com.tft_mvvm.domain.features.model.ChampListEntity
+import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
+import com.tft_mvvm.domain.features.model.TeamListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class RepoRepositoryImpl(
@@ -54,8 +56,7 @@ class RepoRepositoryImpl(
 
     override suspend fun getChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val listChampDBO = mutableListOf<ChampListDBO.ChampDBO>()
-            listChampDBO.addAll(champDAO.getAllChamp())
+            var listChampDBO = champDAO.getAllChamp()
             val listChampEntity = mutableListOf<ChampListEntity.Champ>()
             if (champDAO.getAllChamp().isNullOrEmpty() || isForceLoadData) {
                 if (isForceLoadData) {
@@ -64,7 +65,7 @@ class RepoRepositoryImpl(
                 val listChampResponse = apiService.getChampList()
                 val listChampDbo = champDaoEntityMapper.map(listChampResponse)
                 champDAO.insertChamps(listChampDbo.champDBOs)
-                listChampDBO.addAll(champDAO.getAllChamp())
+                listChampDBO = champDAO.getAllChamp()
             }
 
             if (itemDAO.getAllItem().isNullOrEmpty()) {
@@ -167,6 +168,8 @@ class RepoRepositoryImpl(
                 val listChampCommon =
                     champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
                 listChampEntity.addAll(listChampCommon)
+                listChampEntity.sortBy { it.name }
+                listChampEntity.sortBy { it.cost }
                 listTeamBuilder.add(
                     TeamBuilderListEntity.TeamsBuilder(
                         team.nameTeam,
@@ -293,6 +296,8 @@ class RepoRepositoryImpl(
                 val listChampCommon =
                     champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
                 listChampEntity.addAll(listChampCommon)
+                listChampEntity.sortBy { it.name }
+                listChampEntity.sortBy { it.cost }
                 listTeamBuilder.add(
                     TeamBuilderListEntity.TeamsBuilder(
                         team.nameTeam,

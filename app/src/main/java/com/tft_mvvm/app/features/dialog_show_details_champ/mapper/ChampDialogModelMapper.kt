@@ -4,7 +4,7 @@ import com.example.common_jvm.mapper.Mapper
 import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
-class ChampDialogModelMapper :
+class ChampDialogModelMapper(private val itemSuitableMapper: ItemSuitableMapper) :
     Mapper<ChampListEntity.Champ, ChampDialogModel>() {
     override fun map(input: ChampListEntity.Champ): ChampDialogModel {
         return ChampDialogModel(
@@ -13,6 +13,7 @@ class ChampDialogModelMapper :
             linkChampCover = input.linkChampCover,
             activated = input.activated,
             skillName = input.skillName,
+            itemSuitable = itemSuitableMapper.mapList(input.suitableItem),
             linkSkillAvatar = input.linkSkillAvatar
         )
     }

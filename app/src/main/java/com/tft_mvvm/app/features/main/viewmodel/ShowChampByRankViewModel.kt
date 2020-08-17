@@ -37,7 +37,7 @@ class ShowChampByRankViewModel(
             }) { (champs) ->
                 Log.d("PHUC", "$champs")
                 champByRankLiveData.value =
-                    champMapper.mapList(champs.sortedByDescending { champ -> champ.rankChamp })
+                    champMapper.mapList(champs.sortedBy { champ -> champ.rankChamp })
                 isLoadingLiveData.value = false
             }
         }

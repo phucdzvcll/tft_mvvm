@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
 import com.tft_mvvm.app.features.details.model.ItemRv
-import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.model.TeamRecommendForChamp
-import com.tft_mvvm.app.features.main.adapter.AdapterShowChampInTeamBuilder
 import com.tft_mvvm.champ.R
+import kotlinx.android.synthetic.main.header_details_champ.view.*
 import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
 import kotlinx.android.synthetic.main.item_header_rv_details_champ.view.*
 import kotlinx.android.synthetic.main.item_rv_details_champ.view.*
@@ -27,6 +27,7 @@ class AdapterShowDetailsChamp(
     val HEADER_TYPE: Int = 1
     val ITEM_TYPE: Int = 2
     val TEAM_TYPE: Int = 3
+    val SECTION_TYPE: Int = 4
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -41,10 +42,16 @@ class AdapterShowDetailsChamp(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_rv_details_champ, parent, false)
             )
-        } else {
+        }
+        if (viewType == TEAM_TYPE) {
             return TeamViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.iteam_team_recommend, parent, false)
+            )
+        } else {
+            return SectionViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.header_details_champ, parent, false)
             )
         }
     }
@@ -57,8 +64,11 @@ class AdapterShowDetailsChamp(
         }
         if (listItemRv[position] is ItemHolderViewHolder) {
             return ITEM_TYPE
-        } else {
+        }
+        if(listItemRv[position] is TeamRecommendForChamp){
             return TEAM_TYPE
+        }else{
+            return SECTION_TYPE
         }
     }
 
@@ -81,6 +91,9 @@ class AdapterShowDetailsChamp(
                 listItemRv[position] as TeamRecommendForChamp,
                 onItemClickListener
             )
+        }
+        if(itemType == SECTION_TYPE){
+            (holder as SectionViewHolder).bind(listItemRv[position] as SectionViewHolder.SectionModel)
         }
     }
 
@@ -158,9 +171,23 @@ class AdapterShowDetailsChamp(
         }
     }
 
+    class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(sectionModel: SectionModel) {
+            itemView.tv_header_details.text = sectionModel.section
+        }
+
+        data class SectionModel(val section: String) : ItemRv()
+    }
+
     fun addData(list: List<ItemRv>) {
+        val listTeam = list.filterIsInstance<TeamRecommendForChamp>()
+        val header = list.filterIsInstance<HeaderViewHolderModel>()
         listItemRv.clear()
-        listItemRv.addAll(list)
+        listItemRv.addAll(header)
+        listItemRv.add(SectionViewHolder.SectionModel("Tộc và Hệ"))
+        listItemRv.addAll(list - (listTeam + header))
+        listItemRv.add(SectionViewHolder.SectionModel("Đội Hình Thích Hợp"))
+        listItemRv.addAll(listTeam)
         notifyDataSetChanged()
     }
 

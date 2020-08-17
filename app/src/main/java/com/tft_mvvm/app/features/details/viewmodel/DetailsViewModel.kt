@@ -8,12 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
-import com.tft_mvvm.app.features.details.mapper.ItemMapper
 import com.tft_mvvm.app.features.details.mapper.TeamRecommendForChampMapper
 import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
 import com.tft_mvvm.app.features.details.model.ItemRv
-import com.tft_mvvm.app.features.details.model.TeamRecommendForChamp
 import com.tft_mvvm.app.features.main.mapper.ChampMapper
 import com.tft_mvvm.domain.features.usecase.*
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +30,7 @@ class DetailsViewModel(
 ) : BaseViewModel() {
     private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
     private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
-    private val listTeamRecommendForChamp = MutableLiveData<List<TeamRecommendForChamp>>()
-    var itemOriginHolderViewHolder = ItemHolderViewHolder(
+    private var itemOriginHolderViewHolder = ItemHolderViewHolder(
         ItemHolderViewHolder.ClassOrOrigin(
             classOrOriginName = "",
             bonus = listOf(),
@@ -41,7 +38,7 @@ class DetailsViewModel(
         ),
         listOf()
     )
-    var itemClassHolderViewHolder = ItemHolderViewHolder(
+    private var itemClassHolderViewHolder = ItemHolderViewHolder(
         ItemHolderViewHolder.ClassOrOrigin(
             classOrOriginName = "",
             bonus = listOf(),
@@ -49,7 +46,7 @@ class DetailsViewModel(
         ),
         listOf()
     )
-    var listItemRv = mutableListOf<ItemRv>()
+    private var listItemRv = mutableListOf<ItemRv>()
 
     fun getChampById(id: String) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -110,9 +107,7 @@ class DetailsViewModel(
             //TODO handle error
         }) {
             updateListItemRv(
-                itemOriginHolderViewHolder.copy(
-                    listChamp = champMapper.mapList(it.champs)
-                )
+                itemOriginHolderViewHolder.copy(listChamp = champMapper.mapList(it.champs))
             )
         }
     }
@@ -163,22 +158,23 @@ class DetailsViewModel(
         }
     }
 
-    fun getTeamRecommendForChampLiveData(id: String) = viewModelScope.launch(Dispatchers.Main) {
-        val dbResult = withContext(Dispatchers.IO) {
-            getTeamRecommendForChampUseCase.execute(
-                GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
-                    id = id
-                )
-            )
-        }
-        dbResult.either({
-            //TODO handle error
-        }) {
-            for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
-                updateListItemRv(team)
+    fun getTeamRecommendForChampLiveData(id: String) =
+        viewModelScope.launch(Dispatchers.Main) {
+                val dbResult = withContext(Dispatchers.IO) {
+                    getTeamRecommendForChampUseCase.execute(
+                        GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
+                            id = id
+                        )
+                    )
+                }
+                dbResult.either({
+                    //TODO handle error
+                }) {
+                    for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
+                        updateListItemRv(team)
+                    }
+                }
             }
-        }
-    }
 
 
     private fun updateItemOriginHolderViewHolder(model: ItemHolderViewHolder) {

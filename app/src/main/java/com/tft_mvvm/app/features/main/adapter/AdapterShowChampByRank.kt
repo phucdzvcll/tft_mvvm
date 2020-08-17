@@ -94,14 +94,19 @@ class AdapterShowChampByRank(
 
     fun setData(list: List<ItemRv>) {
         val data = mutableListOf<ItemRv>()
-        data.addAll(list)
+        val listChampRankOther = (list as List<Champ>).filter { champ -> champ.rank != "S" }
+        val listChampRankS = (list).filter { champ -> champ.rank == "S" }
 
-        data.size
+        data.addAll(listChampRankS)
+        data.addAll(listChampRankOther)
         data.add(0, SectionHeaderViewHolder.SectionModel((data[0] as Champ).rank))
         for (i in data.indices) {
-            if (data[i] is Champ && data[i - 1] is Champ) {
-                if ((data[i] as Champ).rank != (data[i - 1] as Champ).rank) {
-                    data.add(i, SectionHeaderViewHolder.SectionModel((data[i] as Champ).rank))
+            if (data[i] is Champ && data[i + 1] is Champ) {
+                if ((data[i] as Champ).rank != (data[i + 1] as Champ).rank) {
+                    data.add(
+                        i + 1,
+                        SectionHeaderViewHolder.SectionModel((data[i + 1] as Champ).rank)
+                    )
                 }
             }
         }
