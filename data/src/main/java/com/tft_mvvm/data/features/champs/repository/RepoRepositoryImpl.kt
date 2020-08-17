@@ -340,9 +340,19 @@ class RepoRepositoryImpl(
                         listIdChampCommon.removeAt(p)
                     }
                 }
-                val listChampCommon =
-                    champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
-                listChampEntity.addAll(listChampCommon)
+                for (idChamp in listIdChampCommon){
+                    var check = 0
+                    for (idChampThreeStart in team.listIdChampThreeStar){
+                        if (idChamp == idChampThreeStart){
+                            check++
+                        }
+                    }
+                    if(check>0){
+                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),true, mutableListOf()))
+                    }else{
+                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),false, mutableListOf()))
+                    }
+                }
                 listChampEntity.sortBy { it.name }
                 listChampEntity.sortBy { it.cost }
                 listTeamBuilder.add(

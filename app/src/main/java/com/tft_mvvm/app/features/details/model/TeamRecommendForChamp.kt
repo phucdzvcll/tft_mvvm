@@ -9,6 +9,7 @@ data class TeamRecommendForChamp(
         val name: String,
         val imgUrl: String,
         val cost: String,
+        val threeStar: Boolean,
         val itemSuitable: List<Item>
     ) : ItemRv() {
         data class Item(

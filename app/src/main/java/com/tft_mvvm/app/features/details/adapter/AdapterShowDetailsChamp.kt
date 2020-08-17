@@ -65,9 +65,9 @@ class AdapterShowDetailsChamp(
         if (listItemRv[position] is ItemHolderViewHolder) {
             return ITEM_TYPE
         }
-        if(listItemRv[position] is TeamRecommendForChamp){
+        if (listItemRv[position] is TeamRecommendForChamp) {
             return TEAM_TYPE
-        }else{
+        } else {
             return SECTION_TYPE
         }
     }
@@ -92,7 +92,7 @@ class AdapterShowDetailsChamp(
                 onItemClickListener
             )
         }
-        if(itemType == SECTION_TYPE){
+        if (itemType == SECTION_TYPE) {
             (holder as SectionViewHolder).bind(listItemRv[position] as SectionViewHolder.SectionModel)
         }
     }
@@ -186,8 +186,10 @@ class AdapterShowDetailsChamp(
         listItemRv.addAll(header)
         listItemRv.add(SectionViewHolder.SectionModel("Tộc và Hệ"))
         listItemRv.addAll(list - (listTeam + header))
-        listItemRv.add(SectionViewHolder.SectionModel("Đội Hình Thích Hợp"))
-        listItemRv.addAll(listTeam)
+        if (listTeam.isNotEmpty()) {
+            listItemRv.add(SectionViewHolder.SectionModel("Đội Hình Thích Hợp"))
+            listItemRv.addAll(listTeam)
+        }
         notifyDataSetChanged()
     }
 

@@ -12,6 +12,7 @@ class ChampOfTeamRecommendForChampMapper(private val itemSuitableTeamRecommendFo
             itemSuitable = itemSuitableTeamRecommendForChampMapper.mapList(input.suitableItem),
             imgUrl = input.linkImg,
             cost = input.cost,
+            threeStar = input.threeStar,
             name = input.name
         )
     }
