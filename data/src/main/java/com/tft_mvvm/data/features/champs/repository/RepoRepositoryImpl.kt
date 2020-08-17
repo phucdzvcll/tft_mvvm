@@ -36,6 +36,7 @@ class RepoRepositoryImpl(
 
     private fun createChamp(
         champDBO: ChampListDBO.ChampDBO,
+        threeStart: Boolean,
         listItem: MutableList<ChampListEntity.Champ.Item>
     ): ChampListEntity.Champ {
         return ChampListEntity.Champ(
@@ -50,6 +51,7 @@ class RepoRepositoryImpl(
             linkSkillAvatar = champDBO.linkSkillAvatar,
             rankChamp = champDBO.rankChamp,
             suitableItem = listItem,
+            threeStar = threeStart,
             name = champDBO.name
         )
     }
@@ -83,7 +85,7 @@ class RepoRepositoryImpl(
                 }
 
                 listChampEntity.add(
-                    createChamp(i, listItem)
+                    createChamp(i, false, listItem)
                 )
             }
             listChampEntity.size
@@ -148,13 +150,30 @@ class RepoRepositoryImpl(
                 val listIdChampCommon = mutableListOf<String>()
                 listIdChampCommon.addAll(team.listIdChamp)
                 for (position in listChampMainDbo.indices) {
+                    var check = 0
+                    for (idChampThreeStart in team.listIdChampThreeStar) {
+                        if (listChampMainDbo[position].id == idChampThreeStart) {
+                            check++
+                            Log.d("phuc","$check")
+                        }
+                    }
                     val listItem = mutableListOf<ChampListEntity.Champ.Item>()
                     val listIdItem = team.listIdSuitable[position].split(",")
                     for (idItem in listIdItem) {
                         val item = itemListMapper.map(itemDAO.getItemById(idItem))
                         listItem.add(item)
                     }
-                    listChampEntity.add(createChamp(listChampMainDbo[position], listItem))
+                    if (check > 0) {
+                        listChampEntity.add(createChamp(listChampMainDbo[position], true, listItem))
+                    } else {
+                        listChampEntity.add(
+                            createChamp(
+                                listChampMainDbo[position],
+                                false,
+                                listItem
+                            )
+                        )
+                    }
                     val index = mutableListOf<Int>()
                     for (positionIdChampCommon in listIdChampCommon.indices) {
                         if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {
@@ -165,9 +184,20 @@ class RepoRepositoryImpl(
                         listIdChampCommon.removeAt(p)
                     }
                 }
-                val listChampCommon =
-                    champListMapper.mapList(champDAO.getListChampByTeam(listIdChampCommon))
-                listChampEntity.addAll(listChampCommon)
+
+                for (idChamp in listIdChampCommon){
+                    var check = 0
+                    for (idChampThreeStart in team.listIdChampThreeStar){
+                        if (idChamp == idChampThreeStart){
+                            check++
+                        }
+                    }
+                    if(check>0){
+                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),true, mutableListOf()))
+                    }else{
+                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),false, mutableListOf()))
+                    }
+                }
                 listChampEntity.sortBy { it.name }
                 listChampEntity.sortBy { it.cost }
                 listTeamBuilder.add(
@@ -236,7 +266,7 @@ class RepoRepositoryImpl(
                     listItem.add(itemListMapper.map(itemDAO.getItemById(i)))
                 }
             }
-            val champ = createChamp(champDBO, listItem)
+            val champ = createChamp(champDBO, false, listItem)
             return@runSuspendWithCatchError Either.Success(champ)
         }
 
@@ -271,18 +301,35 @@ class RepoRepositoryImpl(
             val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
             dbTeamListEntityResult.size
             dbTeamListEntityResult.forEach { team ->
+                val listIdThreeStart = team.listIdChampThreeStar
                 val listChampEntity = mutableListOf<ChampListEntity.Champ>()
                 val listChampMainDbo = champDAO.getListChampByTeam(team.listIdChampMain)
                 val listIdChampCommon = mutableListOf<String>()
                 listIdChampCommon.addAll(team.listIdChamp)
                 for (position in listChampMainDbo.indices) {
+                    var check = 0
+                    for (idChampThreeStart in listIdThreeStart) {
+                        if (listChampMainDbo[position].id == idChampThreeStart) {
+                            check++
+                        }
+                    }
                     val listItem = mutableListOf<ChampListEntity.Champ.Item>()
                     val listIdItem = team.listIdSuitable[position].split(",")
                     for (idItem in listIdItem) {
                         val item = itemListMapper.map(itemDAO.getItemById(idItem))
                         listItem.add(item)
                     }
-                    listChampEntity.add(createChamp(listChampMainDbo[position], listItem))
+                    if (check > 0) {
+                        listChampEntity.add(createChamp(listChampMainDbo[position], true, listItem))
+                    } else {
+                        listChampEntity.add(
+                            createChamp(
+                                listChampMainDbo[position],
+                                false,
+                                listItem
+                            )
+                        )
+                    }
                     val index = mutableListOf<Int>()
                     for (positionIdChampCommon in listIdChampCommon.indices) {
                         if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {

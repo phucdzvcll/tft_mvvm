@@ -1,7 +1,6 @@
 package com.tft_mvvm.app.features.main.mapper
 
 import com.example.common_jvm.mapper.Mapper
-import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
 import com.tft_mvvm.app.features.main.adapter.AdapterShowChampInTeamBuilder
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
@@ -12,6 +11,7 @@ class ChampOfTeamMapper(private val itemOfTeamMapper: ItemOfTeamMapper) :
             name = input.name,
             cost = input.cost,
             id = input.id,
+            threeStar = input.threeStar,
             imgUrl = input.linkImg,
             itemSuitable = itemOfTeamMapper.mapList(input.suitableItem)
         )
