@@ -61,11 +61,11 @@ class RepoRepositoryImpl(
             var listChampDBO = champDAO.getAllChamp()
             val listChampEntity = mutableListOf<ChampListEntity.Champ>()
             if (champDAO.getAllChamp().isNullOrEmpty() || isForceLoadData) {
-                if (isForceLoadData) {
-                    champDAO.deleteAllChampTable()
-                }
                 val listChampResponse = apiService.getChampList()
                 val listChampDbo = champDaoEntityMapper.map(listChampResponse)
+                if (isForceLoadData && listChampDbo.champDBOs.isNotEmpty()) {
+                    champDAO.deleteAllChampTable()
+                }
                 champDAO.insertChamps(listChampDbo.champDBOs)
                 listChampDBO = champDAO.getAllChamp()
             }
@@ -123,11 +123,11 @@ class RepoRepositoryImpl(
                     )
                 )
             if (dbTeamListEntity.teams.isNullOrEmpty() || isForceLoadData) {
-                if (isForceLoadData) {
-                    teamDAO.deleteAllTeam()
-                }
                 val teamListResponse = apiService.getTeamList()
                 val teamListDBO = teamDaoEntityMapper.map(teamListResponse)
+                if (isForceLoadData && teamListDBO.teamDBOs.isNotEmpty()) {
+                    teamDAO.deleteAllTeam()
+                }
                 teamDAO.insertTeam(teamListDBO.teamDBOs)
                 dbTeamListEntity =
                     TeamListEntity(
@@ -154,7 +154,7 @@ class RepoRepositoryImpl(
                     for (idChampThreeStart in team.listIdChampThreeStar) {
                         if (listChampMainDbo[position].id == idChampThreeStart) {
                             check++
-                            Log.d("phuc","$check")
+                            Log.d("phuc", "$check")
                         }
                     }
                     val listItem = mutableListOf<ChampListEntity.Champ.Item>()
@@ -185,17 +185,29 @@ class RepoRepositoryImpl(
                     }
                 }
 
-                for (idChamp in listIdChampCommon){
+                for (idChamp in listIdChampCommon) {
                     var check = 0
-                    for (idChampThreeStart in team.listIdChampThreeStar){
-                        if (idChamp == idChampThreeStart){
+                    for (idChampThreeStart in team.listIdChampThreeStar) {
+                        if (idChamp == idChampThreeStart) {
                             check++
                         }
                     }
-                    if(check>0){
-                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),true, mutableListOf()))
-                    }else{
-                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),false, mutableListOf()))
+                    if (check > 0) {
+                        listChampEntity.add(
+                            createChamp(
+                                champDAO.getChampById(idChamp),
+                                true,
+                                mutableListOf()
+                            )
+                        )
+                    } else {
+                        listChampEntity.add(
+                            createChamp(
+                                champDAO.getChampById(idChamp),
+                                false,
+                                mutableListOf()
+                            )
+                        )
                     }
                 }
                 listChampEntity.sortBy { it.name }
@@ -221,7 +233,6 @@ class RepoRepositoryImpl(
     ) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             if (classAndOriginDAO.getAllClassAndOrigin().isNullOrEmpty() || isForceLoadData) {
-                classAndOriginDAO.deleteAllClassAndOrinTable()
                 val classAndOriginResponses = apiService.getClassAndOriginList()
                 val classAndOriginDBO = classAndOriginDaoEntityMapper.map(classAndOriginResponses)
                 classAndOriginDAO.insertClassAndOrigin(classAndOriginDBO.classAndOrigins)
@@ -340,17 +351,29 @@ class RepoRepositoryImpl(
                         listIdChampCommon.removeAt(p)
                     }
                 }
-                for (idChamp in listIdChampCommon){
+                for (idChamp in listIdChampCommon) {
                     var check = 0
-                    for (idChampThreeStart in team.listIdChampThreeStar){
-                        if (idChamp == idChampThreeStart){
+                    for (idChampThreeStart in team.listIdChampThreeStar) {
+                        if (idChamp == idChampThreeStart) {
                             check++
                         }
                     }
-                    if(check>0){
-                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),true, mutableListOf()))
-                    }else{
-                        listChampEntity.add(createChamp(champDAO.getChampById(idChamp),false, mutableListOf()))
+                    if (check > 0) {
+                        listChampEntity.add(
+                            createChamp(
+                                champDAO.getChampById(idChamp),
+                                true,
+                                mutableListOf()
+                            )
+                        )
+                    } else {
+                        listChampEntity.add(
+                            createChamp(
+                                champDAO.getChampById(idChamp),
+                                false,
+                                mutableListOf()
+                            )
+                        )
                     }
                 }
                 listChampEntity.sortBy { it.name }

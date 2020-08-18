@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -15,11 +16,14 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_gravity="center|top"
+        android:layout_marginTop="2dp"
         android:id="@+id/three_start"
-        android:layout_width="50dp"
-        android:layout_height="15dp"
+        android:layout_width="40dp"
+        android:layout_height="10dp"
+        android:scaleType="fitCenter"
         android:visibility="gone"
-        android:background="@drawable/ic_star" />
+        tools:visibility="visible"
+        app:srcCompat="@drawable/ic_star" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,6 +38,7 @@
             android:layout_margin="1dp"
             android:background="@drawable/background_boder_skill_avatar"
             android:visibility="gone"
+            tools:visibility="visible"
             tools:src="@tools:sample/avatars" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -43,6 +48,7 @@
             android:layout_margin="1dp"
             android:background="@drawable/background_boder_skill_avatar"
             android:visibility="gone"
+            tools:visibility="visible"
             tools:src="@tools:sample/avatars" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -51,6 +57,7 @@
             android:layout_height="18dp"
             android:layout_margin="1dp"
             android:background="@drawable/background_boder_skill_avatar"
+            tools:visibility="visible"
             android:visibility="gone"
             tools:src="@tools:sample/avatars" />
     </LinearLayout>

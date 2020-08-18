@@ -63,8 +63,11 @@ class DetailsViewModel(
             }) {
                 listItemRv.add(0, itemHeaderMapper.map(it))
                 headerViewHolderModelLiveData.value = itemHeaderMapper.map(it)
-                getOriginContent(it.origin, false)
-                getClassContent(it.classs, false)
+                getOriginContent(it.origin, true)
+                getClassContent((it.classs.split(","))[0], true)
+                if((it.classs.split(",")).size>1){
+                    getClassContent((it.classs.split(","))[1], true)
+                }
             }
         }
 
@@ -160,21 +163,21 @@ class DetailsViewModel(
 
     fun getTeamRecommendForChampLiveData(id: String) =
         viewModelScope.launch(Dispatchers.Main) {
-                val dbResult = withContext(Dispatchers.IO) {
-                    getTeamRecommendForChampUseCase.execute(
-                        GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
-                            id = id
-                        )
+            val dbResult = withContext(Dispatchers.IO) {
+                getTeamRecommendForChampUseCase.execute(
+                    GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
+                        id = id
                     )
-                }
-                dbResult.either({
-                    //TODO handle error
-                }) {
-                    for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
-                        updateListItemRv(team)
-                    }
+                )
+            }
+            dbResult.either({
+                //TODO handle error
+            }) {
+                for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
+                    updateListItemRv(team)
                 }
             }
+        }
 
 
     private fun updateItemOriginHolderViewHolder(model: ItemHolderViewHolder) {

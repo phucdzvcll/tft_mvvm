@@ -5,14 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
-import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
-import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
-import com.tft_mvvm.app.features.details.model.ItemRv
-import com.tft_mvvm.app.features.details.model.TeamRecommendForChamp
+import com.tft_mvvm.app.features.details.model.*
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.header_details_champ.view.*
 import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
@@ -138,12 +134,32 @@ class AdapterShowDetailsChamp(
             adapterShowByOriginAndClass.addData(itemDetailsViewHolderModel.listChamp)
             itemView.rv_origin_or_class.layoutManager = GridLayoutManager(itemView.context, 5)
             itemView.rv_origin_or_class.adapter = adapterShowByOriginAndClass
-            val adapterShowBonusOfClassOrOrigin = AdapterShowBonusOfClassOrOrigin(
-                arrayListOf()
-            )
-            adapterShowBonusOfClassOrOrigin.addData(itemDetailsViewHolderModel.classOrOrigin.bonus)
-            itemView.rv_origin_or_class_bonus.layoutManager = LinearLayoutManager(itemView.context)
-            itemView.rv_origin_or_class_bonus.adapter = adapterShowBonusOfClassOrOrigin
+            val size = itemDetailsViewHolderModel.classOrOrigin.bonus.size
+            if (size > 0) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[0].split(":")
+                itemView.item_bonus_count_1.text = itemBonus[0]
+                itemView.bonus_content_1.text = itemBonus[1]
+                itemView.item_bonus_1.visibility = View.VISIBLE
+            }
+            if (size > 1) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[1].split(":")
+                itemView.item_bonus_count_2.text = itemBonus[0]
+                itemView.bonus_content_2.text = itemBonus[1]
+                itemView.item_bonus_2.visibility = View.VISIBLE
+            }
+            if (size > 2) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[2].split(":")
+                itemView.item_bonus_count_3.text = itemBonus[0]
+                itemView.bonus_content_3.text = itemBonus[1]
+                itemView.item_bonus_3.visibility = View.VISIBLE
+            }
+            if (size > 3) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[3].split(":")
+                itemView.item_bonus_count_4.text = itemBonus[0]
+                itemView.bonus_content_4.text = itemBonus[1]
+                itemView.item_bonus_4.visibility = View.VISIBLE
+            }
+
         }
     }
 
@@ -180,6 +196,8 @@ class AdapterShowDetailsChamp(
     }
 
     fun addData(list: List<ItemRv>) {
+
+
         val listTeam = list.filterIsInstance<TeamRecommendForChamp>()
         val header = list.filterIsInstance<HeaderViewHolderModel>()
         listItemRv.clear()
