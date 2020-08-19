@@ -26,6 +26,9 @@ class AdapterShowChampInTeamBuilder(
                 "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
                 "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
+            if(champ.threeStar){
+                itemView.three_start.visibility = View.VISIBLE
+            }
             if (champ.itemSuitable.isNotEmpty()) {
                 itemView.suitable_item_of_team1.visibility = View.VISIBLE
                 Glide.with(itemView.suitable_item_of_team1.context)
@@ -70,6 +73,7 @@ class AdapterShowChampInTeamBuilder(
         val name: String,
         val imgUrl: String,
         val cost: String,
+        val threeStar:Boolean,
         val itemSuitable: List<Item>
     ) {
         data class Item(

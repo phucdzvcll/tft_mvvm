@@ -23,11 +23,12 @@ class DetailsChampActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_champ)
-          champId = getChamp(intent)
-         observerViewModel()
+        champId = getChamp(intent)
+        observerViewModel()
         setupUi()
         if (champId != null) {
             detailsViewModel.getChampById(champId!!)
+            detailsViewModel.getTeamRecommendForChampLiveData(champId!!)
         }
     }
 
@@ -39,7 +40,6 @@ class DetailsChampActivity : AppCompatActivity(),
         detailsViewModel.getListItemRvLiveData().observe(this, Observer {
             adapterShowDetailsChamp?.addData(it)
         })
-
     }
 
     private fun setupUi() {

@@ -35,4 +35,8 @@ interface RepoRepository {
     suspend fun getChampById(
         id: String
     ): Either<Failure, ChampListEntity.Champ>
+
+    suspend fun getTeamRecommendForChamp(
+        id: String
+    ): Either<Failure, TeamBuilderListEntity>
 }

@@ -15,7 +15,7 @@ import com.tft_mvvm.data.local.model.TeamListDBO
         TeamListDBO.TeamDBO::class,
         ClassAndOriginListDBO.ClassAndOrigin::class,
         ItemListDBO.ItemDBO::class],
-    version = 8
+    version = 9
 )
 
 abstract class ChampRoomDatabase : RoomDatabase() {

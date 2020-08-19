@@ -1,18 +1,17 @@
 package com.tft_mvvm.app.features.details.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
-import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
-import com.tft_mvvm.app.features.details.model.ItemRv
-
 import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.details.model.*
 import com.tft_mvvm.champ.R
+import kotlinx.android.synthetic.main.header_details_champ.view.*
+import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
 import kotlinx.android.synthetic.main.item_header_rv_details_champ.view.*
 import kotlinx.android.synthetic.main.item_rv_details_champ.view.*
 
@@ -23,18 +22,32 @@ class AdapterShowDetailsChamp(
 
     val HEADER_TYPE: Int = 1
     val ITEM_TYPE: Int = 2
+    val TEAM_TYPE: Int = 3
+    val SECTION_TYPE: Int = 4
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return if (viewType == HEADER_TYPE) {
-            HeaderViewHolder(
+        if (viewType == HEADER_TYPE) {
+            return HeaderViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_header_rv_details_champ, parent, false)
             )
-        } else {
-            ItemViewHolder(
+        }
+        if (viewType == ITEM_TYPE) {
+            return ItemViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_rv_details_champ, parent, false)
+            )
+        }
+        if (viewType == TEAM_TYPE) {
+            return TeamViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.iteam_team_recommend, parent, false)
+            )
+        } else {
+            return SectionViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.header_details_champ, parent, false)
             )
         }
     }
@@ -42,10 +55,16 @@ class AdapterShowDetailsChamp(
     override fun getItemCount() = listItemRv.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (listItemRv[position] is HeaderViewHolderModel) {
-            HEADER_TYPE
+        if (listItemRv[position] is HeaderViewHolderModel) {
+            return HEADER_TYPE
+        }
+        if (listItemRv[position] is ItemHolderViewHolder) {
+            return ITEM_TYPE
+        }
+        if (listItemRv[position] is TeamRecommendForChamp) {
+            return TEAM_TYPE
         } else {
-            ITEM_TYPE
+            return SECTION_TYPE
         }
     }
 
@@ -56,11 +75,21 @@ class AdapterShowDetailsChamp(
                 listItemRv[position] as HeaderViewHolderModel,
                 onItemClickListener
             )
-        } else {
+        }
+        if (itemType == ITEM_TYPE) {
             (holder as ItemViewHolder).bind(
                 listItemRv[position] as ItemHolderViewHolder,
                 onItemClickListener
             )
+        }
+        if (itemType == TEAM_TYPE) {
+            (holder as TeamViewHolder).bind(
+                listItemRv[position] as TeamRecommendForChamp,
+                onItemClickListener
+            )
+        }
+        if (itemType == SECTION_TYPE) {
+            (holder as SectionViewHolder).bind(listItemRv[position] as SectionViewHolder.SectionModel)
         }
     }
 
@@ -105,18 +134,80 @@ class AdapterShowDetailsChamp(
             adapterShowByOriginAndClass.addData(itemDetailsViewHolderModel.listChamp)
             itemView.rv_origin_or_class.layoutManager = GridLayoutManager(itemView.context, 5)
             itemView.rv_origin_or_class.adapter = adapterShowByOriginAndClass
-            val adapterShowBonusOfClassOrOrigin = AdapterShowBonusOfClassOrOrigin(
-                arrayListOf()
-            )
-            adapterShowBonusOfClassOrOrigin.addData(itemDetailsViewHolderModel.classOrOrigin.bonus)
-            itemView.rv_origin_or_class_bonus.layoutManager = LinearLayoutManager(itemView.context)
-            itemView.rv_origin_or_class_bonus.adapter = adapterShowBonusOfClassOrOrigin
+            val size = itemDetailsViewHolderModel.classOrOrigin.bonus.size
+            if (size > 0) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[0].split(":")
+                itemView.item_bonus_count_1.text = itemBonus[0]
+                itemView.bonus_content_1.text = itemBonus[1]
+                itemView.item_bonus_1.visibility = View.VISIBLE
+            }
+            if (size > 1) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[1].split(":")
+                itemView.item_bonus_count_2.text = itemBonus[0]
+                itemView.bonus_content_2.text = itemBonus[1]
+                itemView.item_bonus_2.visibility = View.VISIBLE
+            }
+            if (size > 2) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[2].split(":")
+                itemView.item_bonus_count_3.text = itemBonus[0]
+                itemView.bonus_content_3.text = itemBonus[1]
+                itemView.item_bonus_3.visibility = View.VISIBLE
+            }
+            if (size > 3) {
+                val itemBonus = itemDetailsViewHolderModel.classOrOrigin.bonus[3].split(":")
+                itemView.item_bonus_count_4.text = itemBonus[0]
+                itemView.bonus_content_4.text = itemBonus[1]
+                itemView.item_bonus_4.visibility = View.VISIBLE
+            }
+
         }
     }
 
+    class TeamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(
+            teamBuilder: TeamRecommendForChamp,
+            onItemClickListener: OnItemClickListener
+        ) {
+            itemView.name_team.text = teamBuilder.name
+            when (teamBuilder.name) {
+                "D" -> itemView.name_team.setTextColor(Color.parseColor("#C5C1C1"))
+                "C" -> itemView.name_team.setTextColor(Color.parseColor("#7FDF5F"))
+                "B" -> itemView.name_team.setTextColor(Color.parseColor("#0099FF"))
+                "A" -> itemView.name_team.setTextColor(Color.parseColor("#D152F4"))
+                "S" -> itemView.name_team.setTextColor(Color.parseColor("#EFB135"))
+            }
+            itemView.rv_item_by_team_recommend?.layoutManager =
+                GridLayoutManager(itemView.context, 5)
+            val adapterShowByOriginAndClass = AdapterShowByOriginAndClass(
+                arrayListOf(),
+                onItemClickListener
+            )
+            adapterShowByOriginAndClass.addData(teamBuilder.listChamp)
+            itemView.rv_item_by_team_recommend?.adapter = adapterShowByOriginAndClass
+        }
+    }
+
+    class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(sectionModel: SectionModel) {
+            itemView.tv_header_details.text = sectionModel.section
+        }
+
+        data class SectionModel(val section: String) : ItemRv()
+    }
+
     fun addData(list: List<ItemRv>) {
+
+
+        val listTeam = list.filterIsInstance<TeamRecommendForChamp>()
+        val header = list.filterIsInstance<HeaderViewHolderModel>()
         listItemRv.clear()
-        listItemRv.addAll(list)
+        listItemRv.addAll(header)
+        listItemRv.add(SectionViewHolder.SectionModel("Tộc và Hệ"))
+        listItemRv.addAll(list - (listTeam + header))
+        if (listTeam.isNotEmpty()) {
+            listItemRv.add(SectionViewHolder.SectionModel("Đội Hình Thích Hợp"))
+            listItemRv.addAll(listTeam)
+        }
         notifyDataSetChanged()
     }
 

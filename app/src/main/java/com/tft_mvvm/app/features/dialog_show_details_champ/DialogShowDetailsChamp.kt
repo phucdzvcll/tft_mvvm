@@ -51,6 +51,17 @@ class DialogShowDetailsChamp : DialogFragment() {
         Glide.with(skill_avatar_dialog.context)
             .load(champ.linkSkillAvatar)
             .into(skill_avatar_dialog)
+        if (champ.itemSuitable.size == 3) {
+            Glide.with(suitable_item_dialog_img_1.context)
+                .load(champ.itemSuitable[0].itemAvatar)
+                .into(suitable_item_dialog_img_1)
+            Glide.with(suitable_item_dialog_img_2.context)
+                .load(champ.itemSuitable[1].itemAvatar)
+                .into(suitable_item_dialog_img_2)
+            Glide.with(suitable_item_dialog_img_3.context)
+                .load(champ.itemSuitable[2].itemAvatar)
+                .into(suitable_item_dialog_img_3)
+        }
     }
 
     private fun observeViewModel() {

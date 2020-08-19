@@ -6,5 +6,12 @@ data class ChampDialogModel(
     val activated: String,
     val linkChampCover: String,
     val linkSkillAvatar: String,
-    val cost: String
-)
+    val cost: String,
+    val itemSuitable: List<Item>
+){
+    data class Item(
+        val id: String,
+        val itemName: String,
+        val itemAvatar: String
+    )
+}
