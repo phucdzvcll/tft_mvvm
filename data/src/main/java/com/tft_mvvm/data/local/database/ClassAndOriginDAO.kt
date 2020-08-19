@@ -13,7 +13,7 @@ interface ClassAndOriginDAO {
     @Insert
     suspend fun insertClassAndOrigin(list: List<ClassAndOriginListDBO.ClassAndOrigin>)
 
-    @Query("SELECT * FROM classAndOrigin WHERE classOrOriginName LIKE :classOrOriginName")
+    @Query("SELECT * FROM classAndOrigin WHERE classOrOriginName LIKE '%' || :classOrOriginName || '%'")
     suspend fun getClassOrOriginByName(classOrOriginName: String): ClassAndOriginListDBO.ClassAndOrigin
 
     @Query("DELETE FROM classAndOrigin")

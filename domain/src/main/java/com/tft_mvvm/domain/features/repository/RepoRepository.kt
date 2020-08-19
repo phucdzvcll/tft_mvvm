@@ -11,26 +11,14 @@ interface RepoRepository {
         isForceLoadData: Boolean
     ): Either<Failure, ChampListEntity>
 
-    suspend fun getChampsByOrigin(
-        origin: String
-    ): Either<Failure, ChampListEntity>
-
-    suspend fun getChampsByClass(
-        classs: String
-    ): Either<Failure, ChampListEntity>
-
     suspend fun getTeams(
         isForceLoadData: Boolean
     ): Either<Failure, TeamBuilderListEntity>
 
     suspend fun getClassAndOriginContent(
         isForceLoadData: Boolean,
-        classOrOriginName: String
-    ): Either<Failure, ClassAndOriginListEntity.ClassAndOrigin>
-
-    suspend fun updateChamp(
-        id: String
-    ): Either<Failure, ChampListEntity.Champ>
+        listClassOrOriginName: List<String>
+    ): Either<Failure, ClassAndOriginListEntity>
 
     suspend fun getChampById(
         id: String

@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.common_jvm.extension.nullable.defaultEmpty
 import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.adapter.AdapterShowDetailsChamp
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
@@ -33,11 +34,9 @@ class DetailsChampActivity : AppCompatActivity(),
     }
 
     private fun observerViewModel() {
-        detailsViewModel.getHeaderViewHolderModel().observe(this, Observer {
-            toolbar_title.text = it.name
-            champ_cost.text = it.cost
-        })
         detailsViewModel.getChampDetailsLiveData().observe(this, Observer {
+            toolbar_title.text = it.headerModel?.name.defaultEmpty()
+            champ_cost.text = it.headerModel?.cost.defaultEmpty()
             adapterShowDetailsChamp?.addData(it)
             Log.d("Phuc", "$it")
         })

@@ -11,16 +11,6 @@ val domainModule = module {
         )
     }
     single {
-        GetListChampsByOriginUseCase(
-            repoRepository = get()
-        )
-    }
-    single {
-        GetListChampsByClassUseCase(
-            repoRepository = get()
-        )
-    }
-    single {
         GetListTeamBuilderUseCase(
             repoRepoRepository = get()
         )
@@ -30,12 +20,6 @@ val domainModule = module {
             repoRepository = get()
         )
     }
-    single {
-        UpdateChampUseCase(
-            repoRepository = get()
-        )
-    }
-
     single {
         GetChampByIdUseCase(
             repository = get()

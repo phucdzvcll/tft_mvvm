@@ -22,10 +22,8 @@ data class Champ (
         val linkImg : GsxName?,
     @SerializedName("gsx\$cost")
         val cost : GsxName?,
-    @SerializedName("gsx\$origin")
-        val origin : GsxName?,
-    @SerializedName("gsx\$classs")
-        val classs : GsxName?,
+    @SerializedName("gsx\$originandclass")
+        val originAndClassName : GsxName?,
     @SerializedName("gsx\$id")
         val id : GsxName?,
     @SerializedName("gsx\$skillname")

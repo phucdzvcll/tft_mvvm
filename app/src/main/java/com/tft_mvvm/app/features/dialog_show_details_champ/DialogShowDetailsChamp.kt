@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -55,12 +56,24 @@ class DialogShowDetailsChamp : DialogFragment() {
             Glide.with(suitable_item_dialog_img_1.context)
                 .load(champ.itemSuitable[0].itemAvatar)
                 .into(suitable_item_dialog_img_1)
+            suitable_item_dialog_img_1.setOnClickListener {
+                Toast.makeText(requireContext(), champ.itemSuitable[0].itemName, Toast.LENGTH_SHORT)
+                    .show()
+            }
             Glide.with(suitable_item_dialog_img_2.context)
                 .load(champ.itemSuitable[1].itemAvatar)
                 .into(suitable_item_dialog_img_2)
+            suitable_item_dialog_img_2.setOnClickListener {
+                Toast.makeText(requireContext(), champ.itemSuitable[1].itemName, Toast.LENGTH_SHORT)
+                    .show()
+            }
             Glide.with(suitable_item_dialog_img_3.context)
                 .load(champ.itemSuitable[2].itemAvatar)
                 .into(suitable_item_dialog_img_3)
+            suitable_item_dialog_img_3.setOnClickListener {
+                Toast.makeText(requireContext(), champ.itemSuitable[2].itemName, Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

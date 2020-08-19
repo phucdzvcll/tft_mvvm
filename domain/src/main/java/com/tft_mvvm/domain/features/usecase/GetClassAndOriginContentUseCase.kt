@@ -8,16 +8,16 @@ import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
 
 class GetClassAndOriginContentUseCase(private val repoRepository: RepoRepository) :
-    UseCase<GetClassAndOriginContentUseCase.GetClassAnOriginContentParam, Either<Failure, ClassAndOriginListEntity.ClassAndOrigin>>() {
-    override suspend fun executeInternal(params: GetClassAnOriginContentParam): Either<Failure, ClassAndOriginListEntity.ClassAndOrigin> {
+    UseCase<GetClassAndOriginContentUseCase.GetClassAnOriginContentParam, Either<Failure, ClassAndOriginListEntity>>() {
+    override suspend fun executeInternal(params: GetClassAnOriginContentParam): Either<Failure, ClassAndOriginListEntity> {
         return repoRepository.getClassAndOriginContent(
             isForceLoadData = params.isForceLoadData,
-            classOrOriginName = params.classOrOriginName
+            listClassOrOriginName = params.listClassOrOriginName
         )
     }
 
     data class GetClassAnOriginContentParam(
         val isForceLoadData: Boolean,
-        val classOrOriginName: String
+        val listClassOrOriginName: List<String>
     ) : UseCaseParams
 }

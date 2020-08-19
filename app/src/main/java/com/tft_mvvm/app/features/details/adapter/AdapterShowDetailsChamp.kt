@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -107,12 +108,33 @@ class AdapterShowDetailsChamp(
                 Glide.with(itemView.suitable_item_img_1.context)
                     .load(headerModel.listSuitableItem[0].itemAvatar)
                     .into(itemView.suitable_item_img_1)
+                itemView.suitable_item_img_1.setOnClickListener {
+                    Toast.makeText(
+                        itemView.suitable_item_img_1.context,
+                        headerModel.listSuitableItem[0].itemName,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 Glide.with(itemView.suitable_item_img_2.context)
                     .load(headerModel.listSuitableItem[1].itemAvatar)
                     .into(itemView.suitable_item_img_2)
+                itemView.suitable_item_img_2.setOnClickListener {
+                    Toast.makeText(
+                        itemView.suitable_item_img_2.context,
+                        headerModel.listSuitableItem[1].itemName,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 Glide.with(itemView.suitable_item_img_3.context)
                     .load(headerModel.listSuitableItem[2].itemAvatar)
                     .into(itemView.suitable_item_img_3)
+                itemView.suitable_item_img_3.setOnClickListener {
+                    Toast.makeText(
+                        itemView.suitable_item_img_3.context,
+                        headerModel.listSuitableItem[2].itemName,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -134,34 +156,34 @@ class AdapterShowDetailsChamp(
             onItemClickListener: OnItemClickListener
         ) {
             itemView.origin_or_class_name.text =
-                classAndOriginContent.classOrOrigin.classOrOriginName
-            itemView.origin_or_class_content.text = classAndOriginContent.classOrOrigin.content
+                classAndOriginContent.classOrOriginName
+            itemView.origin_or_class_content.text = classAndOriginContent.content
             val adapterShowByOriginAndClass =
                 AdapterShowByOriginAndClass(arrayListOf(), onItemClickListener)
             adapterShowByOriginAndClass.addData(classAndOriginContent.listChamp)
             itemView.rv_origin_or_class.layoutManager = GridLayoutManager(itemView.context, 5)
             itemView.rv_origin_or_class.adapter = adapterShowByOriginAndClass
-            val size = classAndOriginContent.classOrOrigin.bonus.size
+            val size = classAndOriginContent.bonus.size
             if (size > 0) {
-                val itemBonus = classAndOriginContent.classOrOrigin.bonus[0].split(":")
+                val itemBonus = classAndOriginContent.bonus[0].split(":")
                 itemView.item_bonus_count_1.text = itemBonus[0]
                 itemView.bonus_content_1.text = itemBonus[1]
                 itemView.item_bonus_1.visibility = View.VISIBLE
             }
             if (size > 1) {
-                val itemBonus = classAndOriginContent.classOrOrigin.bonus[1].split(":")
+                val itemBonus = classAndOriginContent.bonus[1].split(":")
                 itemView.item_bonus_count_2.text = itemBonus[0]
                 itemView.bonus_content_2.text = itemBonus[1]
                 itemView.item_bonus_2.visibility = View.VISIBLE
             }
             if (size > 2) {
-                val itemBonus = classAndOriginContent.classOrOrigin.bonus[2].split(":")
+                val itemBonus = classAndOriginContent.bonus[2].split(":")
                 itemView.item_bonus_count_3.text = itemBonus[0]
                 itemView.bonus_content_3.text = itemBonus[1]
                 itemView.item_bonus_3.visibility = View.VISIBLE
             }
             if (size > 3) {
-                val itemBonus = classAndOriginContent.classOrOrigin.bonus[3].split(":")
+                val itemBonus = classAndOriginContent.bonus[3].split(":")
                 itemView.item_bonus_count_4.text = itemBonus[0]
                 itemView.bonus_content_4.text = itemBonus[1]
                 itemView.item_bonus_4.visibility = View.VISIBLE
@@ -169,16 +191,12 @@ class AdapterShowDetailsChamp(
         }
 
         data class ClassAndOriginContent(
-            val classOrOrigin: ClassOrOrigin,
-            val listChamp: List<Champ>
-        ) : ItemRv() {
+            val listChamp: List<Champ>,
+            val classOrOriginName: String,
+            val bonus: List<String>,
+            val content: String
+        ) : ItemRv()
 
-            data class ClassOrOrigin(
-                val classOrOriginName: String,
-                val bonus: List<String>,
-                val content: String
-            )
-        }
     }
 
     class TeamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -238,7 +256,7 @@ class AdapterShowDetailsChamp(
 
     fun addData(champDetails: ChampDetailsModel) {
         listItemRv.clear()
-        if (champDetails.headerModel.listSuitableItem.isNotEmpty()) {
+        if (champDetails.headerModel != null) {
             listItemRv.add(
                 HeaderViewHolder.HeaderModel(
                     nameSkill = champDetails.headerModel.nameSkill,
@@ -283,11 +301,9 @@ class AdapterShowDetailsChamp(
 
     private fun classAndOriginContentMapper(classAndOriginContent: ChampDetailsModel.ClassAndOriginContent): ItemViewHolder.ClassAndOriginContent {
         return ItemViewHolder.ClassAndOriginContent(
-            ItemViewHolder.ClassAndOriginContent.ClassOrOrigin(
-                classOrOriginName = classAndOriginContent.classOrOrigin.classOrOriginName,
-                bonus = classAndOriginContent.classOrOrigin.bonus,
-                content = classAndOriginContent.classOrOrigin.content
-            ),
+            classOrOriginName = classAndOriginContent.classOrOriginName,
+            bonus = classAndOriginContent.bonus,
+            content = classAndOriginContent.content,
             listChamp = champAdapterDetailsMapper(classAndOriginContent.listChamp)
         )
     }

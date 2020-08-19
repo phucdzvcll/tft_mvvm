@@ -1,7 +1,7 @@
 package com.tft_mvvm.app.features.details.model
 
 data class ChampDetailsModel(
-    val headerModel: HeaderModel,
+    val headerModel: HeaderModel?,
     val listItem: List<ClassAndOriginContent>,
     val listTeamRecommend: List<TeamRecommend>
 ) {
@@ -16,21 +16,15 @@ data class ChampDetailsModel(
     )
 
     data class ClassAndOriginContent(
-        val classOrOrigin: ClassOrOrigin,
-        val listChamp: List<Champ>
-    ) {
-        data class ClassOrOrigin(
-            val classOrOriginName: String,
-            val bonus: List<String>,
-            val content: String
-        )
-    }
-
+        val listChamp: List<Champ>,
+        val classOrOriginName: String,
+        val bonus: List<String>,
+        val content: String
+    )
     data class TeamRecommend(
         val name: String,
         val listChamp: List<Champ>
     )
-
     data class Champ(
         val id: String,
         val name: String,

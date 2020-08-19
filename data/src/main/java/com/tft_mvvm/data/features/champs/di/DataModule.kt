@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.di
 
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
@@ -30,10 +29,6 @@ val dataModule = module {
 
     factory {
         TeamListMapper()
-    }
-
-    factory {
-        ClassAndOriginListMapper()
     }
 
     factory {
@@ -99,7 +94,6 @@ val dataModule = module {
             teamDAO = get(),
             classAndOriginDAO = get(),
             classAndOriginDaoEntityMapper = get(),
-            classAndOriginListMapper = get(),
             itemDAO = get(),
             itemDaoEntityMapper = get(),
             itemListMapper = get(),

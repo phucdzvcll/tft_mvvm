@@ -12,6 +12,7 @@ import com.tft_mvvm.data.local.database.ItemDAO
 import com.tft_mvvm.data.local.database.TeamDAO
 import com.tft_mvvm.data.local.model.ChampListDBO
 import com.tft_mvvm.domain.features.model.ChampListEntity
+import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 import com.tft_mvvm.domain.features.model.TeamListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
@@ -29,7 +30,6 @@ class RepoRepositoryImpl(
     private val remoteExceptionInterceptor: RemoteExceptionInterceptor,
     private val champListMapper: ChampListMapper,
     private val classAndOriginDaoEntityMapper: ClassAndOriginDaoEntityMapper,
-    private val classAndOriginListMapper: ClassAndOriginListMapper,
     private val champDaoEntityMapper: ChampDaoEntityMapper
 
 ) : RepoRepository {
@@ -45,8 +45,7 @@ class RepoRepositoryImpl(
             linkImg = champDBO.linkImg,
             activated = champDBO.activated,
             linkChampCover = champDBO.linkChampCover,
-            classs = champDBO.classs,
-            origin = champDBO.origin,
+            originAndClassName = champDBO.originAndClassName.split(","),
             skillName = champDBO.skillName,
             linkSkillAvatar = champDBO.linkSkillAvatar,
             rankChamp = champDBO.rankChamp,
@@ -58,60 +57,19 @@ class RepoRepositoryImpl(
 
     override suspend fun getAllChamps(isForceLoadData: Boolean) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            var listChampDBO = champDAO.getAllChamp()
-            val listChampEntity = mutableListOf<ChampListEntity.Champ>()
-            if (champDAO.getAllChamp().isNullOrEmpty() || isForceLoadData) {
+            val listChampEntity = champListMapper.mapList(champDAO.getAllChamp())
+            if (listChampEntity.isNullOrEmpty() || isForceLoadData) {
                 val listChampResponse = apiService.getChampList()
                 val listChampDbo = champDaoEntityMapper.map(listChampResponse)
                 if (isForceLoadData && listChampDbo.champDBOs.isNotEmpty()) {
                     champDAO.deleteAllChampTable()
                 }
                 champDAO.insertChamps(listChampDbo.champDBOs)
-                listChampDBO = champDAO.getAllChamp()
+                val dbAfterInset = champListMapper.mapList(champDAO.getAllChamp())
+                return@runSuspendWithCatchError Either.Success(ChampListEntity(champs = dbAfterInset))
+            } else {
+                return@runSuspendWithCatchError Either.Success(ChampListEntity(champs = listChampEntity))
             }
-
-            if (itemDAO.getAllItem().isNullOrEmpty()) {
-                val listItemResponse = apiService.getItemListResponse()
-                val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
-                itemDAO.insertItems(listItemDBO.items)
-            }
-            for (i in listChampDBO) {
-                val listItem = mutableListOf<ChampListEntity.Champ.Item>()
-                if (i.suitableItem.isNotBlank()) {
-                    val listIdItem = i.suitableItem.split(",")
-                    for (j in listIdItem) {
-                        listItem.add(itemListMapper.map(itemDAO.getItemById(j)))
-                    }
-                }
-
-                listChampEntity.add(
-                    createChamp(i, false, listItem)
-                )
-            }
-            listChampEntity.size
-            return@runSuspendWithCatchError Either.Success(ChampListEntity(champs = listChampEntity))
-        }
-
-    override suspend fun getChampsByOrigin(origin: String) =
-        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            return@runSuspendWithCatchError Either.Success(
-                ChampListEntity(
-                    champs = champListMapper.mapList(
-                        champDAO.getDataByOrigin(origin)
-                    )
-                )
-            )
-        }
-
-    override suspend fun getChampsByClass(classs: String) =
-        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            return@runSuspendWithCatchError Either.Success(
-                ChampListEntity(
-                    champs = champListMapper.mapList(
-                        champDAO.getDataByClass(classs)
-                    )
-                )
-            )
         }
 
     override suspend fun getTeams(isForceLoadData: Boolean) =
@@ -157,12 +115,9 @@ class RepoRepositoryImpl(
                             Log.d("phuc", "$check")
                         }
                     }
-                    val listItem = mutableListOf<ChampListEntity.Champ.Item>()
                     val listIdItem = team.listIdSuitable[position].split(",")
-                    for (idItem in listIdItem) {
-                        val item = itemListMapper.map(itemDAO.getItemById(idItem))
-                        listItem.add(item)
-                    }
+                    val listItem =
+                        itemListMapper.mapList(itemDAO.getItemByListId(listIdItem)) as MutableList
                     if (check > 0) {
                         listChampEntity.add(createChamp(listChampMainDbo[position], true, listItem))
                     } else {
@@ -229,47 +184,41 @@ class RepoRepositoryImpl(
 
     override suspend fun getClassAndOriginContent(
         isForceLoadData: Boolean,
-        classOrOriginName: String
-    ) =
-        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            if (classAndOriginDAO.getAllClassAndOrigin().isNullOrEmpty() || isForceLoadData) {
-                val classAndOriginResponses = apiService.getClassAndOriginList()
-                val classAndOriginDBO = classAndOriginDaoEntityMapper.map(classAndOriginResponses)
-                classAndOriginDAO.insertClassAndOrigin(classAndOriginDBO.classAndOrigins)
-                val classOrOriginAfterInsert = classAndOriginListMapper.map(
-                    classAndOriginDAO.getClassOrOriginByName(classOrOriginName)
-                )
-                return@runSuspendWithCatchError Either.Success(classOrOriginAfterInsert)
-            } else {
-                return@runSuspendWithCatchError Either.Success(
-                    classAndOriginListMapper.map(
-                        classAndOriginDAO.getClassOrOriginByName(classOrOriginName)
-                    )
-                )
+        listClassOrOriginName: List<String>
+    ) = runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+        val listClassAndOriginContent = mutableListOf<ClassAndOriginListEntity.ClassAndOrigin>()
+        if (classAndOriginDAO.getAllClassAndOrigin().isNullOrEmpty() || isForceLoadData) {
+            val classAndOriginDBO =
+                classAndOriginDaoEntityMapper.map(apiService.getClassAndOriginList())
+            if (isForceLoadData && classAndOriginDBO.classAndOrigins.isNotEmpty()) {
+                classAndOriginDAO.deleteAllClassAndOrinTable()
             }
+            classAndOriginDAO.insertClassAndOrigin(classAndOriginDBO.classAndOrigins)
         }
-
-
-    override suspend fun updateChamp(id: String) =
-        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
-            val listChampDBO = champDaoEntityMapper.map(apiService.getChampList())
-            listChampDBO.champDBOs.forEach { champDBO ->
-                if (champDBO.id == id) {
-                    champDAO.updateChamp(champDBO)
-                }
-            }
-            return@runSuspendWithCatchError Either.Success(
-                champListMapper.map(
-                    champDAO.getChampById(
-                        id
-                    )
+        listClassOrOriginName.forEach { classOrOriginName ->
+            val content = classAndOriginDAO.getClassOrOriginByName(classOrOriginName)
+            val listChampDbo = champDAO.getListChampByClassOrOriginName(classOrOriginName)
+            listClassAndOriginContent.add(
+                ClassAndOriginListEntity.ClassAndOrigin(
+                    classOrOriginName = content.classOrOriginName,
+                    listChamp = ChampListEntity(champs = champListMapper.mapList(listChampDbo)),
+                    content = content.content,
+                    bonus = content.bonus
                 )
             )
         }
+        return@runSuspendWithCatchError Either.Success(ClassAndOriginListEntity(listClassAndOrigin = listClassAndOriginContent))
+
+    }
 
     override suspend fun getChampById(id: String) =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             val champDBO = champDAO.getChampById(id)
+            if (itemDAO.getAllItem().isNullOrEmpty()) {
+                val listItemResponse = apiService.getItemListResponse()
+                val listItemDbo = itemDaoEntityMapper.map(listItemResponse)
+                itemDAO.insertItems(listItemDbo.items)
+            }
             val listItem = mutableListOf<ChampListEntity.Champ.Item>()
             if (champDBO.suitableItem.isNotBlank()) {
                 val listIdItem = champDBO.suitableItem.split(",")
@@ -290,9 +239,9 @@ class RepoRepositoryImpl(
                     )
                 )
             if (teamListEntity.teams.isNullOrEmpty()) {
-                val listItemResponse = apiService.getItemListResponse()
-                val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
-                itemDAO.insertItems(listItemDBO.items)
+                val listTeamResponse = apiService.getTeamList()
+                val listTeamDBO = teamDaoEntityMapper.map(listTeamResponse)
+                teamDAO.insertTeam(listTeamDBO.teamDBOs)
                 teamListEntity =
                     TeamListEntity(
                         teams = teamListMapper.mapList(
