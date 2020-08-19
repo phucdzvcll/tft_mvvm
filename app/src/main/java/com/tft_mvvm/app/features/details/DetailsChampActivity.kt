@@ -3,6 +3,7 @@ package com.tft_mvvm.app.features.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,6 @@ class DetailsChampActivity : AppCompatActivity(),
         setupUi()
         if (champId != null) {
             detailsViewModel.getChampById(champId!!)
-            detailsViewModel.getTeamRecommendForChampLiveData(champId!!)
         }
     }
 
@@ -37,14 +37,15 @@ class DetailsChampActivity : AppCompatActivity(),
             toolbar_title.text = it.name
             champ_cost.text = it.cost
         })
-        detailsViewModel.getListItemRvLiveData().observe(this, Observer {
+        detailsViewModel.getChampDetailsLiveData().observe(this, Observer {
             adapterShowDetailsChamp?.addData(it)
+            Log.d("Phuc", "$it")
         })
     }
 
     private fun setupUi() {
         rv_show_details_champ?.layoutManager = LinearLayoutManager(this)
-        adapterShowDetailsChamp = AdapterShowDetailsChamp(arrayListOf(), this)
+        adapterShowDetailsChamp = AdapterShowDetailsChamp(this)
         rv_show_details_champ?.adapter = adapterShowDetailsChamp
 
         item_btn_back?.setOnClickListener {

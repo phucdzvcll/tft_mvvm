@@ -7,12 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
+import com.tft_mvvm.app.features.details.mapper.ChampOfChampDetailsMapper
 import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
 import com.tft_mvvm.app.features.details.mapper.TeamRecommendForChampMapper
-import com.tft_mvvm.app.features.details.model.HeaderViewHolderModel
-import com.tft_mvvm.app.features.details.model.ItemHolderViewHolder
-import com.tft_mvvm.app.features.details.model.ItemRv
-import com.tft_mvvm.app.features.main.mapper.ChampMapper
+import com.tft_mvvm.app.features.details.model.ChampDetailsModel
 import com.tft_mvvm.domain.features.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,27 +24,43 @@ class DetailsViewModel(
     private val getTeamRecommendForChampUseCase: GetTeamRecommendForChampUseCase,
     private val teamRecommendForChampMapper: TeamRecommendForChampMapper,
     private val itemHeaderMapper: ItemHeaderMapper,
-    private val champMapper: ChampMapper
+    private val champMapper: ChampOfChampDetailsMapper
 ) : BaseViewModel() {
-    private val headerViewHolderModelLiveData = MutableLiveData<HeaderViewHolderModel>()
-    private val listItemRvLiveData = MutableLiveData<List<ItemRv>>()
-    private var itemOriginHolderViewHolder = ItemHolderViewHolder(
-        ItemHolderViewHolder.ClassOrOrigin(
+    private val champDetailsModelLiveData = MutableLiveData<ChampDetailsModel>()
+    private val headerModelLiveData = MutableLiveData<ChampDetailsModel.HeaderModel>()
+
+    private val listClassAndOriginContent = mutableListOf<ChampDetailsModel.ClassAndOriginContent>()
+    private val listTeamRecommend = mutableListOf<ChampDetailsModel.TeamRecommend>()
+
+    private var champDetailsModel = ChampDetailsModel(
+        ChampDetailsModel.HeaderModel(
+            name = "",
+            cost = "",
+            activated = "",
+            linkChampCover = "",
+            listSuitableItem = listOf(),
+            linkAvatarSkill = "",
+            nameSkill = ""
+        ),
+        listItem = listOf(),
+        listTeamRecommend = listOf()
+    )
+    private var itemOriginModel = ChampDetailsModel.ClassAndOriginContent(
+        ChampDetailsModel.ClassAndOriginContent.ClassOrOrigin(
             classOrOriginName = "",
             bonus = listOf(),
             content = ""
         ),
         listOf()
     )
-    private var itemClassHolderViewHolder = ItemHolderViewHolder(
-        ItemHolderViewHolder.ClassOrOrigin(
+    private var itemClassModel = ChampDetailsModel.ClassAndOriginContent(
+        ChampDetailsModel.ClassAndOriginContent.ClassOrOrigin(
             classOrOriginName = "",
             bonus = listOf(),
             content = ""
         ),
         listOf()
     )
-    private var listItemRv = mutableListOf<ItemRv>()
 
     fun getChampById(id: String) =
         viewModelScope.launch(Dispatchers.Main) {
@@ -59,15 +73,19 @@ class DetailsViewModel(
             }
             dbResult.either({
                 //TODO handel error
-                Log.d("Phuc", "$it")
             }) {
-                listItemRv.add(0, itemHeaderMapper.map(it))
-                headerViewHolderModelLiveData.value = itemHeaderMapper.map(it)
+                updateChampDetails(
+                    champDetailsModel.copy(
+                        headerModel = itemHeaderMapper.map(it)
+                    )
+                )
+                headerModelLiveData.value = itemHeaderMapper.map(it)
                 getOriginContent(it.origin, true)
                 getClassContent((it.classs.split(","))[0], true)
-                if((it.classs.split(",")).size>1){
+                if ((it.classs.split(",")).size > 1) {
                     getClassContent((it.classs.split(","))[1], true)
                 }
+                getTeamRecommendForChampLiveData(it.id)
             }
         }
 
@@ -86,8 +104,8 @@ class DetailsViewModel(
                 //TODO handle error
             }) {
                 updateItemOriginHolderViewHolder(
-                    itemOriginHolderViewHolder.copy(
-                        classOrOrigin = ItemHolderViewHolder.ClassOrOrigin(
+                    itemOriginModel.copy(
+                        classOrOrigin = ChampDetailsModel.ClassAndOriginContent.ClassOrOrigin(
                             classOrOriginName = it.classOrOriginName,
                             content = it.content,
                             bonus = it.bonus.split(",")
@@ -109,8 +127,8 @@ class DetailsViewModel(
         dbResult.either({
             //TODO handle error
         }) {
-            updateListItemRv(
-                itemOriginHolderViewHolder.copy(listChamp = champMapper.mapList(it.champs))
+            updateListItemModel(
+                itemOriginModel.copy(listChamp = champMapper.mapList(it.champs))
             )
         }
     }
@@ -130,8 +148,8 @@ class DetailsViewModel(
                 Log.d("Phuc", "$it")
             }) {
                 updateItemClassHolderViewHolder(
-                    itemClassHolderViewHolder.copy(
-                        classOrOrigin = ItemHolderViewHolder.ClassOrOrigin(
+                    itemClassModel.copy(
+                        classOrOrigin = ChampDetailsModel.ClassAndOriginContent.ClassOrOrigin(
                             classOrOriginName = it.classOrOriginName,
                             bonus = it.bonus.split(","),
                             content = it.content
@@ -153,8 +171,8 @@ class DetailsViewModel(
         dbResult.either({
             //TODO handle error
         }) {
-            updateListItemRv(
-                itemClassHolderViewHolder.copy(
+            updateListItemModel(
+                itemClassModel.copy(
                     listChamp = champMapper.mapList(it.champs)
                 )
             )
@@ -173,31 +191,48 @@ class DetailsViewModel(
             dbResult.either({
                 //TODO handle error
             }) {
-                for (team in teamRecommendForChampMapper.mapList(it.teamBuilders)) {
-                    updateListItemRv(team)
-                }
+                updateListTeamRecommend(teamRecommendForChampMapper.mapList(it.teamBuilders))
             }
         }
 
 
-    private fun updateItemOriginHolderViewHolder(model: ItemHolderViewHolder) {
-        itemOriginHolderViewHolder = model
+    private fun updateItemOriginHolderViewHolder(model: ChampDetailsModel.ClassAndOriginContent) {
+        itemOriginModel = model
     }
 
-    private fun updateItemClassHolderViewHolder(model: ItemHolderViewHolder) {
-        itemClassHolderViewHolder = model
+    private fun updateItemClassHolderViewHolder(model: ChampDetailsModel.ClassAndOriginContent) {
+        itemClassModel = model
     }
 
-    fun getHeaderViewHolderModel(): LiveData<HeaderViewHolderModel> {
-        return headerViewHolderModelLiveData
+    fun getHeaderViewHolderModel(): LiveData<ChampDetailsModel.HeaderModel> {
+        return headerModelLiveData
     }
 
-    private fun updateListItemRv(item: ItemRv) {
-        listItemRv.add(item)
-        listItemRvLiveData.value = listItemRv
+    private fun updateListItemModel(item: ChampDetailsModel.ClassAndOriginContent) {
+        listClassAndOriginContent.add(item)
+        updateChampDetails(
+            champDetailsModel.copy(
+                listItem = listClassAndOriginContent
+            )
+        )
     }
 
-    fun getListItemRvLiveData(): LiveData<List<ItemRv>> {
-        return listItemRvLiveData
+    private fun updateListTeamRecommend(listTeam: List<ChampDetailsModel.TeamRecommend>) {
+        listTeamRecommend.clear()
+        listTeamRecommend.addAll(listTeam)
+        updateChampDetails(
+            champDetailsModel.copy(
+                listTeamRecommend = listTeamRecommend
+            )
+        )
+    }
+
+    private fun updateChampDetails(champDetails: ChampDetailsModel) {
+        champDetailsModel = champDetails
+        champDetailsModelLiveData.value = champDetailsModel
+    }
+
+    fun getChampDetailsLiveData(): LiveData<ChampDetailsModel> {
+        return champDetailsModelLiveData
     }
 }

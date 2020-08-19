@@ -10,7 +10,7 @@ import com.tft_mvvm.domain.features.repository.RepoRepository
 class GetListChampsUseCase(private val repoRepository: RepoRepository) :
     UseCase<GetListChampsUseCase.GetAllChampUseCaseParam, Either<Failure, ChampListEntity>>() {
     override suspend fun executeInternal(params: GetAllChampUseCaseParam): Either<Failure, ChampListEntity> {
-        return repoRepository.getChamps(
+        return repoRepository.getAllChamps(
             isForceLoadData = params.isForceLoadData
         )
     }

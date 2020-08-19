@@ -7,7 +7,7 @@ import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 
 interface RepoRepository {
-    suspend fun getChamps(
+    suspend fun getAllChamps(
         isForceLoadData: Boolean
     ): Either<Failure, ChampListEntity>
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
-import com.tft_mvvm.app.features.details.model.ItemRv
+import com.tft_mvvm.app.model.ItemRv
 import com.tft_mvvm.app.model.Champ
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*

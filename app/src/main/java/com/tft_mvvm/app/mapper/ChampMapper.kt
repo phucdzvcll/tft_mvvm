@@ -1,4 +1,4 @@
-package com.tft_mvvm.app.features.main.mapper
+package com.tft_mvvm.app.mapper
 
 import com.example.common_jvm.mapper.Mapper
 import com.tft_mvvm.app.model.Champ

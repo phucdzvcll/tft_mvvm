@@ -1,6 +1,8 @@
 package com.tft_mvvm.app.features.details.model
 
-data class TeamRecommendForChamp(
+import com.tft_mvvm.app.model.ItemRv
+
+data class TeamRecommendForChampViewHolder(
     val name: String,
     val listChamp: List<Champ>
 ) : ItemRv() {

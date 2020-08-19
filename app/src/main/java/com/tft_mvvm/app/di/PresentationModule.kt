@@ -5,7 +5,7 @@ import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ChampDialogModelMapper
 import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ItemSuitableMapper
 import com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel.DialogShowDetailsChampViewModel
-import com.tft_mvvm.app.features.main.mapper.ChampMapper
+import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.features.main.mapper.ChampOfTeamMapper
 import com.tft_mvvm.app.features.main.mapper.ItemOfTeamMapper
 import com.tft_mvvm.app.features.main.mapper.TeamBuilderRecommendMapper
@@ -26,9 +26,8 @@ val presentationModule = module {
     factory { ItemHeaderMapper(itemMapper = get()) }
     factory { ChampOfTeamMapper(itemOfTeamMapper = get()) }
     factory { ItemOfTeamMapper() }
-    factory { ItemSuitableTeamRecommendForChampMapper() }
-    factory { ChampOfTeamRecommendForChampMapper(itemSuitableTeamRecommendForChampMapper = get()) }
-    factory { TeamRecommendForChampMapper(champOfTeamRecommendForChampMapper = get()) }
+    factory { ChampOfChampDetailsMapper(itemMapper = get()) }
+    factory { TeamRecommendForChampMapper(champOfChampDetailsMapper = get()) }
     viewModel {
         DetailsViewModel(
             getChampByIdUseCase = get(),

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
-import com.tft_mvvm.app.features.main.mapper.ChampMapper
+import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.model.Champ
 import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
 import kotlinx.coroutines.Dispatchers
