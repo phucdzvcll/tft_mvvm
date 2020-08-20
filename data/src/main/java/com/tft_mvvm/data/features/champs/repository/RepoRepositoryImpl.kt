@@ -1,6 +1,7 @@
 package com.tft_mvvm.data.features.champs.repository
 
 import android.util.Log
+import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
@@ -55,10 +56,10 @@ class RepoRepositoryImpl(
         )
     }
 
-    override suspend fun getAllChamps(isForceLoadData: Boolean) =
+    override suspend fun getAllChamps(isForceLoadData: Boolean): Either<Failure, ChampListEntity> =
         runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
             val listChampEntity = champListMapper.mapList(champDAO.getAllChamp())
-            if (listChampEntity.isNullOrEmpty() || isForceLoadData) {
+            if (listChampEntity.isEmpty() || isForceLoadData) {
                 val listChampResponse = apiService.getChampList()
                 val listChampDbo = champDaoEntityMapper.map(listChampResponse)
                 if (isForceLoadData && listChampDbo.champDBOs.isNotEmpty()) {
