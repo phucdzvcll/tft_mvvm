@@ -11,13 +11,11 @@ class GetClassAndOriginContentUseCase(private val repoRepository: RepoRepository
     UseCase<GetClassAndOriginContentUseCase.GetClassAnOriginContentParam, Either<Failure, ClassAndOriginListEntity>>() {
     override suspend fun executeInternal(params: GetClassAnOriginContentParam): Either<Failure, ClassAndOriginListEntity> {
         return repoRepository.getClassAndOriginContent(
-            isForceLoadData = params.isForceLoadData,
             listClassOrOriginName = params.listClassOrOriginName
         )
     }
 
     data class GetClassAnOriginContentParam(
-        val isForceLoadData: Boolean,
         val listClassOrOriginName: List<String>
     ) : UseCaseParams
 }

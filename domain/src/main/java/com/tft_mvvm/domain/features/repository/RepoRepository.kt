@@ -16,7 +16,6 @@ interface RepoRepository {
     ): Either<Failure, TeamBuilderListEntity>
 
     suspend fun getClassAndOriginContent(
-        isForceLoadData: Boolean,
         listClassOrOriginName: List<String>
     ): Either<Failure, ClassAndOriginListEntity>
 

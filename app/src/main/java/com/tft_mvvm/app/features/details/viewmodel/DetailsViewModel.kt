@@ -55,21 +55,19 @@ class DetailsViewModel(
                     )
                 )
                 val listClassAndOriginName = it.originAndClassName
-                getListClassAndOriginContent(listClassAndOriginName, true)
+                getListClassAndOriginContent(listClassAndOriginName)
                 getTeamRecommendForChampLiveData(it.id)
             }
         }
 
 
     private fun getListClassAndOriginContent(
-        listClassAndOriginName: List<String>,
-        isForceLoadData: Boolean
+        listClassAndOriginName: List<String>
     ) =
         viewModelScope.launch(Dispatchers.Main) {
             val dbResult = withContext(Dispatchers.IO) {
                 getClassAndOriginContentUseCase.execute(
                     GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
-                        isForceLoadData = isForceLoadData,
                         listClassOrOriginName = listClassAndOriginName
                     )
                 )

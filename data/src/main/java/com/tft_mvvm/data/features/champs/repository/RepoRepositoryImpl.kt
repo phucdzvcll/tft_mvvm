@@ -183,16 +183,12 @@ class RepoRepositoryImpl(
         }
 
     override suspend fun getClassAndOriginContent(
-        isForceLoadData: Boolean,
         listClassOrOriginName: List<String>
     ) = runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
         val listClassAndOriginContent = mutableListOf<ClassAndOriginListEntity.ClassAndOrigin>()
-        if (classAndOriginDAO.getAllClassAndOrigin().isNullOrEmpty() || isForceLoadData) {
+        if (classAndOriginDAO.getAllClassAndOrigin().isNullOrEmpty()) {
             val classAndOriginDBO =
                 classAndOriginDaoEntityMapper.map(apiService.getClassAndOriginList())
-            if (isForceLoadData && classAndOriginDBO.classAndOrigins.isNotEmpty()) {
-                classAndOriginDAO.deleteAllClassAndOrinTable()
-            }
             classAndOriginDAO.insertClassAndOrigin(classAndOriginDBO.classAndOrigins)
         }
         listClassOrOriginName.forEach { classOrOriginName ->
