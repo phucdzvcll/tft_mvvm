@@ -39,4 +39,23 @@ object ChampDBOFake {
         rankChamp = "",
         suitableItem = ""
     )
+
+    fun provideChampDBOListEmptyByName(number: Int, name: String) =
+        mutableListOf<ChampListDBO.ChampDBO>().apply {
+            repeat(number) { add(provideChampDboByName(name)) }
+        }.toList()
+
+    fun provideChampDboByName(name: String = "1") = ChampListDBO.ChampDBO(
+        name = "name$name",
+        id = "123$name",
+        originAndClassName = "$name,class",
+        cost = "1$name",
+        activated = "activated $name",
+        linkChampCover = "http://linkchamp$name.google/",
+        linkSkillAvatar = "http://linkskill$name.google/",
+        skillName = "skill $name",
+        linkImg = "http://linkimg$name.google/",
+        rankChamp = "rank$name",
+        suitableItem = "item$name,item$name"
+    )
 }
