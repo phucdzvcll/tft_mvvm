@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.repository
 
-import android.util.Log
 import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
@@ -18,6 +17,7 @@ import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
 import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 import com.tft_mvvm.domain.features.model.TeamListEntity
 import com.tft_mvvm.domain.features.repository.RepoRepository
+import kotlinx.coroutines.*
 
 class RepoRepositoryImpl(
     private val apiService: ApiService,
@@ -38,8 +38,8 @@ class RepoRepositoryImpl(
 
     private fun createChamp(
         champDBO: ChampListDBO.ChampDBO,
-        threeStart: Boolean,
-        listItem: MutableList<ChampListEntity.Champ.Item>
+        star: String,
+        listItem: List<ItemListDBO.ItemDBO>
     ): ChampListEntity.Champ {
         return ChampListEntity.Champ(
             id = champDBO.id,
@@ -51,8 +51,8 @@ class RepoRepositoryImpl(
             skillName = champDBO.skillName,
             linkSkillAvatar = champDBO.linkSkillAvatar,
             rankChamp = champDBO.rankChamp,
-            suitableItem = listItem,
-            threeStar = threeStart,
+            suitableItem = itemListMapper.mapList(listItem),
+            star = star,
             name = champDBO.name
         )
     }
@@ -100,8 +100,8 @@ class RepoRepositoryImpl(
                 reloadTeamDataFormNetwork()
             } else {
                 val localTeam = teamDAO.getAllTeam()
-                if(localTeam.isEmpty())
-                reloadTeamDataFormNetwork()
+                if (localTeam.isEmpty())
+                    reloadTeamDataFormNetwork()
             }
             val dbTeamListEntity =
                 TeamListEntity(
@@ -109,108 +109,64 @@ class RepoRepositoryImpl(
                         teamDAO.getAllTeam()
                     )
                 )
-
-            if (itemDAO.getAllItem().isNullOrEmpty()) {
-                reloadItemDataFromNetwork()
-            }
-            val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> =
-                mapListTeam(dbTeamListEntity, x, y, z)
+            insertItemDataIntoRoom()
+            val listTeamBuilder: List<TeamBuilderListEntity.TeamsBuilder> =
+                mapListTeamAsync(dbTeamListEntity).await()
             return@runSuspendWithCatchError Either.Success(
                 TeamBuilderListEntity(
-                    listTeamBuilder
+                    teamBuilders = listTeamBuilder
                 )
             )
         }
 
-    private fun mapListTeam(dbTeamListEntity: TeamListEntity): MutableList<TeamBuilderListEntity.TeamsBuilder> {
-        val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
-
-        dbTeamListEntity.teams.forEach { team ->
-            val listChampEntity = mutableListOf<ChampListEntity.Champ>()
-            val listChampMainDbo = getListChampByTeam(team.idTeam)
-            val listIdChampCommon = mutableListOf<String>()
-            listIdChampCommon.addAll(team.listIdChamp)
-            for (position in listChampMainDbo.indices) {
-                var check = 0
-                for (idChampThreeStart in team.listIdChampThreeStar) {
-                    if (listChampMainDbo[position].id == idChampThreeStart) {
-                        check++
-                        Log.d("phuc", "$check")
-                    }
-                }
-                val listIdItem = team.listIdSuitable[position].split(",")
-                val listItem =
-                    itemListMapper.mapList(getItemByListId(listIdItem)) as MutableList
-                if (check > 0) {
-                    listChampEntity.add(createChamp(listChampMainDbo[position], true, listItem))
-                } else {
-                    listChampEntity.add(
-                        createChamp(
-                            listChampMainDbo[position],
-                            false,
-                            listItem
-                        )
-                    )
-                }
-                val index = mutableListOf<Int>()
-                for (positionIdChampCommon in listIdChampCommon.indices) {
-                    if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {
-                        index.add(positionIdChampCommon)
-                    }
-                }
-                for (p in index) {
-                    listIdChampCommon.removeAt(p)
-                }
-            }
-
-            for (idChamp in listIdChampCommon) {
-                var check = 0
-                for (idChampThreeStart in team.listIdChampThreeStar) {
-                    if (idChamp == idChampThreeStart) {
-                        check++
-                    }
-                }
-                if (check > 0) {
-                    listChampEntity.add(
-                        createChamp(
-                            getChampByIdInternal(idChamp),
-                            true,
-                            mutableListOf()
-                        )
-                    )
-                } else {
-                    listChampEntity.add(
-                        createChamp(
-                            getChampByIdInternal(idChamp),
-                            false,
-                            mutableListOf()
-                        )
-                    )
-                }
-            }
-            listChampEntity.sortBy { it.name }
-            listChampEntity.sortBy { it.cost }
-            listTeamBuilder.add(
-                TeamBuilderListEntity.TeamsBuilder(
-                    team.nameTeam,
-                    ChampListEntity(champs = listChampEntity)
-                )
-            )
-
+    private suspend fun insertItemDataIntoRoom() {
+        if (itemDAO.getAllItem().isEmpty()) {
+            val listItemResponse = apiService.getItemListResponse()
+            val listItemDBO = itemDaoEntityMapper.map(listItemResponse)
+            itemDAO.insertItems(listItemDBO.items)
         }
-        return listTeamBuilder
     }
 
-    private fun getChampByIdInternal(idChamp: String): ChampListDBO.ChampDBO {
-
-    }
-
-    private fun getListChampByTeam(teamId: String): List<ChampListDBO.ChampDBO> {
-
-    }
-
-    private fun getItemByListId(listIdItem: List<String>): List<ItemListDBO.ItemDBO> {
-
+    fun mapListTeamAsync(dbTeamListEntity: TeamListEntity): Deferred<List<TeamBuilderListEntity.TeamsBuilder>> {
+        return CoroutineScope(Dispatchers.IO).async {
+            val listTeamBuilder = mutableListOf<TeamBuilderListEntity.TeamsBuilder>()
+            for (team in dbTeamListEntity.teams) {
+                val listChamp = mutableListOf<ChampListEntity.Champ>()
+                for (idChamp in team.listIdChamp.indices) {
+                    for (idChampMain in team.listIdChampMain.indices) {
+                        if (team.listIdChamp[idChamp] == team.listIdChampMain[idChampMain]) {
+                            val listIdItem = team.listIdSuitable[idChampMain].split(",")
+                            val listItem = itemDAO.getItemByListId(listIdItem)
+                            listChamp.add(
+                                createChamp(
+                                    champDBO = champDAO.getChampById(team.listIdChamp[idChamp]),
+                                    star = team.listIdChampThreeStar[idChamp],
+                                    listItem = listItem
+                                )
+                            )
+                        }
+                    }
+                }
+                val listIdChampCommon = team.listIdChamp as MutableList
+                for (i in team.listIdChampMain) {
+                    listIdChampCommon.remove(i)
+                }
+                listChamp.addAll(
+                    champListMapper.mapList(
+                        champDAO.getListChampByTeam(
+                            listIdChampCommon
+                        )
+                    )
+                )
+                listTeamBuilder.add(
+                    TeamBuilderListEntity.TeamsBuilder(
+                        team.nameTeam,
+                        ChampListEntity(listChamp)
+                    )
+                )
+            }
+            return@async listTeamBuilder
+        }
     }
 
     override suspend fun getClassAndOriginContent(
@@ -246,9 +202,8 @@ class RepoRepositoryImpl(
             }
             val champDBO = champDAO.getChampById(id)
             val listIdItem = champDBO.suitableItem.split(",")
-            val listItem =
-                itemListMapper.mapList(getItemByListId(listIdItem)) as MutableList
-            val champ = createChamp(champDBO, false, listItem)
+            val listItem = itemDAO.getItemByListId(listIdItem)
+            val champ = createChamp(champDBO, "1", listItem)
             return@runSuspendWithCatchError Either.Success(champ)
         }
 
@@ -280,85 +235,13 @@ class RepoRepositoryImpl(
                     }
                 }
             }
-            val listTeamBuilder: MutableList<TeamBuilderListEntity.TeamsBuilder> = mutableListOf()
-            dbTeamListEntityResult.size
-            dbTeamListEntityResult.forEach { team ->
-                val listIdThreeStart = team.listIdChampThreeStar
-                val listChampEntity = mutableListOf<ChampListEntity.Champ>()
-                val listChampMainDbo = getListChampByTeam(team.idTeam)
-                val listIdChampCommon = mutableListOf<String>()
-                listIdChampCommon.addAll(team.listIdChamp)
-                for (position in listChampMainDbo.indices) {
-                    var check = 0
-                    for (idChampThreeStart in listIdThreeStart) {
-                        if (listChampMainDbo[position].id == idChampThreeStart) {
-                            check++
-                        }
-                    }
-                    val listItem = mutableListOf<ChampListEntity.Champ.Item>()
-                    val listIdItem = team.listIdSuitable[position].split(",")
-                    for (idItem in listIdItem) {
-                        val item = itemListMapper.map(itemDAO.getItemById(idItem))
-                        listItem.add(item)
-                    }
-                    if (check > 0) {
-                        listChampEntity.add(createChamp(listChampMainDbo[position], true, listItem))
-                    } else {
-                        listChampEntity.add(
-                            createChamp(
-                                listChampMainDbo[position],
-                                false,
-                                listItem
-                            )
-                        )
-                    }
-                    val index = mutableListOf<Int>()
-                    for (positionIdChampCommon in listIdChampCommon.indices) {
-                        if (listChampMainDbo[position].id == listIdChampCommon[positionIdChampCommon]) {
-                            index.add(positionIdChampCommon)
-                        }
-                    }
-                    for (p in index) {
-                        listIdChampCommon.removeAt(p)
-                    }
-                }
-                for (idChamp in listIdChampCommon) {
-                    var check = 0
-                    for (idChampThreeStart in team.listIdChampThreeStar) {
-                        if (idChamp == idChampThreeStart) {
-                            check++
-                        }
-                    }
-                    if (check > 0) {
-                        listChampEntity.add(
-                            createChamp(
-                                getChampByIdInternal(idChamp),
-                                true,
-                                mutableListOf()
-                            )
-                        )
-                    } else {
-                        listChampEntity.add(
-                            createChamp(
-                                getChampByIdInternal(idChamp),
-                                false,
-                                mutableListOf()
-                            )
-                        )
-                    }
-                }
-                listChampEntity.sortBy { it.name }
-                listChampEntity.sortBy { it.cost }
-                listTeamBuilder.add(
-                    TeamBuilderListEntity.TeamsBuilder(
-                        team.nameTeam,
-                        ChampListEntity(champs = listChampEntity)
-                    )
+            val listTeamBuilder: List<TeamBuilderListEntity.TeamsBuilder> =
+                mapListTeamAsync(TeamListEntity(dbTeamListEntityResult)).await()
+            return@runSuspendWithCatchError Either.Success(
+                TeamBuilderListEntity(
+                    teamBuilders = listTeamBuilder
                 )
-
-            }
-            Log.d("phuc", "$listTeamBuilder")
-            return@runSuspendWithCatchError Either.Success(TeamBuilderListEntity(teamBuilders = listTeamBuilder))
+            )
         }
 
 }

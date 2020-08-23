@@ -11,7 +11,7 @@ class ChampOfTeamMapper(private val itemOfTeamMapper: ItemOfTeamMapper) :
             name = input.name,
             cost = input.cost,
             id = input.id,
-            threeStar = input.threeStar,
+            threeStar = input.star,
             imgUrl = input.linkImg,
             itemSuitable = itemOfTeamMapper.mapList(input.suitableItem)
         )

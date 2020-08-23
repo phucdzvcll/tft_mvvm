@@ -12,7 +12,7 @@ class TeamListDBO(val teamDBOs: List<TeamDBO>) {
         val nameTeam: String,
         val idChampMain: String,
         val idItemSuitable: String,
-        val listIdThreeStar : String,
+        val listStar : String,
         val listIdChamp: String
     )
 }

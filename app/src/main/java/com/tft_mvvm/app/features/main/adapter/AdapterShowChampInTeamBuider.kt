@@ -26,7 +26,7 @@ class AdapterShowChampInTeamBuilder(
                 "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
                 "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
-            if(champ.threeStar){
+            if(champ.threeStar=="3"){
                 itemView.three_start.visibility = View.VISIBLE
             }
             if (champ.itemSuitable.isNotEmpty()) {
@@ -73,7 +73,7 @@ class AdapterShowChampInTeamBuilder(
         val name: String,
         val imgUrl: String,
         val cost: String,
-        val threeStar:Boolean,
+        val threeStar:String,
         val itemSuitable: List<Item>
     ) {
         data class Item(

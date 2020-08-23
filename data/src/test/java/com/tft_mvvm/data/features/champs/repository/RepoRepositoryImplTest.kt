@@ -14,6 +14,7 @@ import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
 import com.tft_mvvm.data.local.model.ItemListDBO
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
+import com.tft_mvvm.domain.features.model.TeamListEntity
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -232,7 +233,7 @@ class RepoRepositoryImplTest {
                 ItemEntityFake.provideItemEntity(1),
                 ItemEntityFake.provideItemEntity(1)
             ),
-            threeStar = false,
+            star = "1",
             name = champDBO.name
         )
         coEvery { itemDAO.getAllItem() } returnsMany listOf(listOf(), listItemDBO)
@@ -296,7 +297,7 @@ class RepoRepositoryImplTest {
                 ItemEntityFake.provideItemEntity(1),
                 ItemEntityFake.provideItemEntity(1)
             ),
-            threeStar = false,
+            star = "1",
             name = champDBO.name
         )
         coEvery { itemDAO.getAllItem() } returns listItemDBO
@@ -362,27 +363,6 @@ class RepoRepositoryImplTest {
         val listItemDBO = ItemDBOFake.provideListItemResponse(10)
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getChampById(id) } throws exception
-        every { remoteExceptionInterceptor.handleException(exception) } returns expected
-        //when
-        val either = repoRepository.getChampById(id)
-        //then
-        either.either(
-            failAction = { actual -> Assert.assertEquals(expected, actual) },
-            successAction = { Assert.assertTrue(false) }
-        )
-    }
-
-    @Test
-    fun `getChampById itemDao-getChampByListId-error`() = runBlocking {
-        //given
-        val id = "11"
-        val exception = Exception()
-        val expected = CommonFake.provideFailure(exception)
-        val listItemDBO = ItemDBOFake.provideListItemResponse(10)
-        val champDBO = ChampDBOFake.provideChampDbo(1)
-        coEvery { itemDAO.getAllItem() } returns listItemDBO
-        coEvery { champDAO.getChampById(id) } returns champDBO
-        coEvery { itemDAO.getItemByListId(champDBO.suitableItem.split(",")) } throws exception
         every { remoteExceptionInterceptor.handleException(exception) } returns expected
         //when
         val either = repoRepository.getChampById(id)
@@ -529,4 +509,43 @@ class RepoRepositoryImplTest {
             successAction = { Assert.assertTrue(false) }
         )
     }
+
+    @Test
+    fun `mapListTeamAsync`() = runBlocking {
+        val listTeam = TeamFake.provideListTeam(5)
+        coEvery { champDAO.getChampById("1230") } returns ChampDBOFake.provideChampDbo(0)
+        coEvery { champDAO.getChampById("1231") } returns ChampDBOFake.provideChampDbo(1)
+        coEvery { champDAO.getChampById("1232") } returns ChampDBOFake.provideChampDbo(2)
+        coEvery { champDAO.getChampById("1233") } returns ChampDBOFake.provideChampDbo(3)
+        coEvery { champDAO.getListChampByTeam(listOf("1230","1231")) } returns listOf(ChampDBOFake.provideChampDbo(0),ChampDBOFake.provideChampDbo(1))
+        coEvery {
+            itemDAO.getItemByListId(
+                listOf(
+                    "item0",
+                    "item1"
+                )
+            )
+        } returns ItemDBOFake.provideListItemResponse(2)
+
+        repoRepository.mapListTeamAsync(listTeam)
+
+        for (team in listTeam.teams) {
+            val listIdChampCommon = team.listIdChamp as MutableList
+            for (idChamp in team.listIdChamp.indices) {
+                for (idChampMain in team.listIdChampMain.indices) {
+                    coVerify(exactly = 1) { itemDAO.getItemByListId(listOf("item0", "item1")) }
+                    coVerify(exactly = 1) { champDAO.getChampById("1230") }
+                }
+            }
+            for (i in team.listIdChampMain) {
+                listIdChampCommon.remove(i)
+            }
+            coVerify(exactly = 1) {
+                champDAO.getListChampByTeam(
+                    listIdChampCommon
+                )
+            }
+        }
+    }
 }
+

@@ -9,7 +9,7 @@ object ClassAndOriginListResponseFake {
         repeat(number) { add(classAndOriginEmpty()) }
     }
 
-    fun classAndOriginEmpty(index: Int = 1) = ClassAndOrigin(
+    private fun classAndOriginEmpty() = ClassAndOrigin(
         classOrOriginName = null,
         bonus = null,
         content = null
@@ -19,7 +19,7 @@ object ClassAndOriginListResponseFake {
         repeat(number) { index -> add(classAndOrigin(index)) }
     }
 
-    fun classAndOrigin(index: Int = 1) = ClassAndOrigin(
+    private fun classAndOrigin(index: Int = 1) = ClassAndOrigin(
         classOrOriginName = GsxNameClassAndOrigin("classOrOriginName$index"),
         bonus = GsxNameClassAndOrigin("bonus$index"),
         content = GsxNameClassAndOrigin("content$index")

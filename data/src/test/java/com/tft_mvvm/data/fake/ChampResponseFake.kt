@@ -25,7 +25,7 @@ object ChampResponseFake {
 
 
     fun provideChampResponseListNull(number: Int) = mutableListOf<Champ>().apply {
-        repeat(number) { index -> add(provideChampResponseNull()) }
+        repeat(number) {add(provideChampResponseNull())}
     }.toList()
 
     fun provideChampResponseNull() = Champ(

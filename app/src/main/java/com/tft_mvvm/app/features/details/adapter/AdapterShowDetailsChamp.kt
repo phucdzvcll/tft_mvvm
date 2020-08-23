@@ -244,7 +244,7 @@ class AdapterShowDetailsChamp(
         val name: String,
         val imgUrl: String,
         val cost: String,
-        val threeStar: Boolean,
+        val threeStar: String,
         val itemSuitable: List<Item>
     )
 

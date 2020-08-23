@@ -12,7 +12,7 @@ object ChampEntityFake {
         name = "name$index",
         id = "123$index",
         originAndClassName = listOf("origin$index", "class$index"),
-        threeStar = false,
+        star = "1",
         cost = "1$index",
         activated = "activated $index",
         linkChampCover = "http://linkchamp$index.google/",
@@ -26,7 +26,7 @@ object ChampEntityFake {
 
     fun provideChampEntityListByName(number: Int, name: String) =
         mutableListOf<ChampListEntity.Champ>().apply {
-            repeat(number) { index -> add(provideChampEntityByName(name)) }
+            repeat(number) {add(provideChampEntityByName(name))}
         }.toList()
 
     fun provideChampEntityByName(name: String = "1") = ChampListEntity.Champ(
@@ -41,6 +41,6 @@ object ChampEntityFake {
         linkImg = "http://linkimg$name.google/",
         rankChamp = "rank$name",
         suitableItem = listOf(),
-        threeStar = false
+        star = "1"
     )
 }

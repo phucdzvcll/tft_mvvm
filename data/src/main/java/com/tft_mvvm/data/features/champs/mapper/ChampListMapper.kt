@@ -16,7 +16,7 @@ class ChampListMapper() : Mapper<ChampListDBO.ChampDBO, ChampListEntity.Champ>()
             activated = input.activated,
             linkChampCover = input.linkChampCover,
             cost = input.cost,
-            threeStar = false,
+            star = "1",
             rankChamp = input.rankChamp,
             suitableItem = listOf(),
             linkImg = input.linkImg

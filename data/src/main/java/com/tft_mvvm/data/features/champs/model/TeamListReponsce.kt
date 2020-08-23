@@ -25,8 +25,8 @@ data class Team(
     val idChampMain: GsxNameTeam?,
     @SerializedName("gsx\$listiditem")
     val idItemSuitable: GsxNameTeam?,
-    @SerializedName("gsx\$threestart")
-    val listIdThreeStar: GsxNameTeam?,
+    @SerializedName("gsx\$star")
+    val listStar: GsxNameTeam?,
     @SerializedName("gsx\$listid")
     val listIdChamp: GsxNameTeam?
 

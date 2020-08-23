@@ -12,7 +12,7 @@ class ChampOfChampDetailsMapper(private val itemMapper: ItemMapper) :
             itemSuitable = itemMapper.mapList(input.suitableItem),
             imgUrl = input.linkImg,
             cost = input.cost,
-            threeStar = input.threeStar,
+            threeStar = input.star,
             name = input.name
         )
     }
