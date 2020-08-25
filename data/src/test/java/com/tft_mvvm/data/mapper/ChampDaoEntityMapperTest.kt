@@ -1,10 +1,10 @@
 package com.tft_mvvm.data.mapper
 
-import com.tft_mvvm.data.fake.ChampDBOFake
+import com.tft_mvvm.data.features.champs.repository.fake.ChampDBOFake
 import com.tft_mvvm.data.fake.ChampResponseFake
 import com.tft_mvvm.data.features.champs.mapper.ChampDaoEntityMapper
-import com.tft_mvvm.data.features.champs.model.ChampListResponse
-import com.tft_mvvm.data.features.champs.model.Feed
+import com.tft_mvvm.data.features.champs.remote.ChampListResponse
+import com.tft_mvvm.data.features.champs.remote.Feed
 import com.tft_mvvm.data.local.model.ChampListDBO
 import org.junit.Assert
 import org.junit.Test

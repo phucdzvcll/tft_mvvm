@@ -2,7 +2,7 @@ package com.tft_mvvm.data.features.champs.mapper
 
 import com.example.common_jvm.extension.nullable.defaultEmpty
 import com.example.common_jvm.mapper.Mapper
-import com.tft_mvvm.data.features.champs.model.ChampListResponse
+import com.tft_mvvm.data.features.champs.remote.ChampListResponse
 import com.tft_mvvm.data.local.model.ChampListDBO
 
 class ChampDaoEntityMapper : Mapper<ChampListResponse?, ChampListDBO>() {

@@ -1,12 +1,10 @@
 package com.tft_mvvm.data.mapper
 
-import com.tft_mvvm.data.fake.ChampDBOFake
-import com.tft_mvvm.data.fake.ClassAndOriginDBOFake
+import com.tft_mvvm.data.features.champs.repository.fake.ClassAndOriginDBOFake
 import com.tft_mvvm.data.fake.ClassAndOriginListResponseFake
 import com.tft_mvvm.data.features.champs.mapper.ClassAndOriginDaoEntityMapper
-import com.tft_mvvm.data.features.champs.model.ClassAndOriginListResponse
-import com.tft_mvvm.data.features.champs.model.FeedClassAndOrigin
-import com.tft_mvvm.data.local.model.ChampListDBO
+import com.tft_mvvm.data.features.champs.remote.ClassAndOriginListResponse
+import com.tft_mvvm.data.features.champs.remote.FeedClassAndOrigin
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
 import org.junit.Assert
 import org.junit.Test

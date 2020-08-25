@@ -1,0 +1,76 @@
+{
+  "feed": {
+    "entry": [
+      {
+        "gsx$id": {
+          "$t": "1"
+        },
+        "gsx$name": {
+          "$t": "Caitlyn"
+        },
+        "gsx$cost": {
+          "$t": "1"
+        },
+        "gsx$linkimg": {
+          "$t": "https://rerollcdn.com/characters/Skin/3.5/Caitlyn.png"
+        },
+        "gsx$originandclass": {
+          "$t": "Thời Không,Xạ Thủ"
+        },
+        "gsx$activated": {
+          "$t": "Caitlyn nhắm vào kẻ thù xa nhất, gây sát thương phép lên kẻ thù này. Sát thương: 700/1000/1800."
+        },
+        "gsx$linkskillavatar": {
+          "$t": "https://rerollcdn.com/abilities/3.5/caitlyn-ace-in-the-hole.png"
+        },
+        "gsx$skillname": {
+          "$t": "Bách Phát Bách Trúng"
+        },
+        "gsx$linkchampcover": {
+          "$t": "https://cdn.lolchess.gg/images/tft/champions/set3/splash/tft3_Caitlyn.jpg"
+        },
+        "gsx$rankchamp": {
+          "$t": "B"
+        },
+        "gsx$suitableitem": {
+          "$t": "9,24,31"
+        }
+      },
+      {
+        "gsx$id": {
+          "$t": "2"
+        },
+        "gsx$name": {
+          "$t": "Ezreal"
+        },
+        "gsx$cost": {
+          "$t": "3"
+        },
+        "gsx$linkimg": {
+          "$t": "https://rerollcdn.com/characters/Skin/3.5/Ezreal.png"
+        },
+        "gsx$originandclass": {
+          "$t": "Pháo Thủ,Thời Không"
+        },
+        "gsx$activated": {
+          "$t": "Ezreal bắn ra một quả cầu dính vào kẻ thù ngẫu nhiên. gây 250 / 350 / 700 lên kẻ thù xung quanh mục tiêu đồng thời khiến kẻ thù phải mất thêm 40% năng lượng để sử dụng kỹ năng."
+        },
+        "gsx$linkskillavatar": {
+          "$t": "https://rerollcdn.com/abilities/3.5/ezreal-e.m.p..png"
+        },
+        "gsx$skillname": {
+          "$t": "Tinh Hoa Tuôn Chảy"
+        },
+        "gsx$linkchampcover": {
+          "$t": "https://cdn.lolchess.gg/images/tft/champions/set3/splash/tft3_Ezreal.jpg"
+        },
+        "gsx$rankchamp": {
+          "$t": "B"
+        },
+        "gsx$suitableitem": {
+          "$t": "2,17,18"
+        }
+      }
+    ]
+  }
+}

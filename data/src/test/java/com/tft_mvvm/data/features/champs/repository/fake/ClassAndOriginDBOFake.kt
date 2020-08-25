@@ -1,4 +1,4 @@
-package com.tft_mvvm.data.fake
+package com.tft_mvvm.data.features.champs.repository.fake
 
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
 
@@ -18,7 +18,11 @@ object ClassAndOriginDBOFake {
 
     fun provideListClassAndOriginDBO(number: Int) =
         mutableListOf<ClassAndOriginListDBO.ClassAndOrigin>().apply {
-            repeat(number) { index -> add(provideClassAndOriginDBO(index)) }
+            repeat(number) { index -> add(
+                provideClassAndOriginDBO(
+                    index
+                )
+            ) }
         }.toList()
 
     fun provideClassAndOriginDBO(index: Int = 1) = ClassAndOriginListDBO.ClassAndOrigin(

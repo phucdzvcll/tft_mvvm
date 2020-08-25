@@ -2,7 +2,7 @@ package com.tft_mvvm.data.features.champs.mapper
 
 import com.example.common_jvm.extension.nullable.defaultEmpty
 import com.example.common_jvm.mapper.Mapper
-import com.tft_mvvm.data.features.champs.model.TeamListResponse
+import com.tft_mvvm.data.features.champs.remote.TeamListResponse
 import com.tft_mvvm.data.local.model.TeamListDBO
 
 class TeamDaoEntityMapper : Mapper<TeamListResponse?, TeamListDBO>() {
@@ -11,7 +11,6 @@ class TeamDaoEntityMapper : Mapper<TeamListResponse?, TeamListDBO>() {
             TeamListDBO.TeamDBO(
                 nameTeam = teamDBO.nameTeam?.value.defaultEmpty(),
                 idTeam = teamDBO.idTeam?.value.defaultEmpty(),
-                idChampMain = teamDBO.idChampMain?.value.defaultEmpty(),
                 listStar = teamDBO.listStar?.value.defaultEmpty(),
                 idItemSuitable = teamDBO.idItemSuitable?.value.defaultEmpty(),
                 listIdChamp = teamDBO.listIdChamp?.value.defaultEmpty()

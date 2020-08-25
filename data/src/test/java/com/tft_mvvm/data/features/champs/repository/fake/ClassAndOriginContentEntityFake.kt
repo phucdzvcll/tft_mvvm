@@ -1,4 +1,4 @@
-package com.tft_mvvm.data.fake
+package com.tft_mvvm.data.features.champs.repository.fake
 
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
@@ -10,6 +10,10 @@ object ClassAndOriginContentEntityFake {
             classOrOriginName = "name$index",
             content = "content$index",
             bonus = "bonus$index",
-            listChamp = ChampListEntity(ChampEntityFake.provideChampEntityList(10))
+            listChamp = ChampListEntity(
+                ChampEntityFake.provideChampEntityList(
+                    10
+                )
+            )
         )
 }

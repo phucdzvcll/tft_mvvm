@@ -1,12 +1,16 @@
 package com.tft_mvvm.data.fake
 
-import com.tft_mvvm.data.features.champs.model.Champ
-import com.tft_mvvm.data.features.champs.model.GsxName
+import com.tft_mvvm.data.features.champs.remote.Champ
+import com.tft_mvvm.data.features.champs.remote.GsxName
 
 object ChampResponseFake {
 
     fun provideChampResponseList(number: Int) = mutableListOf<Champ>().apply {
-        repeat(number) { index -> add(provideChampResponse(index)) }
+        repeat(number) { index -> add(
+            provideChampResponse(
+                index
+            )
+        ) }
     }.toList()
 
     fun provideChampResponse(index: Int = 1) = Champ(

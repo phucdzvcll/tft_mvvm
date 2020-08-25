@@ -10,7 +10,6 @@ class TeamListDBO(val teamDBOs: List<TeamDBO>) {
         @PrimaryKey
         val idTeam: String,
         val nameTeam: String,
-        val idChampMain: String,
         val idItemSuitable: String,
         val listStar : String,
         val listIdChamp: String

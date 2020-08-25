@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val dataModule = module {
+fun dataModule(baseUrl: String) = module {
 
     factory {
         ChampListMapper()
@@ -66,7 +66,7 @@ val dataModule = module {
     factory {
         Retrofit.Builder()
             .client(get())
-            .baseUrl("https://spreadsheets.google.com")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

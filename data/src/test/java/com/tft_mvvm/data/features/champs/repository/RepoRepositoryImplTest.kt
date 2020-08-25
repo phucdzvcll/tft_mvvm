@@ -3,7 +3,8 @@ package com.tft_mvvm.data.features.champs.repository
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.fake.*
 import com.tft_mvvm.data.features.champs.mapper.*
-import com.tft_mvvm.data.features.champs.model.*
+import com.tft_mvvm.data.features.champs.remote.*
+import com.tft_mvvm.data.features.champs.repository.fake.*
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampDAO
 import com.tft_mvvm.data.local.database.ClassAndOriginDAO
@@ -12,8 +13,10 @@ import com.tft_mvvm.data.local.database.TeamDAO
 import com.tft_mvvm.data.local.model.ChampListDBO
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
 import com.tft_mvvm.data.local.model.ItemListDBO
+import com.tft_mvvm.data.local.model.TeamListDBO
 import com.tft_mvvm.domain.features.model.ChampListEntity
 import com.tft_mvvm.domain.features.model.ClassAndOriginListEntity
+import com.tft_mvvm.domain.features.model.TeamBuilderListEntity
 import com.tft_mvvm.domain.features.model.TeamListEntity
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
@@ -216,7 +219,7 @@ class RepoRepositoryImplTest {
     fun `getChampById itemDAO-getAllItem-empty success`() = runBlocking {
         val id = "11"
         val listItemResponse = ItemResponseFake.provideListItemResponse(10)
-        val listItemDBO = ItemDBOFake.provideListItemResponse(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
         val champDBO = ChampDBOFake.provideChampDbo(1)
         val itemListResponse = ItemListResponse(FeedItem(items = listItemResponse))
         val expected = ChampListEntity.Champ(
@@ -281,7 +284,7 @@ class RepoRepositoryImplTest {
     fun `getChampById itemDAO-getAllItem-not-empty success`() = runBlocking {
         //given
         val id = "11"
-        val listItemDBO = ItemDBOFake.provideListItemResponse(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
         val champDBO = ChampDBOFake.provideChampDbo(1)
         val expected = ChampListEntity.Champ(
             id = champDBO.id,
@@ -360,7 +363,7 @@ class RepoRepositoryImplTest {
         val id = "11"
         val exception = Exception()
         val expected = CommonFake.provideFailure(exception)
-        val listItemDBO = ItemDBOFake.provideListItemResponse(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getChampById(id) } throws exception
         every { remoteExceptionInterceptor.handleException(exception) } returns expected
@@ -376,7 +379,7 @@ class RepoRepositoryImplTest {
     @Test
     fun `getClassAndOriginContent classAndOriginDAO-getAllClassAndOrigin-not-empty `() =
         runBlocking {
-            val listClassAndOriginName = listOf<String>("name0", "name1", "name2")
+            val listClassAndOriginName = listOf("name0", "name1", "name2")
             coEvery { classAndOriginDAO.getAllClassAndOrigin() } returns ClassAndOriginDBOFake.provideListClassAndOriginDBOEmpty(
                 10
             )
@@ -511,41 +514,478 @@ class RepoRepositoryImplTest {
     }
 
     @Test
-    fun `mapListTeamAsync`() = runBlocking {
-        val listTeam = TeamFake.provideListTeam(5)
-        coEvery { champDAO.getChampById("1230") } returns ChampDBOFake.provideChampDbo(0)
-        coEvery { champDAO.getChampById("1231") } returns ChampDBOFake.provideChampDbo(1)
-        coEvery { champDAO.getChampById("1232") } returns ChampDBOFake.provideChampDbo(2)
-        coEvery { champDAO.getChampById("1233") } returns ChampDBOFake.provideChampDbo(3)
-        coEvery { champDAO.getListChampByTeam(listOf("1230","1231")) } returns listOf(ChampDBOFake.provideChampDbo(0),ChampDBOFake.provideChampDbo(1))
-        coEvery {
-            itemDAO.getItemByListId(
-                listOf(
-                    "item0",
-                    "item1"
+    fun getListItem() = runBlocking {
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val expected = ItemDBOFake.provideListItemDBO(5)
+        val listId = listOf<String>("item0", "item1", "item2", "item3", "item4")
+        val listItemEntity = ItemEntityFake.provideListItemEntity(5)
+
+        every { itemListMapper.mapList(expected) } returns listItemEntity
+
+        repoRepository.getListItem(listItemDBO, listId)
+
+        coVerify(exactly = 1) { itemListMapper.mapList(expected) }
+    }
+
+    @Test
+    fun `getListItem-success`() = runBlocking {
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listItemDBOResult = ItemDBOFake.provideListItemDBO(5)
+        val listId = listOf<String>("item0", "item1", "item2", "item3", "item4")
+        val expected = ItemEntityFake.provideListItemEntity(5)
+
+        every { itemListMapper.mapList(listItemDBOResult) } returns expected
+
+        val actual = repoRepository.getListItem(listItemDBO, listId)
+
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getChampById Internal actual-not-empty`() = runBlocking {
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val id = "1233"
+        val expected = ChampDBOFake.provideChampDbo(3)
+
+        val actual = repoRepository.getChampByIdInternal(listChampDBO, id)
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getChampById Internal actual-empty`() = runBlocking {
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val id = "1"
+        val expected = ChampDBOFake.provideChampDboEmpty()
+
+        val actual = repoRepository.getChampByIdInternal(listChampDBO, id)
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getListChampByListIdInternal actual-not-Empty`() = runBlocking {
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val listId = listOf<String>("1230", "1231", "1232", "1233", "1234")
+        val expected = ChampDBOFake.provideChampDBOList(5)
+
+        val actual = repoRepository.getListChampByListIdInternal(listChampDBO, listId)
+
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getListChampByListIdInternal actual-Empty`() = runBlocking {
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val listId = listOf<String>("1", "2", "3")
+        val expected = listOf<ChampListDBO.ChampDBO>()
+
+        val actual = repoRepository.getListChampByListIdInternal(listChampDBO, listId)
+
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `mapListTeam dbTeamListEntity-empty `() = runBlocking {
+        val dbTeamListEntity = TeamListEntity(listOf())
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val expected = listOf<TeamBuilderListEntity.TeamsBuilder>()
+        val actual = repoRepository.mapListTeam(dbTeamListEntity, listItemDBO, listChampDBO)
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `mapListTeam dbTeamListEntity-not-empty listIdChamp-empty`() = runBlocking {
+        val dbTeamListEntity = TeamFake.provideListTeamListChampEmpty(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val expected = mutableListOf<TeamBuilderListEntity.TeamsBuilder>()
+        for (team in dbTeamListEntity.teams) {
+            expected.add(
+                TeamBuilderListEntity.TeamsBuilder(
+                    name = team.nameTeam,
+                    champs = ChampListEntity(listOf())
                 )
             )
-        } returns ItemDBOFake.provideListItemResponse(2)
-
-        repoRepository.mapListTeamAsync(listTeam)
-
-        for (team in listTeam.teams) {
-            val listIdChampCommon = team.listIdChamp as MutableList
-            for (idChamp in team.listIdChamp.indices) {
-                for (idChampMain in team.listIdChampMain.indices) {
-                    coVerify(exactly = 1) { itemDAO.getItemByListId(listOf("item0", "item1")) }
-                    coVerify(exactly = 1) { champDAO.getChampById("1230") }
-                }
-            }
-            for (i in team.listIdChampMain) {
-                listIdChampCommon.remove(i)
-            }
-            coVerify(exactly = 1) {
-                champDAO.getListChampByTeam(
-                    listIdChampCommon
-                )
-            }
         }
+
+        val actual = repoRepository.mapListTeam(dbTeamListEntity, listItemDBO, listChampDBO)
+        Assert.assertEquals(expected, actual)
     }
+
+    @Test
+    fun `mapListTeam dbTeamListEntity-not-empty listIdChamp-not-empty`() = runBlocking {
+        val dbTeamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val expected = mutableListOf<TeamBuilderListEntity.TeamsBuilder>()
+        val listChampEntityResult = mutableListOf<ChampListEntity.Champ>()
+        listChampEntityResult.addAll(ChampEntityFake.provideListChampEntityForMapListTeam(2))
+        listChampEntityResult.add(ChampEntityFake.provideChampEntityThreeStar(2))
+        listChampEntityResult.add(ChampEntityFake.provideChampEntityThreeStar(3))
+        for (team in dbTeamListEntity.teams) {
+            expected.add(
+                TeamBuilderListEntity.TeamsBuilder(
+                    name = team.nameTeam,
+                    champs = ChampListEntity(champs = listChampEntityResult)
+                )
+            )
+        }
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        val actual = repoRepository.mapListTeam(dbTeamListEntity, listItemDBO, listChampDBO)
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getTeams isForceLoadData-true itemDAO-not-Empty`() = runBlocking {
+        val isForLoadData = true
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItem = ItemDBOFake.provideListItemDBO(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { apiService.getTeamList() } returns teamResponse
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        coEvery { teamDAO.deleteAllTeam() } returns Unit
+        coEvery { teamDAO.insertTeam(teamDBO.teamDBOs) } returns Unit
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItem
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        val either = repoRepository.getTeams(isForLoadData)
+
+        coVerify(exactly = 1) { apiService.getTeamList() }
+        coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
+        coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
+        coVerify(exactly = 1) { teamDAO.insertTeam(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeams isForceLoadData-true itemDAO-Empty`() = runBlocking {
+        val isForLoadData = true
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val listItemResponse = ItemResponseFake.provideListItemResponse(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { apiService.getTeamList() } returns teamResponse
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        coEvery { teamDAO.deleteAllTeam() } returns Unit
+        coEvery { teamDAO.insertTeam(teamDBO.teamDBOs) } returns Unit
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returnsMany listOf(listOf(), listItemDBO)
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+        coEvery { apiService.getItemListResponse() } returns ItemListResponse(
+            FeedItem(
+                listItemResponse
+            )
+        )
+        every { itemDaoEntityMapper.map(ItemListResponse(FeedItem(listItemResponse))) } returns ItemListDBO(
+            listItemDBO
+        )
+        coEvery { itemDAO.insertItems(listItemDBO) } returns Unit
+        val either = repoRepository.getTeams(isForLoadData)
+
+        coVerify(exactly = 1) { apiService.getTeamList() }
+        coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
+        coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
+        coVerify(exactly = 1) { teamDAO.insertTeam(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { apiService.getItemListResponse() }
+        coVerify(exactly = 1) { itemDAO.insertItems(listItemDBO) }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeams isForceLoadData-false itemDAO-Empty`() = runBlocking {
+        val isForLoadData = false
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val listItemResponse = ItemResponseFake.provideListItemResponse(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returnsMany listOf(listOf(), teamDBO.teamDBOs)
+        coEvery { apiService.getTeamList() } returns teamResponse
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        coEvery { teamDAO.deleteAllTeam() } returns Unit
+        coEvery { teamDAO.insertTeam(teamDBO.teamDBOs) } returns Unit
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+
+        val either = repoRepository.getTeams(isForLoadData)
+
+        coVerify(exactly = 1) { apiService.getTeamList() }
+        coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
+        coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
+        coVerify(exactly = 1) { teamDAO.insertTeam(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeams isForceLoadData-false itemDAO-not-Empty`() = runBlocking {
+        val isForLoadData = false
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+
+        val either = repoRepository.getTeams(isForLoadData)
+
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeams success `() = runBlocking {
+        val isForceLoadData = false
+        val dbTeamListEntity = TeamFake.provideListTeam(10)
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        val listTeamBuilder = mutableListOf<TeamBuilderListEntity.TeamsBuilder>()
+        val listChampEntityResult = mutableListOf<ChampListEntity.Champ>()
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        listChampEntityResult.addAll(ChampEntityFake.provideListChampEntityForMapListTeam(2))
+        listChampEntityResult.add(ChampEntityFake.provideChampEntityThreeStar(2))
+        listChampEntityResult.add(ChampEntityFake.provideChampEntityThreeStar(3))
+        for (team in dbTeamListEntity.teams) {
+            listTeamBuilder.add(
+                TeamBuilderListEntity.TeamsBuilder(
+                    name = team.nameTeam,
+                    champs = ChampListEntity(champs = listChampEntityResult)
+                )
+            )
+        }
+        val expected = TeamBuilderListEntity(teamBuilders = listTeamBuilder)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns dbTeamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+        val either = repoRepository.getTeams(isForceLoadData)
+
+        either.either(
+            failAction = { Assert.assertTrue(false) },
+            successAction = { actual -> Assert.assertEquals(expected, actual) }
+        )
+    }
+
+    @Test
+    fun `getTeam-apiService-getTeamList-error`() = runBlocking {
+        //given
+        val isForceLoadData = true
+        val exception = Exception()
+        val expected = CommonFake.provideFailure(exception)
+        coEvery { apiService.getTeamList() } throws exception
+        every { remoteExceptionInterceptor.handleException(exception) } returns expected
+
+        //when
+        val allChamps = repoRepository.getTeams(isForceLoadData)
+
+        //then
+        allChamps.either(
+            failAction = { actual -> Assert.assertEquals(expected, actual) },
+            successAction = { Assert.assertTrue(false) }
+        )
+    }
+
+    @Test
+    fun `getTeam-apiService--error`() = runBlocking {
+        //given
+        val isForceLoadData = false
+        val exception = Exception()
+        val expected = CommonFake.provideFailure(exception)
+        coEvery { teamDAO.getAllTeam() } throws exception
+        every { remoteExceptionInterceptor.handleException(exception) } returns expected
+
+        //when
+        val allChamps = repoRepository.getTeams(isForceLoadData)
+
+        //then
+        allChamps.either(
+            failAction = { actual -> Assert.assertEquals(expected, actual) },
+            successAction = { Assert.assertTrue(false) }
+        )
+    }
+
+    @Test
+    fun `getTeamRecommendForChamp teamDao-getAllTeam-empty id-not-empty`() = runBlocking {
+        val id = "1230"
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returnsMany listOf(listOf(), teamDBO.teamDBOs)
+        coEvery { apiService.getTeamList() } returns teamResponse
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        coEvery { teamDAO.deleteAllTeam() } returns Unit
+        coEvery { teamDAO.insertTeam(teamDBO.teamDBOs) } returns Unit
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+        val either = repoRepository.getTeamRecommendForChamp(id)
+
+        coVerify(exactly = 1) { apiService.getTeamList() }
+        coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
+        coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
+        coVerify(exactly = 1) { teamDAO.insertTeam(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeamRecommendForChamp teamDao-getAllTeam-empty id-empty`() = runBlocking {
+        val id = ""
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returnsMany listOf(listOf(), teamDBO.teamDBOs)
+        coEvery { apiService.getTeamList() } returns teamResponse
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        coEvery { teamDAO.deleteAllTeam() } returns Unit
+        coEvery { teamDAO.insertTeam(teamDBO.teamDBOs) } returns Unit
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+        val either = repoRepository.getTeamRecommendForChamp(id)
+        coVerify(exactly = 1) { apiService.getTeamList() }
+        coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
+        coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
+        coVerify(exactly = 1) { teamDAO.insertTeam(teamDBO.teamDBOs) }
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeamRecommendForChamp teamDao-getAllTeam-not-empty id-empty`() = runBlocking {
+        val id = ""
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+
+        val either = repoRepository.getTeamRecommendForChamp(id)
+
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeamRecommendForChamp teamDao-getAllTeam-not-empty id-not-empty`() = runBlocking {
+        val id = "1237"
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+
+        val either = repoRepository.getTeamRecommendForChamp(id)
+
+        coVerify(exactly = 2) { teamDAO.getAllTeam() }
+        coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
+        coVerify(exactly = 1) { itemDAO.getAllItem() }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+    }
+
+    @Test
+    fun `getTeamRecommendForChamp succes`() = runBlocking {
+        val id = "1231"
+        val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
+        val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
+        val teamListEntity = TeamFake.provideListTeam(10)
+        val listItemDBO = ItemDBOFake.provideListItemDBO(10)
+        val listChampDBO = ChampDBOFake.provideChampDBOList(10)
+        every { itemListMapper.mapList(listOf()) } returns listOf()
+        every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
+            2
+        )
+        coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
+        every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        coEvery { itemDAO.getAllItem() } returns listItemDBO
+        coEvery { champDAO.getAllChamp() } returns listChampDBO
+
+        val either = repoRepository.getTeamRecommendForChamp(id)
+
+
+    }
+
 }
 

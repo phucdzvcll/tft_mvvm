@@ -17,6 +17,7 @@ class RemoteExceptionInterceptor : ExceptionInterceptor {
                 } else {
                     ""
                 }
+                exception.response()
                 Failure.ApiError(exception.code(), errorMsg)
             }
             else -> null

@@ -1,7 +1,7 @@
 package com.tft_mvvm.data.fake
 
-import com.tft_mvvm.data.features.champs.model.ClassAndOrigin
-import com.tft_mvvm.data.features.champs.model.GsxNameClassAndOrigin
+import com.tft_mvvm.data.features.champs.remote.ClassAndOrigin
+import com.tft_mvvm.data.features.champs.remote.GsxNameClassAndOrigin
 
 object ClassAndOriginContentResponseFake {
 
@@ -9,7 +9,7 @@ object ClassAndOriginContentResponseFake {
         mutableListOf<ClassAndOrigin>().apply {
             repeat(number) { index ->
                 add(
-                    ClassAndOriginContentResponseFake.provideClassAndOriginContentResponse(
+                    provideClassAndOriginContentResponse(
                         index
                     )
                 )

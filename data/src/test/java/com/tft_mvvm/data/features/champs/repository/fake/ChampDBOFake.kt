@@ -1,11 +1,15 @@
-package com.tft_mvvm.data.fake
+package com.tft_mvvm.data.features.champs.repository.fake
 
 import com.tft_mvvm.data.local.model.ChampListDBO
 
 object ChampDBOFake {
 
     fun provideChampDBOList(number: Int) = mutableListOf<ChampListDBO.ChampDBO>().apply {
-        repeat(number) { index -> add(provideChampDbo(index)) }
+        repeat(number) { index -> add(
+            provideChampDbo(
+                index
+            )
+        ) }
     }.toList()
 
     fun provideChampDbo(index: Int = 1) = ChampListDBO.ChampDBO(
@@ -42,7 +46,11 @@ object ChampDBOFake {
 
     fun provideChampDBOListEmptyByName(number: Int, name: String) =
         mutableListOf<ChampListDBO.ChampDBO>().apply {
-            repeat(number) { add(provideChampDboByName(name)) }
+            repeat(number) { add(
+                provideChampDboByName(
+                    name
+                )
+            ) }
         }.toList()
 
     fun provideChampDboByName(name: String = "1") = ChampListDBO.ChampDBO(

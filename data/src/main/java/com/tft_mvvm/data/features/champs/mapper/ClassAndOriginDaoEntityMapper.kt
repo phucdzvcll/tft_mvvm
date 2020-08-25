@@ -2,7 +2,7 @@ package com.tft_mvvm.data.features.champs.mapper
 
 import com.example.common_jvm.extension.nullable.defaultEmpty
 import com.example.common_jvm.mapper.Mapper
-import com.tft_mvvm.data.features.champs.model.ClassAndOriginListResponse
+import com.tft_mvvm.data.features.champs.remote.ClassAndOriginListResponse
 import com.tft_mvvm.data.local.model.ClassAndOriginListDBO
 
 class ClassAndOriginDaoEntityMapper : Mapper<ClassAndOriginListResponse?, ClassAndOriginListDBO>() {

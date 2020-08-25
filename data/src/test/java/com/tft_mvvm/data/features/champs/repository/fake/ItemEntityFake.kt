@@ -1,11 +1,15 @@
-package com.tft_mvvm.data.fake
+package com.tft_mvvm.data.features.champs.repository.fake
 
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
 object ItemEntityFake {
 
-    fun provideListItemResponse(number: Int) = mutableListOf<ChampListEntity.Champ.Item>().apply {
-        repeat(number) { index -> add(ItemEntityFake.provideItemEntity(index)) }
+    fun provideListItemEntity(number: Int) = mutableListOf<ChampListEntity.Champ.Item>().apply {
+        repeat(number) { index -> add(
+            provideItemEntity(
+                index
+            )
+        ) }
     }.toList()
 
     fun provideItemEntity(index: Int = 1) = ChampListEntity.Champ.Item(

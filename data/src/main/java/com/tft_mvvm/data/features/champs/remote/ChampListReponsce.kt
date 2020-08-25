@@ -1,4 +1,4 @@
-package com.tft_mvvm.data.features.champs.model
+package com.tft_mvvm.data.features.champs.remote
 import com.google.gson.annotations.SerializedName
 
 data class Feed(

@@ -1,9 +1,9 @@
 package com.tft_mvvm.data.features.champs.service
 
-import com.tft_mvvm.data.features.champs.model.ChampListResponse
-import com.tft_mvvm.data.features.champs.model.ClassAndOriginListResponse
-import com.tft_mvvm.data.features.champs.model.ItemListResponse
-import com.tft_mvvm.data.features.champs.model.TeamListResponse
+import com.tft_mvvm.data.features.champs.remote.ChampListResponse
+import com.tft_mvvm.data.features.champs.remote.ClassAndOriginListResponse
+import com.tft_mvvm.data.features.champs.remote.ItemListResponse
+import com.tft_mvvm.data.features.champs.remote.TeamListResponse
 import retrofit2.http.GET
 
 
