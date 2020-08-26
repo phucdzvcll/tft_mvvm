@@ -41,3 +41,11 @@ fun Float?.default(default: Float): Float {
 fun Float?.defaultZero(): Float {
     return this.default(0.0f)
 }
+
+fun Boolean?.default(default: Boolean): Boolean {
+    return this ?: default
+}
+
+fun Boolean?.defaultFalse(): Boolean {
+    return this.default(false)
+}

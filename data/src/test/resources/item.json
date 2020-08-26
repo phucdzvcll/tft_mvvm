@@ -1,0 +1,28 @@
+{
+  "feed": {
+    "entry": [
+      {
+        "gsx$id": {
+          "$t": "6"
+        },
+        "gsx$itemname": {
+          "$t": "Tim Băng"
+        },
+        "gsx$itemavatar": {
+          "$t": "https://rerollcdn.com/items/GiantSlayer.png"
+        }
+      },
+      {
+        "gsx$id": {
+          "$t": "23"
+        },
+        "gsx$itemname": {
+          "$t": "Dây Chuyền Chuộc Tội"
+        },
+        "gsx$itemavatar": {
+          "$t": "https://rerollcdn.com/items/Redemption.png"
+        }
+      }
+    ]
+  }
+}

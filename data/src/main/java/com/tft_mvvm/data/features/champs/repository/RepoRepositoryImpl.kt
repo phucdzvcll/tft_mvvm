@@ -76,7 +76,6 @@ class RepoRepositoryImpl(
 
     private suspend fun reloadChampDataFromNetwork() {
         val listChampResponse = apiService.getChampList()
-        Log.d("Phuc", "aa")
         val listChampDbo = champDaoEntityMapper.map(listChampResponse)
         champDAO.deleteAllChampTable()
         champDAO.insertChamps(listChampDbo.champDBOs)
@@ -164,7 +163,7 @@ class RepoRepositoryImpl(
     ): ChampListDBO.ChampDBO {
         val champ = listChamp.findLast { champDBO -> champDBO.id == id }
         if (champ != null) {
-            return champ!!
+            return champ
         } else {
             return ChampListDBO.ChampDBO(
                 name = "",

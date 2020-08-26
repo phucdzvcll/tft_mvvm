@@ -1,0 +1,28 @@
+{
+  "feed": {
+    "entry": [
+      {
+        "gsx$originorclass": {
+          "$t": "Vũ Trụ"
+        },
+        "gsx$bonus": {
+          "$t": "2: 15% Hồi máu theo sát thương,4: 30% Hồi máu theo sát thương,6: 60 Hồi máu theo sát thương%"
+        },
+        "gsx$content": {
+          "$t": "Tất cả đồng minh được hồi máu theo phần trăm theo sát thương họ gây ra."
+        }
+      },
+      {
+        "gsx$originorclass": {
+          "$t": "Phù Thủy"
+        },
+        "gsx$bonus": {
+          "$t": "Tất cả đồng minh nhận thêm Sức mạnh kỹ năng"
+        },
+        "gsx$content": {
+          "$t": "2: 20%,4: 40%,6: 80%"
+        }
+      }
+    ]
+  }
+}

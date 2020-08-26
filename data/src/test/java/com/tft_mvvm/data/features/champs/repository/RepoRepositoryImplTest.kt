@@ -72,9 +72,12 @@ class RepoRepositoryImplTest {
         repoRepository.getAllChamps(isForceLoadData)
 
         //then
+        coVerify(exactly = 1) { apiService.getChampList() }
         verify(exactly = 1) { champDaoEntityMapper.map(champListResponse) }
         coVerify(exactly = 1) { champDAO.deleteAllChampTable() }
         coVerify(exactly = 1) { champDAO.insertChamps(champListDBO.champDBOs) }
+        coVerify(exactly = 1) { champDAO.getAllChamp() }
+        verify(exactly = 1) { champListMapper.mapList(champListDBO.champDBOs) }
     }
 
     @Test
@@ -91,10 +94,8 @@ class RepoRepositoryImplTest {
         coEvery { champDAO.insertChamps(champListDBO.champDBOs) } returns Unit
         coEvery { champDAO.getAllChamp() } returns champListDBO.champDBOs
         every { champListMapper.mapList(champListDBO.champDBOs) } returns champListEntity
-
         val either = repoRepository.getAllChamps(isForceLoadData)
 
-        coVerify(exactly = 1) { champListMapper.mapList(champListDBO.champDBOs) }
         either.either(
             failAction = { Assert.assertTrue(false) },
             successAction = { actual -> Assert.assertEquals(expected, actual) }
@@ -121,9 +122,12 @@ class RepoRepositoryImplTest {
         repoRepository.getAllChamps(isForceLoadData)
 
         //then
+        coVerify(exactly = 1) { apiService.getChampList() }
         verify(exactly = 1) { champDaoEntityMapper.map(champListResponse) }
         coVerify(exactly = 1) { champDAO.deleteAllChampTable() }
         coVerify(exactly = 1) { champDAO.insertChamps(champListDBO.champDBOs) }
+        coVerify(exactly = 2) { champDAO.getAllChamp() }
+        verify(exactly = 1) { champListMapper.mapList(champListDBO.champDBOs) }
     }
 
     @Test
@@ -131,14 +135,9 @@ class RepoRepositoryImplTest {
         //given
         val isForceLoadData = false
         val listChampResponse = ChampResponseFake.provideChampResponseList(10)
-        val champListResponse = ChampListResponse(Feed(champs = listChampResponse))
         val champListDBO = ChampListDBO(champDBOs = ChampDBOFake.provideChampDBOList(10))
         val champListEntity = ChampEntityFake.provideChampEntityList(10)
 
-        coEvery { apiService.getChampList() } returns champListResponse
-        every { champDaoEntityMapper.map(champListResponse) } returns champListDBO
-        coEvery { champDAO.deleteAllChampTable() } returns Unit
-        coEvery { champDAO.insertChamps(champListDBO.champDBOs) } returns Unit
         coEvery { champDAO.getAllChamp() } returns champListDBO.champDBOs
         every { champListMapper.mapList(champListDBO.champDBOs) } returns champListEntity
 
@@ -146,9 +145,8 @@ class RepoRepositoryImplTest {
         repoRepository.getAllChamps(isForceLoadData)
 
         //then
-        verify(exactly = 0) { champDaoEntityMapper.map(champListResponse) }
-        coVerify(exactly = 0) { champDAO.deleteAllChampTable() }
-        coVerify(exactly = 0) { champDAO.insertChamps(champListDBO.champDBOs) }
+        verify(exactly = 1) { champListMapper.mapList(champListDBO.champDBOs) }
+        coVerify(exactly = 2) { champDAO.getAllChamp() }
     }
 
     @Test
@@ -660,7 +658,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItem
         coEvery { champDAO.getAllChamp() } returns listChampDBO
         coEvery { itemDAO.getAllItem() } returns listItemDBO
-        val either = repoRepository.getTeams(isForLoadData)
+        repoRepository.getTeams(isForLoadData)
 
         coVerify(exactly = 1) { apiService.getTeamList() }
         coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
@@ -702,7 +700,7 @@ class RepoRepositoryImplTest {
             listItemDBO
         )
         coEvery { itemDAO.insertItems(listItemDBO) } returns Unit
-        val either = repoRepository.getTeams(isForLoadData)
+        repoRepository.getTeams(isForLoadData)
 
         coVerify(exactly = 1) { apiService.getTeamList() }
         coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
@@ -724,7 +722,6 @@ class RepoRepositoryImplTest {
         val teamListEntity = TeamFake.provideListTeam(10)
         val listItemDBO = ItemDBOFake.provideListItemDBO(10)
         val listChampDBO = ChampDBOFake.provideChampDBOList(10)
-        val listItemResponse = ItemResponseFake.provideListItemResponse(10)
         every { itemListMapper.mapList(listOf()) } returns listOf()
         every { itemListMapper.mapList(ItemDBOFake.provideListItemDBO(2)) } returns ItemEntityFake.provideListItemEntity(
             2
@@ -738,7 +735,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        val either = repoRepository.getTeams(isForLoadData)
+        repoRepository.getTeams(isForLoadData)
 
         coVerify(exactly = 1) { apiService.getTeamList() }
         coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
@@ -766,7 +763,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        val either = repoRepository.getTeams(isForLoadData)
+        repoRepository.getTeams(isForLoadData)
 
         coVerify(exactly = 2) { teamDAO.getAllTeam() }
         coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
@@ -869,7 +866,7 @@ class RepoRepositoryImplTest {
         every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
-        val either = repoRepository.getTeamRecommendForChamp(id)
+        repoRepository.getTeamRecommendForChamp(id)
 
         coVerify(exactly = 1) { apiService.getTeamList() }
         coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
@@ -901,7 +898,7 @@ class RepoRepositoryImplTest {
         every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
-        val either = repoRepository.getTeamRecommendForChamp(id)
+        repoRepository.getTeamRecommendForChamp(id)
         coVerify(exactly = 1) { apiService.getTeamList() }
         coVerify(exactly = 1) { teamDaoEntityMapper.map(teamResponse) }
         coVerify(exactly = 1) { teamDAO.deleteAllTeam() }
@@ -930,7 +927,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        val either = repoRepository.getTeamRecommendForChamp(id)
+        repoRepository.getTeamRecommendForChamp(id)
 
         coVerify(exactly = 2) { teamDAO.getAllTeam() }
         coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
@@ -956,7 +953,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        val either = repoRepository.getTeamRecommendForChamp(id)
+        repoRepository.getTeamRecommendForChamp(id)
 
         coVerify(exactly = 2) { teamDAO.getAllTeam() }
         coVerify(exactly = 1) { teamListMapper.mapList(teamDBO.teamDBOs) }
@@ -982,7 +979,7 @@ class RepoRepositoryImplTest {
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        val either = repoRepository.getTeamRecommendForChamp(id)
+        repoRepository.getTeamRecommendForChamp(id)
 
 
     }
