@@ -12,8 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.fasterxml.jackson.databind.deser.DataFormatReaders
-import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
+import com.github.tomakehurst.wiremock.client.WireMock.options
+import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.github.tomakehurst.wiremock.matching.UrlPattern
 import com.tft_mvvm.champ.R
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
@@ -24,15 +25,11 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
-
     private val screenshotTaker = ScreenshotTaker()
 
-//    @Rule
-//    @JvmField
-//    var mockServerRule: MockServerRule = MockServerRule(this, 8888)
-
-//    @JvmField
-//    var mockServerClient: MockServerClient? = null
+    @Rule
+    @JvmField
+    var wireMockRule: WireMockRule? = WireMockRule()
 
     @Rule
     @JvmField
