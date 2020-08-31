@@ -30,11 +30,12 @@ class DetailsViewModel(
     private val listClassAndOriginContent = mutableListOf<ChampDetailsModel.ClassAndOriginContent>()
     private val listTeamRecommend = mutableListOf<ChampDetailsModel.TeamRecommend>()
 
-    private var champDetailsModel = ChampDetailsModel(
-        null,
-        listItem = listOf(),
-        listTeamRecommend = listOf()
-    )
+    private var champDetailsModel =
+        ChampDetailsModel(
+            null,
+            listItem = listOf(),
+            listTeamRecommend = listOf()
+        )
 
     fun getChampById(id: String) =
         viewModelScope.launch(Dispatchers.Main) {

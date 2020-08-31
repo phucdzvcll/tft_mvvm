@@ -1,22 +1,12 @@
-package com.tft_mvvm.app.features.main
+package com.tft_mvvm.app.features.matcher
 
-import android.app.Activity
-import android.graphics.Bitmap
-import android.os.Build
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
-import androidx.test.runner.screenshot.Screenshot
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import java.util.*
 
 class ScreenshotTestWatcher : TestWatcher() {
-    private val screenshotTaker = ScreenshotTaker()
+    private val screenshotTaker =
+        ScreenshotTaker("error")
 
     override fun failed(
         e: Throwable,

@@ -1,21 +1,22 @@
-package com.tft_mvvm.app.features.main
+package com.tft_mvvm.app.features.matcher
 
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import androidx.test.runner.screenshot.Screenshot
-import org.junit.runner.Description
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class ScreenshotTaker {
+@Suppress("DEPRECATION")
+class ScreenshotTaker(private val fileSaveName:String) {
     private var currentActivity: Activity? = null
-        private get() {
+        get() {
             InstrumentationRegistry.getInstrumentation()
                 .runOnMainSync {
                     val resumedActivities: Collection<*> =
@@ -40,7 +41,7 @@ class ScreenshotTaker {
         }
 
         val folder = File(
-            androidx.test.InstrumentationRegistry.getTargetContext().cacheDir.absolutePath + "/test_screenshots/"
+            getTargetContext().cacheDir.absolutePath + "/$fileSaveName/"
         )
         if (!folder.exists()) {
             folder.mkdirs()

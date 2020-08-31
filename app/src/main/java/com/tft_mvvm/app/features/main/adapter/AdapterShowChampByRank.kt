@@ -8,19 +8,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
-import com.tft_mvvm.app.model.ItemRv
 import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.app.model.ItemRv
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
 class AdapterShowChampByRank(
-    private val champs: ArrayList<ItemRv>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val ITEM_TYPE: Int = 1
     val HEADER_TYPE: Int = 2
-
+    private val listItem = mutableListOf<ItemRv>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == HEADER_TYPE) {
             val view =
@@ -38,35 +37,32 @@ class AdapterShowChampByRank(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (champs[position] is Champ) {
+        return if (listItem[position] is Champ) {
             ITEM_TYPE
         } else {
             HEADER_TYPE
         }
     }
 
-    override fun getItemCount(): Int = champs.size
+    override fun getItemCount(): Int = listItem.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemViewType = getItemViewType(position)
         if (itemViewType == ITEM_TYPE) {
-            (holder as ItemViewHolder).bind(champs[position] as Champ, onItemClickListener)
+            (holder as ItemViewHolder).bind(listItem[position] as Champ, onItemClickListener)
         } else {
-            (holder as SectionHeaderViewHolder).bind(champs[position] as SectionHeaderViewHolder.SectionModel)
+            (holder as SectionHeaderViewHolder).bind(listItem[position] as SectionHeaderViewHolder.SectionModel)
         }
     }
 
     class SectionHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @SuppressLint("SetTextI18n")
         fun bind(header: SectionModel) {
-            val prefix = "Bậc "
-            itemView.tvTitle.text = prefix + header.title
+            itemView.tvTitle.text =header.title
             when (header.title) {
-                "S" -> itemView.tvTitle.setTextColor(Color.YELLOW)
-                "A" -> itemView.tvTitle.setTextColor(Color.RED)
-                "B" -> itemView.tvTitle.setTextColor(Color.BLUE)
-                "C" -> itemView.tvTitle.setTextColor(Color.GREEN)
-                "D" -> itemView.tvTitle.setTextColor(Color.GRAY)
+                "Bậc S" -> itemView.tvTitle.setTextColor(Color.YELLOW)
+                "Bậc A" -> itemView.tvTitle.setTextColor(Color.RED)
+                "Bậc B" -> itemView.tvTitle.setTextColor(Color.BLUE)
+                "Bậc C" -> itemView.tvTitle.setTextColor(Color.GREEN)
             }
         }
 
@@ -92,26 +88,28 @@ class AdapterShowChampByRank(
         }
     }
 
-    fun setData(list: List<ItemRv>) {
-        val data = mutableListOf<ItemRv>()
-        val listChampRankOther = (list as List<Champ>).filter { champ -> champ.rank != "S" }
-        val listChampRankS = (list).filter { champ -> champ.rank == "S" }
-
-        data.addAll(listChampRankS)
-        data.addAll(listChampRankOther)
-        data.add(0, SectionHeaderViewHolder.SectionModel((data[0] as Champ).rank))
-        for (i in data.indices) {
-            if (data[i] is Champ && data[i + 1] is Champ) {
-                if ((data[i] as Champ).rank != (data[i + 1] as Champ).rank) {
-                    data.add(
-                        i + 1,
-                        SectionHeaderViewHolder.SectionModel((data[i + 1] as Champ).rank)
-                    )
-                }
-            }
+    fun setData(list: List<Champ>) {
+        val listChampRankS = list.filter { champ -> champ.rank == "S" }
+        val listChampRankA = list.filter { champ -> champ.rank == "A" }
+        val listChampRankB = list.filter { champ -> champ.rank == "B" }
+        val listChampRankC = list.filter { champ -> champ.rank == "C" }
+        listItem.clear()
+        if (listChampRankS.isNotEmpty()) {
+            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc S"))
+            listItem.addAll(listChampRankS)
         }
-        champs.clear()
-        champs.addAll(data)
+        if (listChampRankA.isNotEmpty()) {
+            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc A"))
+            listItem.addAll(listChampRankA)
+        }
+        if (listChampRankB.isNotEmpty()) {
+            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc B"))
+            listItem.addAll(listChampRankB)
+        }
+        if (listChampRankC.isNotEmpty()) {
+            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc C"))
+            listItem.addAll(listChampRankC)
+        }
         notifyDataSetChanged()
     }
 

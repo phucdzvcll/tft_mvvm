@@ -45,7 +45,10 @@ class ShowChampByGoldFragment : Fragment(),
 
     private fun setupUi() {
         rvByGold?.layoutManager = GridLayoutManager(this.requireContext(), 4)
-        adapter = AdapterShowByGold(arrayListOf(), this)
+        adapter = AdapterShowByGold(
+            arrayListOf(),
+            this
+        )
         rvByGold?.adapter = adapter
         swipeRefreshLayoutByGold?.setOnRefreshListener {
             showChampByGoldViewModel.getChamps(true)

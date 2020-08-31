@@ -19,16 +19,36 @@ import org.koin.dsl.module
 val presentationModule = module {
 
     factory { ChampMapper() }
-    factory { TeamBuilderRecommendMapper(champOfTeamMapper = get()) }
+    factory {
+        TeamBuilderRecommendMapper(
+            champOfTeamMapper = get()
+        )
+    }
     factory { ItemMapper() }
     factory { ChampDialogModelMapper(itemSuitableMapper = get()) }
     factory { ItemSuitableMapper() }
     factory { ItemHeaderMapper(itemMapper = get()) }
-    factory { ChampOfTeamMapper(itemOfTeamMapper = get()) }
+    factory {
+        ChampOfTeamMapper(
+            itemOfTeamMapper = get()
+        )
+    }
     factory { ItemOfTeamMapper() }
-    factory { ChampOfChampDetailsMapper(itemMapper = get()) }
-    factory { TeamRecommendForChampMapper(champOfChampDetailsMapper = get()) }
-    factory { ClassAndOriginContentMapper(champOfChampDetailsMapper = get()) }
+    factory {
+        ChampOfChampDetailsMapper(
+            itemMapper = get()
+        )
+    }
+    factory {
+        TeamRecommendForChampMapper(
+            champOfChampDetailsMapper = get()
+        )
+    }
+    factory {
+        ClassAndOriginContentMapper(
+            champOfChampDetailsMapper = get()
+        )
+    }
     viewModel {
         DetailsViewModel(
             getChampByIdUseCase = get(),

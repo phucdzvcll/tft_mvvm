@@ -13,9 +13,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Stetho.initializeWithDefaults(this)
         val listTab = listOf<Tab>(
-            Tab(type = Tab.Type.Champion, title = "Tướng"),
-            Tab(type = Tab.Type.Ranking, title = "Xếp Loại"),
-            Tab(type = Tab.Type.TeamBuilding, title = "Đội Hình")
+            Tab(
+                type = Tab.Type.Champion,
+                title = "Tướng"
+            ),
+            Tab(
+                type = Tab.Type.Ranking,
+                title = "Xếp Loại"
+            ),
+            Tab(
+                type = Tab.Type.TeamBuilding,
+                title = "Đội Hình"
+            )
         )
         val adapter = ViewPagerAdapter(
             supportFragmentManager

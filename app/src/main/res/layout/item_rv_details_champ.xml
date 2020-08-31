@@ -67,7 +67,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible"
+                >
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/item_bonus_count_1"
@@ -100,6 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -133,6 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -166,6 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView

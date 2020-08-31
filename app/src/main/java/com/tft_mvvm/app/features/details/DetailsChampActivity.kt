@@ -25,7 +25,10 @@ class DetailsChampActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_champ)
-        champId = getChamp(intent)
+        champId =
+            getChamp(
+                intent
+            )
         observerViewModel()
         setupUi()
         if (champId != null) {
@@ -44,7 +47,8 @@ class DetailsChampActivity : AppCompatActivity(),
 
     private fun setupUi() {
         rv_show_details_champ?.layoutManager = LinearLayoutManager(this)
-        adapterShowDetailsChamp = AdapterShowDetailsChamp(this)
+        adapterShowDetailsChamp =
+            AdapterShowDetailsChamp(this)
         rv_show_details_champ?.adapter = adapterShowDetailsChamp
 
         item_btn_back?.setOnClickListener {

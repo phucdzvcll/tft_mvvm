@@ -28,10 +28,11 @@ class AdapterShowRecommendTeamBuilder(
             }
             itemView.rv_item_by_team_recommend.layoutManager =
                 GridLayoutManager(itemView.context, 5)
-            adapterShowByOriginAndClass = AdapterShowChampInTeamBuilder(
-                arrayListOf(),
-                onItemClickListener
-            )
+            adapterShowByOriginAndClass =
+                AdapterShowChampInTeamBuilder(
+                    arrayListOf(),
+                    onItemClickListener
+                )
             adapterShowByOriginAndClass?.addData(teamBuilder.listChamp)
             itemView.rv_item_by_team_recommend.adapter = adapterShowByOriginAndClass
         }

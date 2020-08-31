@@ -1,4 +1,4 @@
-package com.tft_mvvm.app.features.main
+package com.tft_mvvm.app.features.matcher
 
 import android.os.IBinder
 import android.view.WindowManager
@@ -6,6 +6,7 @@ import androidx.test.espresso.Root
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 
+@Suppress("DEPRECATION")
 class ToastMatcher : TypeSafeMatcher<Root?>() {
 
     override fun describeTo(description: Description?) {

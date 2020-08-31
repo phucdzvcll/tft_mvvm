@@ -40,7 +40,6 @@ class ShowChampByRankFragment : Fragment(),
         }
         adapterShowChampByRank =
             AdapterShowChampByRank(
-                arrayListOf(),
                 this
             )
         val mGridLayoutManager = GridLayoutManager(requireContext(), 6)

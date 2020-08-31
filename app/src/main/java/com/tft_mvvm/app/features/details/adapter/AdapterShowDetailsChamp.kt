@@ -159,7 +159,10 @@ class AdapterShowDetailsChamp(
                 classAndOriginContent.classOrOriginName
             itemView.origin_or_class_content.text = classAndOriginContent.content
             val adapterShowByOriginAndClass =
-                AdapterShowByOriginAndClass(arrayListOf(), onItemClickListener)
+                AdapterShowByOriginAndClass(
+                    arrayListOf(),
+                    onItemClickListener
+                )
             adapterShowByOriginAndClass.addData(classAndOriginContent.listChamp)
             itemView.rv_origin_or_class.layoutManager = GridLayoutManager(itemView.context, 5)
             itemView.rv_origin_or_class.adapter = adapterShowByOriginAndClass
@@ -214,10 +217,11 @@ class AdapterShowDetailsChamp(
             }
             itemView.rv_item_by_team_recommend?.layoutManager =
                 GridLayoutManager(itemView.context, 5)
-            val adapterShowByOriginAndClass = AdapterShowByOriginAndClass(
-                arrayListOf(),
-                onItemClickListener
-            )
+            val adapterShowByOriginAndClass =
+                AdapterShowByOriginAndClass(
+                    arrayListOf(),
+                    onItemClickListener
+                )
             adapterShowByOriginAndClass.addData(teamBuilder.listChamp)
             itemView.rv_item_by_team_recommend?.adapter = adapterShowByOriginAndClass
         }
@@ -271,13 +275,21 @@ class AdapterShowDetailsChamp(
         }
 
         if (champDetails.listItem.isNotEmpty()) {
-            listItemRv.add(SectionViewHolder.SectionModel("Tộc và Hệ"))
+            listItemRv.add(
+                SectionViewHolder.SectionModel(
+                    "Tộc và Hệ"
+                )
+            )
             champDetails.listItem.forEach { item ->
                 listItemRv.add(classAndOriginContentMapper(item))
             }
         }
         if (champDetails.listTeamRecommend.isNotEmpty()) {
-            listItemRv.add(SectionViewHolder.SectionModel("Đội Hình Thích Hợp"))
+            listItemRv.add(
+                SectionViewHolder.SectionModel(
+                    "Đội Hình Thích Hợp"
+                )
+            )
             champDetails.listTeamRecommend.forEach { team ->
                 listItemRv.add(teamRecommendMapper(team))
             }

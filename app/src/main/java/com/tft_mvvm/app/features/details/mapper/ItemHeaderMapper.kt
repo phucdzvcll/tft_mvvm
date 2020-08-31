@@ -4,7 +4,7 @@ import com.example.common_jvm.mapper.Mapper
 import com.tft_mvvm.app.features.details.model.ChampDetailsModel
 import com.tft_mvvm.domain.features.model.ChampListEntity
 
-class ItemHeaderMapper(private val itemMapper: ItemMapper) : Mapper<ChampListEntity.Champ,ChampDetailsModel.HeaderModel>() {
+class ItemHeaderMapper(private val itemMapper: ItemMapper) : Mapper<ChampListEntity.Champ, ChampDetailsModel.HeaderModel>() {
     override fun map(input: ChampListEntity.Champ): ChampDetailsModel.HeaderModel {
         return ChampDetailsModel.HeaderModel(
             name = input.name,

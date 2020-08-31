@@ -22,9 +22,7 @@ class ShowChampByGoldViewModel(
 
     fun getChamps(isForceLoadData: Boolean) =
         viewModelScope.launch(Dispatchers.Main) {
-            if (isForceLoadData) {
-                isLoadingLiveData.value = true
-            }
+            isLoadingLiveData.value = true
             val champResult = withContext(Dispatchers.IO) {
                 listChampsUseCase.execute(
                     GetListChampsUseCase.GetAllChampUseCaseParam(
