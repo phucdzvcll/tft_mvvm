@@ -12,6 +12,8 @@ import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.adapter.AdapterShowDetailsChamp
 import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
+import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChampInTeam
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.activity_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -72,6 +74,11 @@ class DetailsChampActivity : AppCompatActivity(),
 
     override fun onClickListener(id: String) {
         val dialog = DialogShowDetailsChamp.newInstance(id)
+        dialog.show(supportFragmentManager, "DialogShowDetailsChamp")
+    }
+
+    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
+        val dialog = DialogShowDetailsChampInTeam.newInstance(id,listItem)
         dialog.show(supportFragmentManager, "DialogShowDetailsChamp")
     }
 }

@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 
-class AdapterShowByOriginAndClass(
+class AdapterShowChampInTeam(
     private val champs: ArrayList<AdapterShowDetailsChamp.Champ>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -26,7 +27,45 @@ class AdapterShowByOriginAndClass(
                 "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
                 "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
-            itemView.setOnClickListener { onItemClickListener.onClickListener(id = champ.id) }
+            if (champ.threeStar=="3") {
+                itemView.three_start.visibility = View.VISIBLE
+            }
+            val listItem = mutableListOf<ChampDialogModel.Item>()
+            if (champ.itemSuitable.isNotEmpty()) {
+                itemView.suitable_item_of_team1.visibility = View.VISIBLE
+                Glide.with(itemView.suitable_item_of_team1.context)
+                    .load(champ.itemSuitable[0].itemAvatar)
+                    .into(itemView.suitable_item_of_team1)
+                listItem.add(itemMapper(champ.itemSuitable[0]))
+            }
+            if (champ.itemSuitable.size >= 2) {
+                itemView.suitable_item_of_team2.visibility = View.VISIBLE
+                Glide.with(itemView.suitable_item_of_team2.context)
+                    .load(champ.itemSuitable[1].itemAvatar)
+                    .into(itemView.suitable_item_of_team2)
+                listItem.add(itemMapper(champ.itemSuitable[1]))
+            }
+            if (champ.itemSuitable.size == 3) {
+                itemView.suitable_item_of_team3.visibility = View.VISIBLE
+                Glide.with(itemView.suitable_item_of_team3.context)
+                    .load(champ.itemSuitable[2].itemAvatar)
+                    .into(itemView.suitable_item_of_team3)
+                listItem.add(itemMapper(champ.itemSuitable[2]))
+            }
+            itemView.setOnClickListener {
+                onItemClickListener.onClickListenerForChampInTeam(
+                    id = champ.id,
+                    listItem = listItem
+                )
+            }
+        }
+
+        private fun itemMapper(item: AdapterShowDetailsChamp.Item): ChampDialogModel.Item {
+            return ChampDialogModel.Item(
+                itemName = item.itemName,
+                id = item.id,
+                itemAvatar = item.itemAvatar
+            )
         }
     }
 

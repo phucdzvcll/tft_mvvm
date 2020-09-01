@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -66,51 +65,63 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_champ_dialog" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/suitable_item_dialog_img_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="125dp"
-            android:background="@drawable/background_5_gold"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="@+id/champ_cover_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/name_champ_dialog"
-            tools:src="@tools:sample/avatars[2]" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/suitable_item_dialog_img_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/background_5_gold"
-            app:layout_constraintBottom_toBottomOf="@+id/suitable_item_dialog_img_1"
-            app:layout_constraintEnd_toStartOf="@+id/suitable_item_dialog_img_3"
-            app:layout_constraintStart_toEndOf="@+id/suitable_item_dialog_img_1"
-            app:layout_constraintTop_toTopOf="@+id/suitable_item_dialog_img_3"
-            tools:src="@tools:sample/avatars[3]" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/suitable_item_dialog_img_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="125dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/background_5_gold"
+        <LinearLayout
+            android:id="@+id/liner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="160dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_champ_dialog"
-            tools:src="@tools:sample/avatars[4]" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/suitable_item_dialog_img_1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="35dp"
+                android:background="@drawable/background_5_gold"
+                tools:src="@tools:sample/avatars[2]"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/suitable_item_dialog_img_2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/background_5_gold"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="35dp"
+                tools:src="@tools:sample/avatars[3]"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/suitable_item_dialog_img_3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/background_5_gold"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="35dp"
+                tools:src="@tools:sample/avatars[4]"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/skill_avatar_dialog"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8sp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
             android:background="#000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/suitable_item_dialog_img_2" />
+            app:layout_constraintTop_toBottomOf="@+id/liner" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/skill_name_dialog"

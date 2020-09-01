@@ -218,7 +218,7 @@ class AdapterShowDetailsChamp(
             itemView.rv_item_by_team_recommend?.layoutManager =
                 GridLayoutManager(itemView.context, 5)
             val adapterShowByOriginAndClass =
-                AdapterShowByOriginAndClass(
+                AdapterShowChampInTeam(
                     arrayListOf(),
                     onItemClickListener
                 )
@@ -308,7 +308,7 @@ class AdapterShowDetailsChamp(
                 )
             )
         }
-        return listItemDetails.toList()
+        return listItemDetails
     }
 
     private fun classAndOriginContentMapper(classAndOriginContent: ChampDetailsModel.ClassAndOriginContent): ItemViewHolder.ClassAndOriginContent {

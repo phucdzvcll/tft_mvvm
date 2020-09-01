@@ -15,8 +15,7 @@ import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.dialog_show_details_champ.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-
-class DialogShowDetailsChamp : DialogFragment() {
+class DialogShowDetailsChampInTeam : DialogFragment() {
 
     private val dialogShowDetailsChampViewModel: DialogShowDetailsChampViewModel by viewModel()
 
@@ -39,6 +38,9 @@ class DialogShowDetailsChamp : DialogFragment() {
         getChampId()?.let { champId ->
             dialogShowDetailsChampViewModel.getChampById(champId)
         }
+        getListItem()?.let { listItem->
+            setupItem(listItem)
+        }
     }
 
     private fun setChampModel(champ: ChampDialogModel) {
@@ -52,29 +54,37 @@ class DialogShowDetailsChamp : DialogFragment() {
         Glide.with(skill_avatar_dialog.context)
             .load(champ.linkSkillAvatar)
             .into(skill_avatar_dialog)
-        if (champ.itemSuitable.size == 3) {
+    }
+
+    private fun setupItem(listItem: List<ChampDialogModel.Item>) {
+
+        if (listItem.isNotEmpty()) {
             suitable_item_dialog_img_1.visibility = View.VISIBLE
             Glide.with(suitable_item_dialog_img_1.context)
-                .load(champ.itemSuitable[0].itemAvatar)
+                .load(listItem[0].itemAvatar)
                 .into(suitable_item_dialog_img_1)
             suitable_item_dialog_img_1.setOnClickListener {
-                Toast.makeText(requireContext(), champ.itemSuitable[0].itemName, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), listItem[0].itemName, Toast.LENGTH_SHORT)
                     .show()
             }
+        }
+        if (listItem.size >= 2) {
             suitable_item_dialog_img_2.visibility = View.VISIBLE
             Glide.with(suitable_item_dialog_img_2.context)
-                .load(champ.itemSuitable[1].itemAvatar)
+                .load(listItem[1].itemAvatar)
                 .into(suitable_item_dialog_img_2)
             suitable_item_dialog_img_2.setOnClickListener {
-                Toast.makeText(requireContext(), champ.itemSuitable[1].itemName, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), listItem[1].itemName, Toast.LENGTH_SHORT)
                     .show()
             }
+        }
+        if (listItem.size == 3) {
             suitable_item_dialog_img_3.visibility = View.VISIBLE
             Glide.with(suitable_item_dialog_img_3.context)
-                .load(champ.itemSuitable[2].itemAvatar)
+                .load(listItem[2].itemAvatar)
                 .into(suitable_item_dialog_img_3)
             suitable_item_dialog_img_3.setOnClickListener {
-                Toast.makeText(requireContext(), champ.itemSuitable[2].itemName, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), listItem[2].itemName, Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -91,16 +101,22 @@ class DialogShowDetailsChamp : DialogFragment() {
         return arguments?.getString(CHAMP_ID_EXTRA)
     }
 
+    private fun getListItem(): List<ChampDialogModel.Item>? {
+        return arguments?.getParcelableArrayList(ITEM_EXTRA)
+    }
+
     companion object {
         private const val CHAMP_ID_EXTRA = "champ_id_extra"
+        private const val ITEM_EXTRA = "item_extra"
 
-        fun newInstance(id: String): DialogShowDetailsChamp {
-            val dialogShowDetailsChamp =
-                DialogShowDetailsChamp()
-            dialogShowDetailsChamp.arguments = bundleOf(
-                CHAMP_ID_EXTRA to id
+        fun newInstance(id: String, listItem: List<ChampDialogModel.Item>): DialogShowDetailsChampInTeam {
+            val dialogShowDetailsChampInTeam =
+                DialogShowDetailsChampInTeam()
+            dialogShowDetailsChampInTeam.arguments = bundleOf(
+                CHAMP_ID_EXTRA to id,
+                ITEM_EXTRA to listItem
             )
-            return dialogShowDetailsChamp
+            return dialogShowDetailsChampInTeam
         }
     }
 }

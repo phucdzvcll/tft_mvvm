@@ -1,5 +1,8 @@
 package com.tft_mvvm.app.features.dialog_show_details_champ.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class ChampDialogModel(
     val name: String,
     val skillName: String,
@@ -9,9 +12,10 @@ data class ChampDialogModel(
     val cost: String,
     val itemSuitable: List<Item>
 ){
+    @Parcelize
     data class Item(
         val id: String,
         val itemName: String,
         val itemAvatar: String
-    )
+    ):Parcelable
 }

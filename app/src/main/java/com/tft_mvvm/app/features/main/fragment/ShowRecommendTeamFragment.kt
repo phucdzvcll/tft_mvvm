@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
+import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChampInTeam
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.app.features.main.adapter.AdapterShowRecommendTeamBuilder
 import com.tft_mvvm.app.features.main.viewmodel.ShowTeamRecommendViewModel
 import com.tft_mvvm.champ.R
@@ -59,7 +61,10 @@ class ShowRecommendTeamFragment : Fragment(),
     }
 
     override fun onClickListener(id: String) {
-        val dialog = DialogShowDetailsChamp.newInstance(id)
+    }
+
+    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
+        val dialog = DialogShowDetailsChampInTeam.newInstance(id,listItem)
         dialog.show(childFragmentManager, "DialogShowDetailsChamp")
     }
 

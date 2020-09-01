@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.DetailsChampActivity
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.app.features.main.adapter.AdapterShowByGold
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByGoldViewModel
 import com.tft_mvvm.champ.R
@@ -58,6 +59,9 @@ class ShowChampByGoldFragment : Fragment(),
 
     override fun onClickListener(id: String) {
         startActivity(DetailsChampActivity.newIntent(requireContext(), id))
+    }
+
+    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
     }
 
 }

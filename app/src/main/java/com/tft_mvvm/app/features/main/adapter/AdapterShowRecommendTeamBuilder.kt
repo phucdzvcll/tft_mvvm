@@ -16,7 +16,7 @@ class AdapterShowRecommendTeamBuilder(
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<AdapterShowRecommendTeamBuilder.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var adapterShowByOriginAndClass: AdapterShowChampInTeamBuilder? = null
+        private var adapterShowByOriginAndClass: AdapterShowChampInTeamBuilder? = null
         fun bind(teamBuilder: TeamBuilder, onItemClickListener: OnItemClickListener) {
             itemView.name_team1.text = teamBuilder.name
             when (teamBuilder.name) {

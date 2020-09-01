@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-
     packagingOptions {
         exclude 'META-INF/ASL-2.0.txt'
         exclude 'META-INF/INDEX.LIST'
