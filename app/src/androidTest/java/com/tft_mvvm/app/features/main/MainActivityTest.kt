@@ -46,106 +46,262 @@ class MainActivityTest {
 
     @Test
     fun mainTest() {
-        onView(withText("TƯỚNG"))
-            .check(matches(isDisplayed()))
-
-        onView(withText("XẾP LOẠI"))
-            .check(matches(isDisplayed()))
-
-        onView(withText("ĐỘI HÌNH"))
-            .check(matches(isDisplayed()))
-
-        val recyclerViewShowChampByGold = onView(withId(R.id.rvByGold))
-        recyclerViewShowChampByGold.check(RecyclerViewItemCountAssertion(57))
-        screenshotTaker.takeScreenshot("001_fragment_show_champ_by_gold.png")
-        Thread.sleep(500)
-        onView(withText("XẾP LOẠI")).perform(click())
+//        onView(withText("TƯỚNG"))
+//            .check(matches(isDisplayed()))
+//
+//        onView(withText("XẾP LOẠI"))
+//            .check(matches(isDisplayed()))
+//
+//        onView(withText("ĐỘI HÌNH"))
+//            .check(matches(isDisplayed()))
+//
+//        val recyclerViewShowChampByGold = onView(withId(R.id.rvByGold))
+//        recyclerViewShowChampByGold.check(RecyclerViewItemCountAssertion(57))
+//        screenshotTaker.takeScreenshot("001_fragment_show_champ_by_gold.png")
+//        Thread.sleep(500)
+//        onView(withText("XẾP LOẠI")).perform(click())
+//        Thread.sleep(3000)
+//        screenshotTaker.takeScreenshot("001_fragment_show_champ_by_rank.png")
+//        val recyclerViewShowChampByRank = onView(withId(R.id.rv_by_rank))
+//        recyclerViewShowChampByRank.check(RecyclerViewItemCountAssertion(61))
+//        onView(
+//            allOf(
+//                withId(R.id.tvTitle),
+//                withText("Bậc S"),
+//                childAtPosition(
+//                    withId(R.id.rv_by_rank),
+//                    0
+//                )
+//            )
+//        ).check(
+//            matches(isDisplayed())
+//        )
+//
+//        onView(
+//            allOf(
+//                withId(R.id.tvTitle),
+//                withText("Bậc A"),
+//                childAtPosition(
+//                    withId(R.id.rv_by_rank),
+//                    4
+//                )
+//
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        onView(
+//            allOf(
+//                withId(R.id.tvTitle),
+//                withText("Bậc B"),
+//                childAtPosition(
+//                    withId(R.id.rv_by_rank),
+//                    23
+//                )
+//
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        recyclerViewShowChampByRank.perform(
+//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+//                60
+//            )
+//        )
+//        Thread.sleep(100)
+//        onView(
+//            allOf(
+//                withId(R.id.tvTitle),
+//                withText("Bậc C")
+//            )
+//        ).check(matches(isDisplayed()))
+//        Thread.sleep(100)
+//
+//        recyclerViewShowChampByRank.perform(
+//            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+//                10,
+//                click()
+//            )
+//        )
+//        Thread.sleep(2000)
+//
+//        onView(
+//            allOf(
+//                withId(R.id.name_champ_dialog),
+//                withText("Fizz")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        onView(
+//            allOf(
+//                withId(R.id.champ_cost_dialog),
+//                withText("4")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        onView(
+//            allOf(
+//                withId(R.id.skill_name_dialog),
+//                withText("Triệu Hồi Thủy Quái")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        val imageItemFizzViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
+//        imageItemFizzViewItem1.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Giáp Gai"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
+//        Thread.sleep(1200)
+//
+//        val imageItemFizzViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
+//        imageItemFizzViewItem2.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Nỏ Sét"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
+//        Thread.sleep(1200)
+//
+//        val imageItemFizzViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
+//        imageItemFizzViewItem3.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Áo Choàng Tĩnh Lặng"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
+//        Thread.sleep(1200)
+//        Espresso.pressBack()
+//        Thread.sleep(200)
+//
+//        recyclerViewShowChampByRank.perform(
+//            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+//                50,
+//                click()
+//            )
+//        )
+//        Thread.sleep(2000)
+//
+//        onView(
+//            allOf(
+//                withId(R.id.name_champ_dialog),
+//                withText("Malphite")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        onView(
+//            allOf(
+//                withId(R.id.champ_cost_dialog),
+//                withText("1")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        onView(
+//            allOf(
+//                withId(R.id.skill_name_dialog),
+//                withText("Nội tại")
+//            )
+//        ).check(matches(isDisplayed()))
+//
+//        val imageItemMalphiteViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
+//        imageItemMalphiteViewItem1.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Giáp Gai"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
+//        Thread.sleep(1200)
+//
+//        val imageItemMalphiteViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
+//        imageItemMalphiteViewItem2.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Giáp Máu"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
+//        Thread.sleep(1200)
+//
+//        val imageItemMalphiteViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
+//        imageItemMalphiteViewItem3.perform(click())
+//        Thread.sleep(200)
+//        onView(withText("Vuốt Rồng"))
+//            .inRoot(ToastMatcher())
+//            .check(matches(isDisplayed()))
+//        Thread.sleep(200)
+//        screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
+//        Thread.sleep(1200)
+//        Espresso.pressBack()
+//        Thread.sleep(500)
+        onView(withText("ĐỘI HÌNH")).perform(click())
         Thread.sleep(3000)
-        screenshotTaker.takeScreenshot("001_fragment_show_champ_by_rank.png")
-        val recyclerViewShowChampByRank = onView(withId(R.id.rv_by_rank))
-        recyclerViewShowChampByRank.check(RecyclerViewItemCountAssertion(61))
-        onView(
+        val recyclerViewShowTeamRecommend = onView(withId(R.id.rv_by_team_recommend))
+        recyclerViewShowTeamRecommend.check(RecyclerViewItemCountAssertion(17))
+
+        val recyclerViewShowChampInTeam = onView(
             allOf(
-                withId(R.id.tvTitle),
-                withText("Bậc S"),
-                childAtPosition(
-                    withId(R.id.rv_by_rank),
-                    0
-                )
+                isDescendantOfA(R.id.rv_by_team_recommend.withRecyclerView()?.atPosition(1)),
+                withId(R.id.rv_item_by_team_recommend)
             )
-        ).check(
-            matches(isDisplayed())
-        )
-
-        onView(
-            allOf(
-                withId(R.id.tvTitle),
-                withText("Bậc A"),
-                childAtPosition(
-                    withId(R.id.rv_by_rank),
-                    4
-                )
-
-            )
-        ).check(matches(isDisplayed()))
-
-        onView(
-            allOf(
-                withId(R.id.tvTitle),
-                withText("Bậc B"),
-                childAtPosition(
-                    withId(R.id.rv_by_rank),
-                    23
-                )
-
-            )
-        ).check(matches(isDisplayed()))
-
-        recyclerViewShowChampByRank.perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                60
-            )
-        )
-        Thread.sleep(100)
-        onView(
-            allOf(
-                withId(R.id.tvTitle),
-                withText("Bậc C")
-            )
-        ).check(matches(isDisplayed()))
-        Thread.sleep(100)
-
-        recyclerViewShowChampByRank.perform(
-            actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                10,
-                click()
-            )
-        )
+        ).check(RecyclerViewItemCountAssertion(8))
+        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
         Thread.sleep(2000)
-
         onView(
             allOf(
                 withId(R.id.name_champ_dialog),
-                withText("Fizz")
+                withText("Cassiopeia")
             )
         ).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.champ_cost_dialog),
-                withText("4")
+                withText("3")
             )
         ).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.skill_name_dialog),
-                withText("Triệu Hồi Thủy Quái")
+                withText("Nanh Độc")
             )
         ).check(matches(isDisplayed()))
 
-        val imageItemFizzViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
-        imageItemFizzViewItem1.perform(click())
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        Espresso.pressBack()
+        Thread.sleep(200)
+        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click()))
+        Thread.sleep(2000)
+        onView(
+            allOf(
+                withId(R.id.name_champ_dialog),
+                withText("Rumble")
+            )
+        ).check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                withId(R.id.champ_cost_dialog),
+                withText("3")
+            )
+        ).check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                withId(R.id.skill_name_dialog),
+                withText("Súng Phun Lửa")
+            )
+        ).check(matches(isDisplayed()))
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        val imageItemRumbleViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
+        imageItemRumbleViewItem1.perform(click())
         Thread.sleep(200)
         onView(withText("Giáp Gai"))
             .inRoot(ToastMatcher())
@@ -154,8 +310,8 @@ class MainActivityTest {
         screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
         Thread.sleep(1200)
 
-        val imageItemFizzViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
-        imageItemFizzViewItem2.perform(click())
+        val imageItemRumbleViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
+        imageItemRumbleViewItem2.perform(click())
         Thread.sleep(200)
         onView(withText("Nỏ Sét"))
             .inRoot(ToastMatcher())
@@ -164,78 +320,53 @@ class MainActivityTest {
         screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
         Thread.sleep(1200)
 
-        val imageItemFizzViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
-        imageItemFizzViewItem3.perform(click())
+        val imageItemRumbleViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
+        imageItemRumbleViewItem3.perform(click())
         Thread.sleep(200)
-        onView(withText("Áo Choàng Tĩnh Lặng"))
+        onView(withText("Khăn Giải Thuật"))
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
         screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
         Thread.sleep(1200)
         Espresso.pressBack()
-        Thread.sleep(200)
-
-        recyclerViewShowChampByRank.perform(
-            actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                50,
-                click()
-            )
-        )
+        Thread.sleep(500)
+        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(6, click()))
         Thread.sleep(2000)
-
         onView(
             allOf(
                 withId(R.id.name_champ_dialog),
-                withText("Malphite")
+                withText("Ekko")
             )
         ).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.champ_cost_dialog),
-                withText("1")
+                withText("5")
             )
         ).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.skill_name_dialog),
-                withText("Nội tại")
+                withText("Lưỡng Giới Đồng Quy")
             )
         ).check(matches(isDisplayed()))
-
-        val imageItemMalphiteViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
-        imageItemMalphiteViewItem1.perform(click())
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        val imageItemEkkoViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
+        imageItemEkkoViewItem1.perform(click())
         Thread.sleep(200)
-        onView(withText("Giáp Gai"))
+        onView(withText("Găng Đạo Tặc"))
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
         screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
         Thread.sleep(1200)
-
-        val imageItemMalphiteViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
-        imageItemMalphiteViewItem2.perform(click())
-        Thread.sleep(200)
-        onView(withText("Giáp Máu"))
-            .inRoot(ToastMatcher())
-            .check(matches(isDisplayed()))
-        Thread.sleep(200)
-        screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
-        Thread.sleep(1200)
-
-        val imageItemMalphiteViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
-        imageItemMalphiteViewItem3.perform(click())
-        Thread.sleep(200)
-        onView(withText("Vuốt Rồng"))
-            .inRoot(ToastMatcher())
-            .check(matches(isDisplayed()))
-        Thread.sleep(200)
-        screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
-        Thread.sleep(1200)
         Espresso.pressBack()
-        Thread.sleep(200)
+        Thread.sleep(500)
     }
 
     private fun childAtPosition(

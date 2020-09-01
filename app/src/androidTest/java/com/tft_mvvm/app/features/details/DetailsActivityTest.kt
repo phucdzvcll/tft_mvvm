@@ -99,7 +99,6 @@ class DetailsActivityTest {
             allOf(
                 isDescendantOfA(R.id.rv_show_details_champ.withRecyclerView()?.atPosition(2)),
                 withId(R.id.rv_origin_or_class)
-
             )
         )
         recyclerviewByOrigin.check(
