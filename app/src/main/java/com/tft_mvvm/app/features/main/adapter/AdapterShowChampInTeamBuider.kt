@@ -54,7 +54,7 @@ class AdapterShowChampInTeamBuilder(
                     .into(itemView.suitable_item_of_team3)
                 listItem.add(itemMapper(champ.itemSuitable[2]))
             }
-            itemView.setOnClickListener { onItemClickListener.onClickListenerForChampInTeam(champ.id,listItem) }
+            itemView.setOnClickListener { onItemClickListener.onClickListenerForChampInTeam(champ.id,listItem,champ.threeStar) }
         }
         private fun itemMapper(item : Champ.Item):ChampDialogModel.Item{
             return ChampDialogModel.Item(

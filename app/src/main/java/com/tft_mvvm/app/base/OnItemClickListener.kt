@@ -4,5 +4,9 @@ import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogMode
 
 interface OnItemClickListener {
     fun onClickListener(id: String)
-    fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>)
+    fun onClickListenerForChampInTeam(
+        id: String,
+        listItem: List<ChampDialogModel.Item>,
+        star: String
+    )
 }

@@ -38,8 +38,12 @@ class DialogShowDetailsChampInTeam : DialogFragment() {
         getChampId()?.let { champId ->
             dialogShowDetailsChampViewModel.getChampById(champId)
         }
-        getListItem()?.let { listItem->
+        getListItem()?.let { listItem ->
             setupItem(listItem)
+        }
+
+        getStart()?.let { star ->
+            setupStar(star)
         }
     }
 
@@ -90,6 +94,12 @@ class DialogShowDetailsChampInTeam : DialogFragment() {
         }
     }
 
+    fun setupStar(star: String) {
+        if (star == "3") {
+            ic_star_dialog.visibility = View.VISIBLE
+        }
+    }
+
     private fun observeViewModel() {
         dialogShowDetailsChampViewModel.getChampByDialogLiveData().observe(viewLifecycleOwner,
             Observer {
@@ -105,16 +115,26 @@ class DialogShowDetailsChampInTeam : DialogFragment() {
         return arguments?.getParcelableArrayList(ITEM_EXTRA)
     }
 
+    private fun getStart(): String? {
+        return arguments?.getString(STAR_EXTRA)
+    }
+
     companion object {
         private const val CHAMP_ID_EXTRA = "champ_id_extra"
         private const val ITEM_EXTRA = "item_extra"
+        private const val STAR_EXTRA = "star_extra"
 
-        fun newInstance(id: String, listItem: List<ChampDialogModel.Item>): DialogShowDetailsChampInTeam {
+        fun newInstance(
+            id: String,
+            star: String,
+            listItem: List<ChampDialogModel.Item>
+        ): DialogShowDetailsChampInTeam {
             val dialogShowDetailsChampInTeam =
                 DialogShowDetailsChampInTeam()
             dialogShowDetailsChampInTeam.arguments = bundleOf(
                 CHAMP_ID_EXTRA to id,
-                ITEM_EXTRA to listItem
+                ITEM_EXTRA to listItem,
+                STAR_EXTRA to star
             )
             return dialogShowDetailsChampInTeam
         }

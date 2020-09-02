@@ -32,7 +32,7 @@ class DetailsViewModel(
 
     private var champDetailsModel =
         ChampDetailsModel(
-            null,
+            headerModel = null,
             listItem = listOf(),
             listTeamRecommend = listOf()
         )
@@ -48,7 +48,7 @@ class DetailsViewModel(
             }
             dbResult.either({
                 //TODO handel error
-                Log.d("phuc","$it")
+                Log.d("phuc", "$it")
             }) {
                 updateChampDetails(
                     champDetailsModel.copy(

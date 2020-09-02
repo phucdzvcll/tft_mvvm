@@ -77,8 +77,12 @@ class DetailsChampActivity : AppCompatActivity(),
         dialog.show(supportFragmentManager, "DialogShowDetailsChamp")
     }
 
-    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
-        val dialog = DialogShowDetailsChampInTeam.newInstance(id,listItem)
+    override fun onClickListenerForChampInTeam(
+        id: String,
+        listItem: List<ChampDialogModel.Item>,
+        star: String
+    ) {
+        val dialog = DialogShowDetailsChampInTeam.newInstance(id, star, listItem)
         dialog.show(supportFragmentManager, "DialogShowDetailsChamp")
     }
 }

@@ -28,6 +28,7 @@ class ShowRecommendTeamFragment : Fragment(),
     ): View? {
         return inflater.inflate(R.layout.fragment_show_recommend_team, container, false)
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupUi()
@@ -63,8 +64,12 @@ class ShowRecommendTeamFragment : Fragment(),
     override fun onClickListener(id: String) {
     }
 
-    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
-        val dialog = DialogShowDetailsChampInTeam.newInstance(id,listItem)
+    override fun onClickListenerForChampInTeam(
+        id: String,
+        listItem: List<ChampDialogModel.Item>,
+        star: String
+    ) {
+        val dialog = DialogShowDetailsChampInTeam.newInstance(id, star, listItem)
         dialog.show(childFragmentManager, "DialogShowDetailsChamp")
     }
 

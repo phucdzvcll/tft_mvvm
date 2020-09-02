@@ -129,7 +129,7 @@ class MainActivityTest {
                 withText("Fizz")
             )
         ).check(matches(isDisplayed()))
-
+        screenshotTaker.takeScreenshot("003_show_dialog.png")
         onView(
             allOf(
                 withId(R.id.champ_cost_dialog),
@@ -175,7 +175,6 @@ class MainActivityTest {
         Thread.sleep(1200)
         Espresso.pressBack()
         Thread.sleep(200)
-
         recyclerViewShowChampByRank.perform(
             actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 50,
@@ -183,7 +182,7 @@ class MainActivityTest {
             )
         )
         Thread.sleep(2000)
-
+        screenshotTaker.takeScreenshot("007_show_dialog.png")
         onView(
             allOf(
                 withId(R.id.name_champ_dialog),
@@ -212,7 +211,7 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
+        screenshotTaker.takeScreenshot("008_toast_name_item_1.png")
         Thread.sleep(1200)
 
         val imageItemMalphiteViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
@@ -222,7 +221,7 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
+        screenshotTaker.takeScreenshot("008_toast_name_item_2.png")
         Thread.sleep(1200)
 
         val imageItemMalphiteViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
@@ -232,12 +231,13 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
+        screenshotTaker.takeScreenshot("010_toast_name_item_3.png")
         Thread.sleep(1200)
         Espresso.pressBack()
         Thread.sleep(500)
         onView(withText("ĐỘI HÌNH")).perform(click())
         Thread.sleep(3000)
+        screenshotTaker.takeScreenshot("011_fragment_show_team.png")
         val recyclerViewShowTeamRecommend = onView(withId(R.id.rv_by_team_recommend))
         recyclerViewShowTeamRecommend.check(RecyclerViewItemCountAssertion(17))
 
@@ -247,8 +247,14 @@ class MainActivityTest {
                 withId(R.id.rv_item_by_team_recommend)
             )
         ).check(RecyclerViewItemCountAssertion(8))
-        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        recyclerViewShowChampInTeam.perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
         Thread.sleep(2000)
+        screenshotTaker.takeScreenshot("012_show_dialog.png")
         onView(
             allOf(
                 withId(R.id.name_champ_dialog),
@@ -270,12 +276,37 @@ class MainActivityTest {
             )
         ).check(matches(isDisplayed()))
 
-        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.GONE)))
-        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.GONE)))
-        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.ic_star_dialog)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.GONE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.GONE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.GONE
+                )
+            )
+        )
         Espresso.pressBack()
         Thread.sleep(200)
-        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click()))
+        recyclerViewShowChampInTeam.perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                2,
+                click()
+            )
+        )
         Thread.sleep(2000)
         onView(
             allOf(
@@ -283,7 +314,7 @@ class MainActivityTest {
                 withText("Rumble")
             )
         ).check(matches(isDisplayed()))
-
+        screenshotTaker.takeScreenshot("013_show_dialog.png")
         onView(
             allOf(
                 withId(R.id.champ_cost_dialog),
@@ -297,9 +328,28 @@ class MainActivityTest {
                 withText("Súng Phun Lửa")
             )
         ).check(matches(isDisplayed()))
-        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.ic_star_dialog)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.VISIBLE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.VISIBLE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.VISIBLE
+                )
+            )
+        )
         val imageItemRumbleViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
         imageItemRumbleViewItem1.perform(click())
         Thread.sleep(200)
@@ -307,7 +357,7 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
+        screenshotTaker.takeScreenshot("014_toast_name_item_1.png")
         Thread.sleep(1200)
 
         val imageItemRumbleViewItem2 = onView(withId(R.id.suitable_item_dialog_img_2))
@@ -317,7 +367,7 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("005_toast_name_item_2.png")
+        screenshotTaker.takeScreenshot("015_toast_name_item_2.png")
         Thread.sleep(1200)
 
         val imageItemRumbleViewItem3 = onView(withId(R.id.suitable_item_dialog_img_3))
@@ -327,12 +377,18 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("006_toast_name_item_3.png")
+        screenshotTaker.takeScreenshot("016_toast_name_item_3.png")
         Thread.sleep(1200)
         Espresso.pressBack()
         Thread.sleep(500)
-        recyclerViewShowChampInTeam.perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(6, click()))
+        recyclerViewShowChampInTeam.perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                6,
+                click()
+            )
+        )
         Thread.sleep(2000)
+        screenshotTaker.takeScreenshot("017_show_dialog.png")
         onView(
             allOf(
                 withId(R.id.name_champ_dialog),
@@ -353,9 +409,28 @@ class MainActivityTest {
                 withText("Lưỡng Giới Đồng Quy")
             )
         ).check(matches(isDisplayed()))
-        onView(withId(R.id.suitable_item_dialog_img_1)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.suitable_item_dialog_img_2)).check(matches(withEffectiveVisibility(Visibility.GONE)))
-        onView(withId(R.id.suitable_item_dialog_img_3)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.ic_star_dialog)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.suitable_item_dialog_img_1)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.VISIBLE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_2)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.GONE
+                )
+            )
+        )
+        onView(withId(R.id.suitable_item_dialog_img_3)).check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.GONE
+                )
+            )
+        )
         val imageItemEkkoViewItem1 = onView(withId(R.id.suitable_item_dialog_img_1))
         imageItemEkkoViewItem1.perform(click())
         Thread.sleep(200)
@@ -363,7 +438,7 @@ class MainActivityTest {
             .inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         Thread.sleep(200)
-        screenshotTaker.takeScreenshot("004_toast_name_item_1.png")
+        screenshotTaker.takeScreenshot("018_toast_name_item_1.png")
         Thread.sleep(1200)
         Espresso.pressBack()
         Thread.sleep(500)

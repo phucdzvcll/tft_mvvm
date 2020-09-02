@@ -14,7 +14,8 @@ class ChampDialogModelMapper(private val itemSuitableMapper: ItemSuitableMapper)
             activated = input.activated,
             skillName = input.skillName,
             itemSuitable = itemSuitableMapper.mapList(input.suitableItem),
-            linkSkillAvatar = input.linkSkillAvatar
+            linkSkillAvatar = input.linkSkillAvatar,
+            star = input.star
         )
     }
 }

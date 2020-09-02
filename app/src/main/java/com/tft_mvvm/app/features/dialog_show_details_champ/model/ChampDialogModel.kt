@@ -10,12 +10,13 @@ data class ChampDialogModel(
     val linkChampCover: String,
     val linkSkillAvatar: String,
     val cost: String,
-    val itemSuitable: List<Item>
-){
+    val itemSuitable: List<Item>,
+    val star: String
+) {
     @Parcelize
     data class Item(
         val id: String,
         val itemName: String,
         val itemAvatar: String
-    ):Parcelable
+    ) : Parcelable
 }

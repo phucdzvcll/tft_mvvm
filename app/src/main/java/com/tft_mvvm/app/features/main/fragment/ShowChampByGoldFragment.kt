@@ -61,7 +61,11 @@ class ShowChampByGoldFragment : Fragment(),
         startActivity(DetailsChampActivity.newIntent(requireContext(), id))
     }
 
-    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
+    override fun onClickListenerForChampInTeam(
+        id: String,
+        listItem: List<ChampDialogModel.Item>,
+        star: String
+    ) {
     }
 
 }

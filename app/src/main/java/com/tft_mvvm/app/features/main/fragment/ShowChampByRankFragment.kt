@@ -73,6 +73,10 @@ class ShowChampByRankFragment : Fragment(),
         dialog.show(childFragmentManager, "DialogShowDetailsChamp")
     }
 
-    override fun onClickListenerForChampInTeam(id: String, listItem: List<ChampDialogModel.Item>) {
+    override fun onClickListenerForChampInTeam(
+        id: String,
+        listItem: List<ChampDialogModel.Item>,
+        star: String
+    ) {
     }
 }

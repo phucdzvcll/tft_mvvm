@@ -55,7 +55,8 @@ class AdapterShowChampInTeam(
             itemView.setOnClickListener {
                 onItemClickListener.onClickListenerForChampInTeam(
                     id = champ.id,
-                    listItem = listItem
+                    listItem = listItem,
+                    star = champ.threeStar
                 )
             }
         }
