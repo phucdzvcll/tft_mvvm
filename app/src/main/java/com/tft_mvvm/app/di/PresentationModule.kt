@@ -56,6 +56,7 @@ val presentationModule = module {
             getTeamRecommendForChampUseCase = get(),
             teamRecommendForChampMapper = get(),
             classAndOriginContentMapper = get(),
+            appDispatchers = get(),
             itemHeaderMapper = get()
         )
     }
@@ -63,6 +64,7 @@ val presentationModule = module {
     viewModel {
         ShowChampByGoldViewModel(
             listChampsUseCase = get(),
+            appDispatchers = get(),
             champMapper = get()
         )
     }
@@ -70,6 +72,7 @@ val presentationModule = module {
     viewModel {
         ShowChampByRankViewModel(
             listChampsUseCase = get(),
+            appDispatchers = get(),
             champMapper = get()
         )
     }
@@ -77,6 +80,7 @@ val presentationModule = module {
     viewModel {
         ShowTeamRecommendViewModel(
             getListTeamBuilderUseCase = get(),
+            appDispatchers = get(),
             teamBuilderRecommendMapper = get()
         )
     }
@@ -84,6 +88,7 @@ val presentationModule = module {
     viewModel {
         DialogShowDetailsChampViewModel(
             champDialogModelMapper = get(),
+            appDispatchers = get(),
             getChampByIdUseCase = get()
         )
     }

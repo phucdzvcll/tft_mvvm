@@ -1,11 +1,13 @@
 package com.tft_mvvm.data.features.champs.di
 
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.data.exception_interceptor.RemoteExceptionInterceptor
 import com.tft_mvvm.data.features.champs.mapper.*
 import com.tft_mvvm.data.features.champs.repository.RepoRepositoryImpl
 import com.tft_mvvm.data.features.champs.service.ApiService
 import com.tft_mvvm.data.local.database.ChampRoomDatabase
 import com.tft_mvvm.domain.features.repository.RepoRepository
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -52,6 +54,8 @@ fun dataModule(baseUrl: String) = module {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
+
+    single { AppDispatchers(Dispatchers.Main, Dispatchers.IO) }
 
     single {
 

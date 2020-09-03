@@ -1,7 +1,5 @@
 package com.tft_mvvm.app.features.details.viewmodel
 
-//import com.tft_mvvm.app.mapper.ClassOrOriginMapper
-
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,10 +9,10 @@ import com.tft_mvvm.app.features.details.mapper.ClassAndOriginContentMapper
 import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
 import com.tft_mvvm.app.features.details.mapper.TeamRecommendForChampMapper
 import com.tft_mvvm.app.features.details.model.ChampDetailsModel
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetChampByIdUseCase
 import com.tft_mvvm.domain.features.usecase.GetClassAndOriginContentUseCase
 import com.tft_mvvm.domain.features.usecase.GetTeamRecommendForChampUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,6 +22,7 @@ class DetailsViewModel(
     private val getTeamRecommendForChampUseCase: GetTeamRecommendForChampUseCase,
     private val teamRecommendForChampMapper: TeamRecommendForChampMapper,
     private val itemHeaderMapper: ItemHeaderMapper,
+    private val appDispatchers: AppDispatchers,
     private val classAndOriginContentMapper: ClassAndOriginContentMapper
 ) : BaseViewModel() {
     private val champDetailsModelLiveData = MutableLiveData<ChampDetailsModel>()
@@ -38,8 +37,8 @@ class DetailsViewModel(
         )
 
     fun getChampById(id: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
+        viewModelScope.launch(appDispatchers.main) {
+            val dbResult = withContext(appDispatchers.io) {
                 getChampByIdUseCase.execute(
                     GetChampByIdUseCase.GetChampByIdUseCaseParam(
                         id
@@ -65,8 +64,8 @@ class DetailsViewModel(
     private fun getListClassAndOriginContent(
         listClassAndOriginName: List<String>
     ) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
+        viewModelScope.launch(appDispatchers.main) {
+            val dbResult = withContext(appDispatchers.io) {
                 getClassAndOriginContentUseCase.execute(
                     GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
                         listClassOrOriginName = listClassAndOriginName
@@ -83,8 +82,8 @@ class DetailsViewModel(
 
 
     private fun getTeamRecommendForChampLiveData(id: String) =
-        viewModelScope.launch(Dispatchers.Main) {
-            val dbResult = withContext(Dispatchers.IO) {
+        viewModelScope.launch(appDispatchers.main) {
+            val dbResult = withContext(appDispatchers.io) {
                 getTeamRecommendForChampUseCase.execute(
                     GetTeamRecommendForChampUseCase.GetTeamRecommendForChampUseCaseParam(
                         id = id

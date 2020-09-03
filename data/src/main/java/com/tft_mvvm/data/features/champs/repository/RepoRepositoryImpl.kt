@@ -1,6 +1,5 @@
 package com.tft_mvvm.data.features.champs.repository
 
-import android.util.Log
 import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.example.common_jvm.function.Either.Companion.runSuspendWithCatchError
@@ -198,7 +197,7 @@ class RepoRepositoryImpl(
                 listChamp.add(
                     createChamp(
                         getChampByIdInternal(listChampDBO, team.listIdChamp[idChamp]),
-                        team.listIdChampThreeStar[idChamp],
+                        team.listStar[idChamp],
                         listItem
                     )
                 )
@@ -206,7 +205,7 @@ class RepoRepositoryImpl(
             listTeamBuilder.add(
                 TeamBuilderListEntity.TeamsBuilder(
                     name = team.nameTeam,
-                    champs = ChampListEntity(listChamp)
+                    champEntity = ChampListEntity(listChamp)
                 )
             )
         }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withContext
 
 class ShowChampByRankViewModel(
     private val listChampsUseCase: GetListChampsUseCase,
+    private val appDispatchers: AppDispatchers,
     private val champMapper: ChampMapper
 ) : BaseViewModel() {
 
@@ -22,9 +24,9 @@ class ShowChampByRankViewModel(
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getChamps(isForceLoadData: Boolean) =
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(appDispatchers.main) {
             isLoadingLiveData.value = true
-            val champResult = withContext(Dispatchers.IO) {
+            val champResult = withContext(appDispatchers.io) {
                 listChampsUseCase.execute(
                     GetListChampsUseCase.GetAllChampUseCaseParam(
                         isForceLoadData
@@ -32,10 +34,9 @@ class ShowChampByRankViewModel(
                 )
             }
             champResult.either({
-                //TODO error handle
+                champByRankLiveData.value = null
                 isLoadingLiveData.value = false
             }) { (champs) ->
-                Log.d("PHUC", "$champs")
                 champByRankLiveData.value =
                     champMapper.mapList(champs.sortedBy { champ -> champ.rankChamp })
                 isLoadingLiveData.value = false

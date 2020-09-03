@@ -9,7 +9,7 @@ class TeamRecommendForChampMapper(private val champOfChampDetailsMapper: ChampOf
     override fun map(input: TeamBuilderListEntity.TeamsBuilder): ChampDetailsModel.TeamRecommend {
         return ChampDetailsModel.TeamRecommend(
             name = input.name,
-            listChamp = champOfChampDetailsMapper.mapList(input.champs.champs)
+            listChamp = champOfChampDetailsMapper.mapList(input.champEntity.champs)
         )
     }
 }

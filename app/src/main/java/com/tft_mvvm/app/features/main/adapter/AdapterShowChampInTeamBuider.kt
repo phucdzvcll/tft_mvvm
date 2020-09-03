@@ -82,7 +82,6 @@ class AdapterShowChampInTeamBuilder(
         notifyDataSetChanged()
     }
 
-    @Parcelize
     data class Champ(
         val id: String,
         val name: String,
@@ -90,13 +89,12 @@ class AdapterShowChampInTeamBuilder(
         val cost: String,
         val threeStar: String,
         val itemSuitable: List<Item>
-    ) : Parcelable {
-        @Parcelize
+    ) {
         data class Item(
             val id: String,
             val itemName: String,
             val itemAvatar: String
-        ) : Parcelable
+        )
     }
 }
 

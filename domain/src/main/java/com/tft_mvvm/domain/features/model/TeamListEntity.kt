@@ -5,7 +5,7 @@ data class TeamListEntity(val teams: List<Team>) {
         val nameTeam: String,
         val idTeam: String,
         val listIdSuitable : List<String>,
-        val listIdChampThreeStar :List<String>,
+        val listStar :List<String>,
         val listIdChamp: List<String>
     )
 

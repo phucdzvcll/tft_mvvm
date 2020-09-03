@@ -2,20 +2,19 @@ package com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.common_jvm.exception.Failure
 import com.example.common_jvm.function.Either
 import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ChampDialogModelMapper
+import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
+import com.tft_mvvm.app.features.fake.ChampDialogFake
 import com.tft_mvvm.app.features.fake.ChampEntityFake
-import com.tft_mvvm.app.features.fake.ChampFake
-import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetChampByIdUseCase
-import io.mockk.coEvery
-import io.mockk.mockk
-import org.junit.Test
-
-import org.junit.Assert.*
+import io.mockk.*
+import kotlinx.coroutines.Dispatchers
 import org.junit.Before
 import org.junit.Rule
-import java.util.*
+import org.junit.Test
 
 class DialogShowDetailsChampViewModelTest {
     @Rule
@@ -25,27 +24,54 @@ class DialogShowDetailsChampViewModelTest {
     private lateinit var getChampByIdUseCase: GetChampByIdUseCase
     private lateinit var champDialogModelMapper: ChampDialogModelMapper
     private lateinit var viewModel: DialogShowDetailsChampViewModel
+    private val appDispatchers = AppDispatchers(Dispatchers.Unconfined, Dispatchers.Unconfined)
+
     @Before
     fun setup() {
         getChampByIdUseCase = mockk()
         champDialogModelMapper = mockk()
         viewModel = DialogShowDetailsChampViewModel(
             getChampByIdUseCase = getChampByIdUseCase,
+            appDispatchers = appDispatchers,
             champDialogModelMapper = champDialogModelMapper
         )
     }
 
     @Test
-    fun getChampById() {
-        val id = "1"
+    fun `getChampById success`() {
+        //GIVEN
+        val observerResult = mockk<Observer<ChampDialogModel>>(relaxed = true)
         val champEntity = ChampEntityFake.provideChampEntity("1")
-        val champ = ChampFake.provideChamp("1")
-        val observerResult = mockk<Observer<Champ>>()
-        val result = Either.Success(champ)
+        val result = Either.Success(champEntity)
+        val champDialogModel = ChampDialogFake.provideChampDialog("1")
 
+        coEvery { getChampByIdUseCase.execute(GetChampByIdUseCase.GetChampByIdUseCaseParam("1")) } returns result
+        every { champDialogModelMapper.map(champEntity) } returns champDialogModel
+        viewModel.getChampByDialogLiveData().observeForever(observerResult)
+
+        //WHEN
+        viewModel.getChampById("1")
+        //THEN
+        verify {
+            observerResult.onChanged(champDialogModel)
+        }
+        confirmVerified(observerResult)
     }
 
     @Test
-    fun getChampByDialogLiveData() {
+    fun `getChampById error`() {
+        val observerResult = mockk<Observer<ChampDialogModel>>(relaxed = true)
+        val error = Either.Fail(Failure.ConnectionTimeout)
+        viewModel.getChampByDialogLiveData().observeForever(observerResult)
+
+        coEvery { getChampByIdUseCase.execute(GetChampByIdUseCase.GetChampByIdUseCaseParam("1")) } returns error
+
+        viewModel.getChampById("1")
+
+        verify {
+            observerResult.onChanged(null)
+        }
+
+        confirmVerified(observerResult)
     }
 }

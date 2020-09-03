@@ -1,15 +1,21 @@
 package com.tft_mvvm.app.features.details.viewmodel
 
-import org.junit.Test
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+
+import androidx.lifecycle.Observer
+import com.example.common_jvm.function.Either
 import com.tft_mvvm.app.features.details.mapper.ClassAndOriginContentMapper
 import com.tft_mvvm.app.features.details.mapper.ItemHeaderMapper
 import com.tft_mvvm.app.features.details.mapper.TeamRecommendForChampMapper
+import com.tft_mvvm.app.features.fake.ChampEntityFake
+import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetChampByIdUseCase
 import com.tft_mvvm.domain.features.usecase.GetClassAndOriginContentUseCase
 import com.tft_mvvm.domain.features.usecase.GetTeamRecommendForChampUseCase
+import io.mockk.coEvery
+import io.mockk.mockk
 import org.junit.Rule
-import io.mockk.*
+import org.junit.Test
 
 class DetailsViewModelTest {
     private val getChampByIdUseCase: GetChampByIdUseCase = mockk()
@@ -17,6 +23,7 @@ class DetailsViewModelTest {
     private val getTeamRecommendForChampUseCase: GetTeamRecommendForChampUseCase = mockk()
     private val teamRecommendForChampMapper: TeamRecommendForChampMapper = mockk()
     private val itemHeaderMapper: ItemHeaderMapper = mockk()
+    private val appDispatchers : AppDispatchers= mockk()
     private val classAndOriginContentMapper: ClassAndOriginContentMapper = mockk()
 
     val detailsViewModel = DetailsViewModel(
@@ -25,15 +32,21 @@ class DetailsViewModelTest {
         getTeamRecommendForChampUseCase = getTeamRecommendForChampUseCase,
         teamRecommendForChampMapper = teamRecommendForChampMapper,
         itemHeaderMapper = itemHeaderMapper,
+        appDispatchers = appDispatchers,
         classAndOriginContentMapper = classAndOriginContentMapper
     )
 
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
+//    @Rule
+//    @JvmField
+//    //val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun getChampById() {
+        val id = "1"
+
+        val result = Either.Success(ChampEntityFake.provideChampEntity("1"))
+        coEvery { getChampByIdUseCase.execute(GetChampByIdUseCase.GetChampByIdUseCaseParam(id)) } returns result
+
     }
 
     @Test

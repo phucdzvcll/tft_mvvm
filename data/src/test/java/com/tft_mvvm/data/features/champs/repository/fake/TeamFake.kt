@@ -20,7 +20,7 @@ object TeamFake {
         listIdSuitable = listOf("item0,item1", "item0,item1", "", ""),
         idTeam = "$index",
         listIdChamp = listOf("1230", "1231", "1232", "1233"),
-        listIdChampThreeStar = listOf("1", "1", "3", "3")
+        listStar = listOf("1", "1", "3", "3")
     )
 
     fun provideListTeamListChampEmpty(number: Int): TeamListEntity {
@@ -39,7 +39,7 @@ object TeamFake {
         listIdSuitable = listOf("item0,item1", "item0,item1"),
         idTeam = "$index",
         listIdChamp = listOf(),
-        listIdChampThreeStar = listOf()
+        listStar = listOf()
     )
 
     private fun provideTeamGetTeamForChamp(index: Int = 1) = TeamListEntity.Team(
@@ -47,6 +47,6 @@ object TeamFake {
         listIdSuitable = listOf("item0,item1", "item0,item1", "", ""),
         idTeam = "$index",
         listIdChamp = listOf("1230", "1231", "1232", "1233"),
-        listIdChampThreeStar = listOf("1", "1", "3", "3")
+        listStar = listOf("1", "1", "3", "3")
     )
 }

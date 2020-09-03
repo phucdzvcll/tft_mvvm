@@ -5,11 +5,13 @@ import com.tft_mvvm.domain.features.model.ChampListEntity
 object ChampEntityFake {
 
     fun provideChampEntityList(number: Int) = mutableListOf<ChampListEntity.Champ>().apply {
-        repeat(number) { index -> add(
-            provideChampEntity(
-                index.toString()
+        repeat(number) { index ->
+            add(
+                provideChampEntity(
+                    index.toString()
+                )
             )
-        ) }
+        }
     }.toList()
 
     fun provideChampEntity(index: String = "1") = ChampListEntity.Champ(
@@ -27,4 +29,32 @@ object ChampEntityFake {
         suitableItem = listOf()
     )
 
+    fun provideChampEntityListHaveItem(number: Int) = mutableListOf<ChampListEntity.Champ>().apply {
+        repeat(number) { index ->
+            add(
+                provideChampEntityHaveItem(
+                    index
+                )
+            )
+        }
+    }.toList()
+
+    fun provideChampEntityHaveItem(index: Int =1) = ChampListEntity.Champ(
+        name = "name$index",
+        id = "id_$index",
+        originAndClassName = listOf("origin$index", "class$index"),
+        star = "1",
+        cost = "1$index",
+        activated = "activated $index",
+        linkChampCover = "http://linkchamp$index.google/",
+        linkSkillAvatar = "http://linkskill$index.google/",
+        skillName = "skill $index",
+        linkImg = "http://linkimg$index.google/",
+        rankChamp = "rank$index",
+        suitableItem = listOf(
+            ItemEntityFake.provideItemEntity(index+1),
+            ItemEntityFake.provideItemEntity(index+2),
+            ItemEntityFake.provideItemEntity(index+3)
+        )
+    )
 }

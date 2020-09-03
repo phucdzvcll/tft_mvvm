@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.mapper.ChampMapper
 import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 
 class ShowChampByGoldViewModel(
     private val listChampsUseCase: GetListChampsUseCase,
+    private val appDispatchers: AppDispatchers,
     private val champMapper: ChampMapper
 ) : BaseViewModel() {
 
@@ -21,9 +23,9 @@ class ShowChampByGoldViewModel(
     private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getChamps(isForceLoadData: Boolean) =
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(appDispatchers.main) {
             isLoadingLiveData.value = true
-            val champResult = withContext(Dispatchers.IO) {
+            val champResult = withContext(appDispatchers.io) {
                 listChampsUseCase.execute(
                     GetListChampsUseCase.GetAllChampUseCaseParam(
                         isForceLoadData
@@ -31,7 +33,7 @@ class ShowChampByGoldViewModel(
                 )
             }
             champResult.either({
-                //TODO error handle
+                champByGoldLiveData.value = null
                 isLoadingLiveData.value = false
             }) {
                 champByGoldLiveData.value =

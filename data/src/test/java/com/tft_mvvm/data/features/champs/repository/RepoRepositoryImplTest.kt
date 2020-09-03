@@ -134,7 +134,6 @@ class RepoRepositoryImplTest {
     fun `getAllChamp isForceLoadData-false localChamps-not-empty`() = runBlocking {
         //given
         val isForceLoadData = false
-        val listChampResponse = ChampResponseFake.provideChampResponseList(10)
         val champListDBO = ChampListDBO(champDBOs = ChampDBOFake.provideChampDBOList(10))
         val champListEntity = ChampEntityFake.provideChampEntityList(10)
 
@@ -601,7 +600,7 @@ class RepoRepositoryImplTest {
             expected.add(
                 TeamBuilderListEntity.TeamsBuilder(
                     name = team.nameTeam,
-                    champs = ChampListEntity(listOf())
+                    champEntity = ChampListEntity(listOf())
                 )
             )
         }
@@ -624,7 +623,7 @@ class RepoRepositoryImplTest {
             expected.add(
                 TeamBuilderListEntity.TeamsBuilder(
                     name = team.nameTeam,
-                    champs = ChampListEntity(champs = listChampEntityResult)
+                    champEntity = ChampListEntity(champs = listChampEntityResult)
                 )
             )
         }
@@ -787,7 +786,7 @@ class RepoRepositoryImplTest {
             listTeamBuilder.add(
                 TeamBuilderListEntity.TeamsBuilder(
                     name = team.nameTeam,
-                    champs = ChampListEntity(champs = listChampEntityResult)
+                    champEntity = ChampListEntity(champs = listChampEntityResult)
                 )
             )
         }
@@ -962,7 +961,7 @@ class RepoRepositoryImplTest {
     }
 
     @Test
-    fun `getTeamRecommendForChamp succes`() = runBlocking {
+    fun `getTeamRecommendForChamp success`() = runBlocking {
         val id = "1231"
         val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
         val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))

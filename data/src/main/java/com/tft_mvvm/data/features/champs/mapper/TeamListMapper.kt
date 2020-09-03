@@ -9,7 +9,7 @@ class TeamListMapper : Mapper<TeamListDBO.TeamDBO, TeamListEntity.Team>() {
         return TeamListEntity.Team(
             nameTeam = input.nameTeam,
             idTeam = input.idTeam,
-            listIdChampThreeStar = (input.listStar).split(","),
+            listStar = (input.listStar).split(","),
             listIdSuitable = input.idItemSuitable.split("/"),
             listIdChamp = input.listIdChamp.split(",")
         )

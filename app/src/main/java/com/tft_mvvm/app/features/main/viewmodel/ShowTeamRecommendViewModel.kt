@@ -6,22 +6,23 @@ import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
 import com.tft_mvvm.app.features.main.adapter.AdapterShowRecommendTeamBuilder
 import com.tft_mvvm.app.features.main.mapper.TeamBuilderRecommendMapper
+import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetListTeamBuilderUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShowTeamRecommendViewModel(
     private val getListTeamBuilderUseCase: GetListTeamBuilderUseCase,
+    private val appDispatchers: AppDispatchers,
     private val teamBuilderRecommendMapper: TeamBuilderRecommendMapper
 ) : BaseViewModel() {
 
     private val listTeamBuilderLiveData: MutableLiveData<List<AdapterShowRecommendTeamBuilder.TeamBuilder>> =
         MutableLiveData()
     private val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    fun getListTeamBuilder(isForceLoadData: Boolean) = viewModelScope.launch(Dispatchers.Main) {
+    fun getListTeamBuilder(isForceLoadData: Boolean) = viewModelScope.launch(appDispatchers.main) {
         isLoading.value = true
-        val dbResult = withContext(Dispatchers.IO) {
+        val dbResult = withContext(appDispatchers.io) {
             getListTeamBuilderUseCase.execute(
                 GetListTeamBuilderUseCase.GetTeamUseCaseParam(
                     isForceLoadData
@@ -29,7 +30,7 @@ class ShowTeamRecommendViewModel(
             )
         }
         dbResult.either({
-            //TODO handle error
+            listTeamBuilderLiveData.value = null
             isLoading.value = false
         }) {
             listTeamBuilderLiveData.value = teamBuilderRecommendMapper.mapList(it.teamBuilders)
