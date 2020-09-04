@@ -21,6 +21,8 @@ data class ClassAndOrigin(
     val classOrOriginName: GsxNameClassAndOrigin?,
     @SerializedName("gsx\$bonus")
     val bonus: GsxNameClassAndOrigin?,
+    @SerializedName("gsx\$imgurl")
+    val imgUrl: GsxNameClassAndOrigin?,
     @SerializedName("gsx\$content")
     val content: GsxNameClassAndOrigin?
 )

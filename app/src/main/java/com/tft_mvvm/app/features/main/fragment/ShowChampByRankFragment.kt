@@ -32,22 +32,19 @@ class ShowChampByRankFragment : Fragment(),
         super.onActivityCreated(savedInstanceState)
         setupUI()
         observeViewModel()
-        showChampByRankViewModel.getChamps(true)
+        showChampByRankViewModel.getAllClassAndOriginName()
     }
 
     private fun setupUI() {
-        swipeRefreshLayoutByRank?.setOnRefreshListener {
-            showChampByRankViewModel.getChamps(true)
-        }
         adapterShowChampByRank =
             AdapterShowChampByRank(
                 this
             )
-        val mGridLayoutManager = GridLayoutManager(requireContext(), 6)
+        val mGridLayoutManager = GridLayoutManager(requireContext(), 8)
         mGridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (adapterShowChampByRank?.getItemViewType(position) == adapterShowChampByRank?.HEADER_TYPE) {
-                    6
+                    8
                 } else {
                     1
                 }
@@ -63,9 +60,6 @@ class ShowChampByRankFragment : Fragment(),
             .observe(viewLifecycleOwner, Observer {
                 adapterShowChampByRank?.setData(it)
             })
-        showChampByRankViewModel.isRefresh().observe(viewLifecycleOwner, Observer {
-            swipeRefreshLayoutByRank?.isRefreshing = it
-        })
     }
 
     override fun onClickListener(id: String) {

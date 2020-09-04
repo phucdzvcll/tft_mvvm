@@ -1,15 +1,12 @@
 package com.tft_mvvm.app.features.main.adapter
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
-import com.tft_mvvm.app.model.Champ
-import com.tft_mvvm.app.model.ItemRv
+import com.tft_mvvm.app.features.main.model.ClassAndOriginContent
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
@@ -37,7 +34,7 @@ class AdapterShowChampByRank(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (listItem[position] is Champ) {
+        return if (listItem[position] is ItemViewHolder.Champ) {
             ITEM_TYPE
         } else {
             HEADER_TYPE
@@ -49,7 +46,10 @@ class AdapterShowChampByRank(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemViewType = getItemViewType(position)
         if (itemViewType == ITEM_TYPE) {
-            (holder as ItemViewHolder).bind(listItem[position] as Champ, onItemClickListener)
+            (holder as ItemViewHolder).bind(
+                listItem[position] as ItemViewHolder.Champ,
+                onItemClickListener
+            )
         } else {
             (holder as SectionHeaderViewHolder).bind(listItem[position] as SectionHeaderViewHolder.SectionModel)
         }
@@ -57,60 +57,66 @@ class AdapterShowChampByRank(
 
     class SectionHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(header: SectionModel) {
-            itemView.tvTitle.text =header.title
-            when (header.title) {
-                "Bậc S" -> itemView.tvTitle.setTextColor(Color.YELLOW)
-                "Bậc A" -> itemView.tvTitle.setTextColor(Color.RED)
-                "Bậc B" -> itemView.tvTitle.setTextColor(Color.BLUE)
-                "Bậc C" -> itemView.tvTitle.setTextColor(Color.GREEN)
-            }
+            itemView.tvTitle.text = header.title
+            Glide.with(itemView.img_class_origin_content.context)
+                .load(header.imgUrl)
+                .into(itemView.img_class_origin_content)
         }
 
         data class SectionModel(
-            val title: String
+            val title: String,
+            val imgUrl: String
         ) : ItemRv()
 
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(champ: Champ, onItemClickListener: OnItemClickListener) {
-            Glide.with(itemView.imgShowByOriginClass.context)
+            Glide.with(itemView.imgShowChampByOriginClass.context)
                 .load(champ.imgUrl)
-                .into(itemView.imgShowByOriginClass)
+                .into(itemView.imgShowChampByOriginClass)
             when (champ.cost) {
-                "1" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_1_gold)
-                "2" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_2_gold)
-                "3" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_3_gold)
-                "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
-                "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
+                "1" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_1_gold)
+                "2" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_2_gold)
+                "3" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_3_gold)
+                "4" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
+                "5" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
             itemView.setOnClickListener { onItemClickListener.onClickListener(champ.id) }
         }
+
+        data class Champ(
+            val imgUrl: String,
+            val cost: String,
+            val id: String,
+            val classAndOriginName: List<String>
+        ) : ItemRv()
     }
 
-    fun setData(list: List<Champ>) {
-        val listChampRankS = list.filter { champ -> champ.rank == "S" }
-        val listChampRankA = list.filter { champ -> champ.rank == "A" }
-        val listChampRankB = list.filter { champ -> champ.rank == "B" }
-        val listChampRankC = list.filter { champ -> champ.rank == "C" }
+    fun setData(list: List<ClassAndOriginContent>) {
         listItem.clear()
-        if (listChampRankS.isNotEmpty()) {
-            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc S"))
-            listItem.addAll(listChampRankS)
-        }
-        if (listChampRankA.isNotEmpty()) {
-            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc A"))
-            listItem.addAll(listChampRankA)
-        }
-        if (listChampRankB.isNotEmpty()) {
-            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc B"))
-            listItem.addAll(listChampRankB)
-        }
-        if (listChampRankC.isNotEmpty()) {
-            listItem.add(SectionHeaderViewHolder.SectionModel(title = "Bậc C"))
-            listItem.addAll(listChampRankC)
+        list.forEach { classAndOriginContent ->
+            listItem.add(
+                SectionHeaderViewHolder.SectionModel(
+                    classAndOriginContent.classOrOriginName,
+                    classAndOriginContent.imgUrl
+                )
+            )
+            val listChamp = classAndOriginContent.listChamp.sortedBy { champ -> champ.cost }
+            listChamp.forEach { champ ->
+                listItem.add(champMapper(champ))
+            }
         }
         notifyDataSetChanged()
     }
 
+    private fun champMapper(champ: ClassAndOriginContent.Champ) = ItemViewHolder.Champ(
+        id = champ.id,
+        cost = champ.cost,
+        classAndOriginName = champ.classAndOriginName,
+        imgUrl = champ.imgUrl
+    )
+
+    abstract class ItemRv {
+    }
 }

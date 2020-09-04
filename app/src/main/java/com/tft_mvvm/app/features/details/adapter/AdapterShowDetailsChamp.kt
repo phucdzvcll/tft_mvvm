@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.details.model.ChampDetailsModel
-import com.tft_mvvm.app.model.ItemRv
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.header_details_champ.view.*
 import kotlinx.android.synthetic.main.iteam_team_recommend.view.*
@@ -166,6 +165,9 @@ class AdapterShowDetailsChamp(
             adapterShowByOriginAndClass.addData(classAndOriginContent.listChamp)
             itemView.rv_origin_or_class.layoutManager = GridLayoutManager(itemView.context, 5)
             itemView.rv_origin_or_class.adapter = adapterShowByOriginAndClass
+            Glide.with(itemView.img_class_origin.context)
+                .load(classAndOriginContent.imgUrl)
+                .into(itemView.img_class_origin)
             val size = classAndOriginContent.bonus.size
             if (size > 0) {
                 val itemBonus = classAndOriginContent.bonus[0].split(":")
@@ -197,6 +199,7 @@ class AdapterShowDetailsChamp(
             val listChamp: List<Champ>,
             val classOrOriginName: String,
             val bonus: List<String>,
+            val imgUrl: String,
             val content: String
         ) : ItemRv()
 
@@ -316,6 +319,7 @@ class AdapterShowDetailsChamp(
             classOrOriginName = classAndOriginContent.classOrOriginName,
             bonus = classAndOriginContent.bonus,
             content = classAndOriginContent.content,
+            imgUrl = classAndOriginContent.imgUrl,
             listChamp = champAdapterDetailsMapper(classAndOriginContent.listChamp)
         )
     }
@@ -342,5 +346,7 @@ class AdapterShowDetailsChamp(
             name = teamRecommend.name,
             listChamp = champAdapterDetailsMapper(teamRecommend.listChamp)
         )
+    }
+    abstract class ItemRv {
     }
 }

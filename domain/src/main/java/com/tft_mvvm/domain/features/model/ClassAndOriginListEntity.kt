@@ -5,6 +5,7 @@ data class ClassAndOriginListEntity(val listClassAndOrigin: List<ClassAndOrigin>
         val classOrOriginName: String,
         val bonus: String,
         val champEntity : ChampListEntity,
+        val imgUrl:String,
         val content: String
     )
 }

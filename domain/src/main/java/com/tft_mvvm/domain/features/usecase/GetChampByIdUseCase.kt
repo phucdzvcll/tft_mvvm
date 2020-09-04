@@ -9,7 +9,7 @@ import com.tft_mvvm.domain.features.repository.RepoRepository
 
 
 class GetChampByIdUseCase(private val repository: RepoRepository) :
-    UseCase<GetChampByIdUseCase.GetChampByIdUseCaseParam, Either<Failure, ChampListEntity.Champ>>() {
+UseCase<GetChampByIdUseCase.GetChampByIdUseCaseParam, Either<Failure, ChampListEntity.Champ>>() {
     data class GetChampByIdUseCaseParam(val id: String) : UseCaseParams
 
     override suspend fun executeInternal(params: GetChampByIdUseCaseParam): Either<Failure, ChampListEntity.Champ> {

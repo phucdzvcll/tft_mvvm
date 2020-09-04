@@ -23,6 +23,8 @@ interface RepoRepository {
         id: String
     ): Either<Failure, ChampListEntity.Champ>
 
+    suspend fun getAllClassAndOriginName(): Either<Failure, List<String>>
+
     suspend fun getTeamRecommendForChamp(
         id: String
     ): Either<Failure, TeamBuilderListEntity>

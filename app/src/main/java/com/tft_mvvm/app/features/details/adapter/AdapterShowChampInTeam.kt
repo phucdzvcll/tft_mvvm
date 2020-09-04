@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.tft_mvvm.app.base.OnItemClickListener
 import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
 import com.tft_mvvm.champ.R
-import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
+import kotlinx.android.synthetic.main.item_show_champ_in_team.view.*
 
 class AdapterShowChampInTeam(
     private val champs: ArrayList<AdapterShowDetailsChamp.Champ>,
@@ -17,15 +17,15 @@ class AdapterShowChampInTeam(
 
     class ChampOfTeamRecommendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(champ: AdapterShowDetailsChamp.Champ, onItemClickListener: OnItemClickListener) {
-            Glide.with(itemView.imgShowByOriginClass.context)
+            Glide.with(itemView.imgShowChampInTeam.context)
                 .load(champ.imgUrl)
-                .into(itemView.imgShowByOriginClass)
+                .into(itemView.imgShowChampInTeam)
             when (champ.cost) {
-                "1" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_1_gold)
-                "2" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_2_gold)
-                "3" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_3_gold)
-                "4" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
-                "5" -> itemView.imgShowByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
+                "1" -> itemView.imgShowChampInTeam.setBackgroundResource(R.drawable.background_1_gold)
+                "2" -> itemView.imgShowChampInTeam.setBackgroundResource(R.drawable.background_2_gold)
+                "3" -> itemView.imgShowChampInTeam.setBackgroundResource(R.drawable.background_3_gold)
+                "4" -> itemView.imgShowChampInTeam.setBackgroundResource(R.drawable.background_4_gold)
+                "5" -> itemView.imgShowChampInTeam.setBackgroundResource(R.drawable.background_5_gold)
             }
             if (champ.threeStar=="3") {
                 itemView.three_start.visibility = View.VISIBLE
@@ -74,7 +74,7 @@ class AdapterShowChampInTeam(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ChampOfTeamRecommendViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_show_by_origin_class, parent, false)
+                .inflate(R.layout.item_show_champ_in_team, parent, false)
         )
     }
 

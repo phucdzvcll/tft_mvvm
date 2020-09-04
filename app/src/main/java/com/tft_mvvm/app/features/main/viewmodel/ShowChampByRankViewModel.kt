@@ -1,53 +1,60 @@
 package com.tft_mvvm.app.features.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
-import com.tft_mvvm.app.mapper.ChampMapper
-import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.app.features.main.mapper.ClassAndOriginContentMapper
+import com.tft_mvvm.app.features.main.model.ClassAndOriginContent
 import com.tft_mvvm.data.common.AppDispatchers
-import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
-import kotlinx.coroutines.Dispatchers
+import com.tft_mvvm.domain.base.usecase.UseCaseParams
+import com.tft_mvvm.domain.features.usecase.GetAllClassAndOriginName
+import com.tft_mvvm.domain.features.usecase.GetClassAndOriginContentUseCase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShowChampByRankViewModel(
-    private val listChampsUseCase: GetListChampsUseCase,
     private val appDispatchers: AppDispatchers,
-    private val champMapper: ChampMapper
+    private val getAllClassAndOriginName: GetAllClassAndOriginName,
+    private val getClassAndOriginContentUseCase: GetClassAndOriginContentUseCase,
+    private val classAndOriginContentMapper: ClassAndOriginContentMapper
 ) : BaseViewModel() {
 
-    private val champByRankLiveData: MutableLiveData<List<Champ>> =
+    private val listClassAneOriginContentLiveData: MutableLiveData<List<ClassAndOriginContent>> =
         MutableLiveData()
-    private val isLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun getChamps(isForceLoadData: Boolean) =
+    fun getAllClassAndOriginName() = viewModelScope.launch(appDispatchers.main) {
+        val dbResult = withContext(appDispatchers.io) {
+            getAllClassAndOriginName.execute(UseCaseParams.Empty)
+        }
+        dbResult.either({
+            getListClassAndOriginContent(listOf())
+        })
+        {
+            getListClassAndOriginContent(it)
+        }
+    }
+
+    private fun getListClassAndOriginContent(listName: List<String>) =
         viewModelScope.launch(appDispatchers.main) {
-            isLoadingLiveData.value = true
-            val champResult = withContext(appDispatchers.io) {
-                listChampsUseCase.execute(
-                    GetListChampsUseCase.GetAllChampUseCaseParam(
-                        isForceLoadData
+            val dbResult = withContext(appDispatchers.io) {
+                getClassAndOriginContentUseCase.execute(
+                    GetClassAndOriginContentUseCase.GetClassAnOriginContentParam(
+                        listName
                     )
                 )
             }
-            champResult.either({
-                champByRankLiveData.value = null
-                isLoadingLiveData.value = false
-            }) { (champs) ->
-                champByRankLiveData.value =
-                    champMapper.mapList(champs.sortedBy { champ -> champ.rankChamp })
-                isLoadingLiveData.value = false
+            dbResult.either({
+                listClassAneOriginContentLiveData.value = null
+            })
+            {
+                listClassAneOriginContentLiveData.value =
+                    classAndOriginContentMapper.mapList(it.listClassAndOrigin)
+                        .sortedBy { classAndOrigin -> classAndOrigin.classOrOriginName }
             }
         }
 
-    fun getChampsLiveData(): LiveData<List<Champ>> {
-        return champByRankLiveData
-    }
-
-    fun isRefresh(): LiveData<Boolean> {
-        return isLoadingLiveData
+    fun getChampsLiveData(): LiveData<List<ClassAndOriginContent>> {
+        return listClassAneOriginContentLiveData
     }
 }

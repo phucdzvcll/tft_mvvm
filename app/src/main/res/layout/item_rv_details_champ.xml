@@ -11,72 +11,90 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/origin_or_class_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:textColor="@color/origin_name_color"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+
+        <LinearLayout
+            android:id="@+id/ln_origin_class"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="origin" />
+            app:layout_constraintTop_toTopOf="@+id/origin_or_class_content"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/origin_or_class_name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/origin_name_color"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="origin" />
+
+            <ImageView
+                android:id="@+id/img_class_origin"
+                android:layout_marginTop="4dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="center"
+                tools:src="@tools:sample/avatars[2]" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/origin_or_class_content"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:paddingStart="8dp"
             android:textColor="@color/content_of_classOrOrigin_color"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/origin_or_class_name"
+            app:layout_constraintStart_toEndOf="@+id/ln_origin_class"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="origin content" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_origin_or_class"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/origin_or_class_content"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/ln_origin_class"
+            app:layout_constraintTop_toBottomOf="@+id/origin_or_class_content" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ln_origin_class"
             app:layout_constraintTop_toBottomOf="@+id/rv_origin_or_class">
 
             <LinearLayout
                 android:id="@+id/item_bonus_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                tools:visibility="visible"
-                >
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/item_bonus_count_1"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="72dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_circle"
@@ -89,8 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:paddingStart="30dp"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/item_bonus_color"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -102,15 +119,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/item_bonus_count_2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="72dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_circle"
@@ -123,8 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:paddingStart="30dp"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/item_bonus_color"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -136,15 +151,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/item_bonus_count_3"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="72dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_circle"
@@ -157,8 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:paddingStart="30dp"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/item_bonus_color"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -170,15 +183,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/item_bonus_count_4"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="72dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_circle"
@@ -191,8 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:paddingStart="30dp"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/item_bonus_color"
                     android:textSize="15sp"
                     android:textStyle="bold"

@@ -10,6 +10,7 @@ data class ClassAndOriginListDBO(val classAndOrigins: List<ClassAndOrigin>) {
         var id: Int = 0,
         val classOrOriginName: String,
         val bonus:String,
+        val imgUrl:String,
         val content: String
     )
 }

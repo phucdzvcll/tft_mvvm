@@ -231,6 +231,7 @@ class RepoRepositoryImpl(
                     classOrOriginName = content.classOrOriginName,
                     champEntity = ChampListEntity(champs = champs),
                     content = content.content,
+                    imgUrl = content.imgUrl,
                     bonus = content.bonus
                 )
             )
@@ -249,6 +250,18 @@ class RepoRepositoryImpl(
             val listItem = itemDAO.getItemByListId(listIdItem)
             val champ = createChamp(champDBO, "1", itemListMapper.mapList(listItem))
             return@runSuspendWithCatchError Either.Success(champ)
+        }
+
+    override suspend fun getAllClassAndOriginName() =
+        runSuspendWithCatchError(listOf(remoteExceptionInterceptor)) {
+            if(classAndOriginDAO.getAllClassAndOrigin().isEmpty()){
+                val classAndOriginResponse = classAndOriginDaoEntityMapper.map(apiService.getClassAndOriginList())
+                classAndOriginDAO.insertClassAndOrigin(classAndOriginResponse.classAndOrigins)
+            }
+            val listClassAndOriginDBO = classAndOriginDAO.getAllClassAndOrigin()
+            val listClassAndOriginName = mutableListOf<String>()
+            listClassAndOriginDBO.forEach { listClassAndOriginName.add(it.classOrOriginName) }
+            return@runSuspendWithCatchError Either.Success(listClassAndOriginName)
         }
 
     override suspend fun getTeamRecommendForChamp(id: String) =

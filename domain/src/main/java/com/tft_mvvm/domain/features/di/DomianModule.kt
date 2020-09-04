@@ -27,6 +27,12 @@ val domainModule = module {
     }
 
     single {
+        GetAllClassAndOriginName(
+            repository = get()
+        )
+    }
+
+    single {
         GetTeamRecommendForChampUseCase(
             repoRepository = get()
         )

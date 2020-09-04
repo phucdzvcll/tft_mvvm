@@ -5,25 +5,26 @@ import com.tft_mvvm.app.features.details.viewmodel.DetailsViewModel
 import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ChampDialogModelMapper
 import com.tft_mvvm.app.features.dialog_show_details_champ.mapper.ItemSuitableMapper
 import com.tft_mvvm.app.features.dialog_show_details_champ.viewmodel.DialogShowDetailsChampViewModel
+import com.tft_mvvm.app.features.main.mapper.ChampByGoldMapper
 import com.tft_mvvm.app.features.main.mapper.ChampOfTeamMapper
 import com.tft_mvvm.app.features.main.mapper.ItemOfTeamMapper
 import com.tft_mvvm.app.features.main.mapper.TeamBuilderRecommendMapper
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByGoldViewModel
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByRankViewModel
 import com.tft_mvvm.app.features.main.viewmodel.ShowTeamRecommendViewModel
-import com.tft_mvvm.app.mapper.ChampMapper
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val presentationModule = module {
 
-    factory { ChampMapper() }
     factory {
         TeamBuilderRecommendMapper(
             champOfTeamMapper = get()
         )
     }
+    factory { com.tft_mvvm.app.features.main.mapper.ChampMapper() }
+    factory { ChampByGoldMapper() }
     factory { ItemMapper() }
     factory { ChampDialogModelMapper(itemSuitableMapper = get()) }
     factory { ItemSuitableMapper() }
@@ -49,6 +50,7 @@ val presentationModule = module {
             champOfChampDetailsMapper = get()
         )
     }
+    factory { com.tft_mvvm.app.features.main.mapper.ClassAndOriginContentMapper(get()) }
     viewModel {
         DetailsViewModel(
             getChampByIdUseCase = get(),
@@ -71,9 +73,10 @@ val presentationModule = module {
 
     viewModel {
         ShowChampByRankViewModel(
-            listChampsUseCase = get(),
-            appDispatchers = get(),
-            champMapper = get()
+            classAndOriginContentMapper = get(),
+            getClassAndOriginContentUseCase = get(),
+            getAllClassAndOriginName = get(),
+            appDispatchers = get()
         )
     }
 

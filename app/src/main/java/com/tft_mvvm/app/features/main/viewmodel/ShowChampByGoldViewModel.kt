@@ -4,18 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tft_mvvm.app.base.BaseViewModel
-import com.tft_mvvm.app.mapper.ChampMapper
-import com.tft_mvvm.app.model.Champ
+import com.tft_mvvm.app.features.main.mapper.ChampByGoldMapper
+import com.tft_mvvm.app.features.main.model.Champ
 import com.tft_mvvm.data.common.AppDispatchers
 import com.tft_mvvm.domain.features.usecase.GetListChampsUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShowChampByGoldViewModel(
     private val listChampsUseCase: GetListChampsUseCase,
     private val appDispatchers: AppDispatchers,
-    private val champMapper: ChampMapper
+    private val champMapper: ChampByGoldMapper
 ) : BaseViewModel() {
 
     private val champByGoldLiveData: MutableLiveData<List<Champ>> =

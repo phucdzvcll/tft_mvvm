@@ -19,6 +19,7 @@ data class ChampDetailsModel(
         val listChamp: List<Champ>,
         val classOrOriginName: String,
         val bonus: List<String>,
+        val imgUrl: String,
         val content: String
     )
     data class TeamRecommend(

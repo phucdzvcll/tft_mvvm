@@ -13,6 +13,7 @@ class ClassAndOriginDaoEntityMapper : Mapper<ClassAndOriginListResponse?, ClassA
                     ClassAndOriginListDBO.ClassAndOrigin(
                         classOrOriginName = classAndOrigin.classOrOriginName?.value.defaultEmpty(),
                         bonus = classAndOrigin.bonus?.value.defaultEmpty(),
+                        imgUrl = classAndOrigin.imgUrl?.value.defaultEmpty(),
                         content = classAndOrigin.content?.value.defaultEmpty()
                     )
                 }

@@ -11,6 +11,7 @@ class ClassAndOriginContentMapper(private val champOfChampDetailsMapper: ChampOf
             content = input.content,
             listChamp = champOfChampDetailsMapper.mapList(input.champEntity.champs),
             bonus = input.bonus.split(","),
+            imgUrl = input.imgUrl,
             classOrOriginName = input.classOrOriginName
         )
     }

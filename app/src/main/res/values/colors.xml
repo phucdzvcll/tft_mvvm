@@ -21,8 +21,9 @@
     <color name="origin_name_color">#E2FFF3</color>
     <color name="class_name_color">#FFD8F5</color>
     <color name="content_of_classOrOrigin_color">#FFFBD7</color>
-    <color name="item_bonus_color">#B8B8B8</color>
+    <color name="item_bonus_color">#DADADA</color>
     <color name="champ_cost_text_color">#FFB700</color>
-    <color name="bg_section_color">#314670</color>
+    <color name="bg_section_color">#000000</color>
     <color name="header_details_color">#8E8E8E</color>
+    <color name="text_color_section">#E8E8E8</color>
 </resources>
