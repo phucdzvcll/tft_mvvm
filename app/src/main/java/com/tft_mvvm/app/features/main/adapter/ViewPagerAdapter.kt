@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.tft_mvvm.app.features.main.MainActivity
 import com.tft_mvvm.app.features.main.fragment.ShowChampByGoldFragment
-import com.tft_mvvm.app.features.main.fragment.ShowChampByRankFragment
+import com.tft_mvvm.app.features.main.fragment.BuildTeamFragment
 import com.tft_mvvm.app.features.main.fragment.ShowRecommendTeamFragment
 
 class ViewPagerAdapter(
@@ -28,7 +28,7 @@ class ViewPagerAdapter(
     private fun createFragment(type : MainActivity.Tab.Type) : Fragment {
         return when (type) {
             MainActivity.Tab.Type.Champion -> ShowChampByGoldFragment()
-            MainActivity.Tab.Type.Ranking -> ShowChampByRankFragment()
+            MainActivity.Tab.Type.Ranking -> BuildTeamFragment()
             MainActivity.Tab.Type.TeamBuilding -> ShowRecommendTeamFragment()
         }
     }

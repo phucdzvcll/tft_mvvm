@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
             ),
             Tab(
                 type = Tab.Type.Ranking,
-                title = "Xếp Loại"
+                title = "Dựng Đội Hình"
             ),
             Tab(
                 type = Tab.Type.TeamBuilding,
-                title = "Đội Hình"
+                title = "Top Đội Hình "
             )
         )
         val adapter = ViewPagerAdapter(

@@ -11,7 +11,7 @@ import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
-class AdapterShowChampByRank(
+class AdapterShowChampByOriginAndClass(
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val ITEM_TYPE: Int = 1

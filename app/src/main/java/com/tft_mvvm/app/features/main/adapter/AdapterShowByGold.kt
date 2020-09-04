@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_show_by_gold.view.*
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class AdapterShowByGold(
-    private val champs: ArrayList<Champ>,
+    private val champs: MutableList<Champ>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
