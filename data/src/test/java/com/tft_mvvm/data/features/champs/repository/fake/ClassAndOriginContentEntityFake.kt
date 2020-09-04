@@ -10,7 +10,7 @@ object ClassAndOriginContentEntityFake {
             classOrOriginName = "name$index",
             content = "content$index",
             bonus = "bonus$index",
-            listChamp = ChampListEntity(
+            champEntity = ChampListEntity(
                 ChampEntityFake.provideChampEntityList(
                     10
                 )

@@ -229,7 +229,7 @@ class RepoRepositoryImpl(
             listClassAndOriginContent.add(
                 ClassAndOriginListEntity.ClassAndOrigin(
                     classOrOriginName = content.classOrOriginName,
-                    listChamp = ChampListEntity(champs = champs),
+                    champEntity = ChampListEntity(champs = champs),
                     content = content.content,
                     bonus = content.bonus
                 )

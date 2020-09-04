@@ -1,6 +1,5 @@
 package com.tft_mvvm.app.features.details.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -46,16 +45,14 @@ class DetailsViewModel(
                 )
             }
             dbResult.either({
-                //TODO handel error
-                Log.d("phuc", "$it")
+                updateChampDetails(null)
             }) {
                 updateChampDetails(
                     champDetailsModel.copy(
                         headerModel = itemHeaderMapper.map(it)
                     )
                 )
-                val listClassAndOriginName = it.originAndClassName
-                getListClassAndOriginContent(listClassAndOriginName)
+                getListClassAndOriginContent(it.originAndClassName)
                 getTeamRecommendForChampLiveData(it.id)
             }
         }
@@ -73,10 +70,17 @@ class DetailsViewModel(
                 )
             }
             dbResult.either({
-                //TODO handle error
-                Log.d("Phuc", "$it")
+                updateChampDetails(
+                    champDetailsModel.copy(
+                        listItem = listOf()
+                    )
+                )
             }) {
-                updateListItemModel(classAndOriginContentMapper.mapList(it.listClassAndOrigin))
+                updateChampDetails(
+                    champDetailsModel.copy(
+                        listItem = classAndOriginContentMapper.mapList(it.listClassAndOrigin)
+                    )
+                )
             }
         }
 
@@ -91,34 +95,24 @@ class DetailsViewModel(
                 )
             }
             dbResult.either({
-                //TODO handle error
+                updateChampDetails(
+                    champDetailsModel.copy(
+                        listTeamRecommend = listOf()
+                    )
+                )
             }) {
-                updateListTeamRecommend(teamRecommendForChampMapper.mapList(it.teamBuilders))
+                updateChampDetails(
+                    champDetailsModel.copy(
+                        listTeamRecommend = teamRecommendForChampMapper.mapList(it.teamBuilders)
+                    )
+                )
             }
         }
 
-    private fun updateListItemModel(item: List<ChampDetailsModel.ClassAndOriginContent>) {
-        listClassAndOriginContent.clear()
-        listClassAndOriginContent.addAll(item)
-        updateChampDetails(
-            champDetailsModel.copy(
-                listItem = listClassAndOriginContent
-            )
-        )
-    }
-
-    private fun updateListTeamRecommend(listTeam: List<ChampDetailsModel.TeamRecommend>) {
-        listTeamRecommend.clear()
-        listTeamRecommend.addAll(listTeam)
-        updateChampDetails(
-            champDetailsModel.copy(
-                listTeamRecommend = listTeamRecommend
-            )
-        )
-    }
-
-    private fun updateChampDetails(champDetails: ChampDetailsModel) {
-        champDetailsModel = champDetails
+    private fun updateChampDetails(champDetails: ChampDetailsModel?) {
+        champDetails?.let {
+            champDetailsModel = it
+        }
         champDetailsModelLiveData.value = champDetailsModel
     }
 

@@ -15,10 +15,6 @@ object ChampForTeamFake {
         threeStar = "1",
         cost = "1$index",
         imgUrl = "http://linkchamp$index.google/",
-        itemSuitable = listOf(
-            ItemForTeamFake.provideItem(index + 1),
-            ItemForTeamFake.provideItem(index + 2),
-            ItemForTeamFake.provideItem(index + 3)
-        )
+        itemSuitable = listOf()
     )
 }

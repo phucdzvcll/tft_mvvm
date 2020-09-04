@@ -400,7 +400,7 @@ class RepoRepositoryImplTest {
                 listClassAndOriginExpected.add(
                     ClassAndOriginListEntity.ClassAndOrigin(
                         classOrOriginName = ClassAndOriginDBOFake.provideClassAndOriginDBO(0).classOrOriginName,
-                        listChamp = ChampListEntity(
+                        champEntity = ChampListEntity(
                             champListEntityByName
                         ),
                         content = ClassAndOriginDBOFake.provideClassAndOriginDBO(0).content,
@@ -459,7 +459,7 @@ class RepoRepositoryImplTest {
             listClassAndOriginExpected.add(
                 ClassAndOriginListEntity.ClassAndOrigin(
                     classOrOriginName = ClassAndOriginDBOFake.provideClassAndOriginDBO(0).classOrOriginName,
-                    listChamp = ChampListEntity(
+                    champEntity = ChampListEntity(
                         champs = champEntityListByName
                     ),
                     content = ClassAndOriginDBOFake.provideClassAndOriginDBO(0).content,
@@ -965,7 +965,7 @@ class RepoRepositoryImplTest {
         val id = "1231"
         val teamResponse = TeamListResponse(FeedTeam(TeamResponseFake.provideTeamResponseList(10)))
         val teamDBO = TeamListDBO(teamDBOs = TeamDBOFake.provideTeamDBOList(10))
-        val teamListEntity = TeamFake.provideListTeam(10)
+        val expected = TeamFake.provideListTeam(10)
         val listItemDBO = ItemDBOFake.provideListItemDBO(10)
         val listChampDBO = ChampDBOFake.provideChampDBOList(10)
         every { itemListMapper.mapList(listOf()) } returns listOf()
@@ -974,12 +974,11 @@ class RepoRepositoryImplTest {
         )
         coEvery { teamDAO.getAllTeam() } returns teamDBO.teamDBOs
         every { teamDaoEntityMapper.map(teamResponse) } returns teamDBO
-        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns teamListEntity.teams
+        every { teamListMapper.mapList(teamDBO.teamDBOs) } returns expected.teams
         coEvery { itemDAO.getAllItem() } returns listItemDBO
         coEvery { champDAO.getAllChamp() } returns listChampDBO
 
-        repoRepository.getTeamRecommendForChamp(id)
-
+        val either = repoRepository.getTeamRecommendForChamp(id)
 
     }
 

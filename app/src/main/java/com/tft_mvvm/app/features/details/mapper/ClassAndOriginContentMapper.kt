@@ -9,7 +9,7 @@ class ClassAndOriginContentMapper(private val champOfChampDetailsMapper: ChampOf
     override fun map(input: ClassAndOriginListEntity.ClassAndOrigin): ChampDetailsModel.ClassAndOriginContent {
         return ChampDetailsModel.ClassAndOriginContent(
             content = input.content,
-            listChamp = champOfChampDetailsMapper.mapList(input.listChamp.champs),
+            listChamp = champOfChampDetailsMapper.mapList(input.champEntity.champs),
             bonus = input.bonus.split(","),
             classOrOriginName = input.classOrOriginName
         )
