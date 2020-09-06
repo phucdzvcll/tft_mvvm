@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tft_mvvm.app.base.OnItemClickListener
+import com.tft_mvvm.app.features.main.OnClickListenerPickChamp
 import com.tft_mvvm.app.features.main.model.ClassAndOriginContent
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.item_show_by_origin_class.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
 class AdapterShowChampByOriginAndClass(
-    private val onItemClickListener: OnItemClickListener
+    private val onClick: OnClickListenerPickChamp
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val ITEM_TYPE: Int = 1
     val HEADER_TYPE: Int = 2
@@ -48,7 +48,7 @@ class AdapterShowChampByOriginAndClass(
         if (itemViewType == ITEM_TYPE) {
             (holder as ItemViewHolder).bind(
                 listItem[position] as ItemViewHolder.Champ,
-                onItemClickListener
+                onClick
             )
         } else {
             (holder as SectionHeaderViewHolder).bind(listItem[position] as SectionHeaderViewHolder.SectionModel)
@@ -71,7 +71,7 @@ class AdapterShowChampByOriginAndClass(
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(champ: Champ, onItemClickListener: OnItemClickListener) {
+        fun bind(champ: Champ, onItemClickListener: OnClickListenerPickChamp) {
             Glide.with(itemView.imgShowChampByOriginClass.context)
                 .load(champ.imgUrl)
                 .into(itemView.imgShowChampByOriginClass)
@@ -82,8 +82,17 @@ class AdapterShowChampByOriginAndClass(
                 "4" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_4_gold)
                 "5" -> itemView.imgShowChampByOriginClass.setBackgroundResource(R.drawable.background_5_gold)
             }
-            itemView.setOnClickListener { onItemClickListener.onClickListener(champ.id) }
+            itemView.setOnClickListener { onItemClickListener.onClick(champMapper2(champ)) }
+
+
         }
+
+        private fun champMapper2(champ: ItemViewHolder.Champ) = ClassAndOriginContent.Champ(
+            id = champ.id,
+            cost = champ.cost,
+            classAndOriginName = champ.classAndOriginName,
+            imgUrl = champ.imgUrl
+        )
 
         data class Champ(
             val imgUrl: String,

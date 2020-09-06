@@ -1,28 +1,30 @@
 package com.tft_mvvm.app.features.main.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.tft_mvvm.app.base.OnItemClickListener
-import com.tft_mvvm.app.features.dialog_show_details_champ.DialogShowDetailsChamp
-import com.tft_mvvm.app.features.dialog_show_details_champ.model.ChampDialogModel
-import com.tft_mvvm.app.features.main.adapter.AdapterShowByGold
+import com.bumptech.glide.Glide
+import com.tft_mvvm.app.features.main.OnClickListenerPickChamp
 import com.tft_mvvm.app.features.main.adapter.AdapterShowChampByOriginAndClass
-import com.tft_mvvm.app.features.main.model.Champ
+import com.tft_mvvm.app.features.main.model.ClassAndOriginContent
 import com.tft_mvvm.app.features.main.viewmodel.ShowChampByRankViewModel
 import com.tft_mvvm.champ.R
 import kotlinx.android.synthetic.main.fragment_build_team.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BuildTeamFragment : Fragment(),
-    OnItemClickListener {
+    OnClickListenerPickChamp {
     private val showChampByRankViewModel: ShowChampByRankViewModel by viewModel()
     private var adapterShowChampByOriginAndClass: AdapterShowChampByOriginAndClass? = null
-
+    private val listImageView = mutableListOf<ImageView?>()
+    val listChamp = mutableListOf<ClassAndOriginContent.Champ>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,8 +37,29 @@ class BuildTeamFragment : Fragment(),
         super.onActivityCreated(savedInstanceState)
         setupUI()
         observeViewModel()
-        test()
+        setupPickChamp()
         showChampByRankViewModel.getAllClassAndOriginName()
+    }
+
+    private fun setupPickChamp() {
+        val listImage = listOf<ImageView?>(
+            champ1,
+            champ2,
+            champ3,
+            champ4,
+            champ5,
+            champ6,
+            champ7,
+            champ8,
+            champ9,
+            champ10
+        )
+        listImage.forEach { img ->
+            img?.setOnClickListener {
+                it?.tag = "blank"
+            }
+            listImageView.add(img)
+        }
     }
 
     private fun setupUI() {
@@ -64,36 +87,38 @@ class BuildTeamFragment : Fragment(),
             .observe(viewLifecycleOwner, Observer {
                 adapterShowChampByOriginAndClass?.setData(it)
             })
+
     }
 
-    private fun test() {
-        val listChamp = mutableListOf<Champ>().apply {
-            repeat(10) {
-                add(
-                    Champ(
-                        id = "",
-                        rank = "",
-                        name = "",
-                        cost = "",
-                        imgUrl = ""
-                    )
-                )
+    override fun onClick(champ: ClassAndOriginContent.Champ) {
+        var check = 0
+        if (listChamp.isNotEmpty()){
+            listChamp.forEach {
+                if (it.id==champ.id){
+                    check++
+                }
             }
         }
-        val adapterShowChampByGold = AdapterShowByGold(listChamp,this)
-        rv_pick_champ?.layoutManager = GridLayoutManager(requireContext(),5)
-        rv_pick_champ?.adapter=adapterShowChampByGold
-    }
+        if (check==0&&listChamp.size<10){
+            listChamp.add(champ)
+        }
+        countChamp?.text = listChamp.size.toString()
+        listImageView.forEach {
+            if (it?.tag == "blank") {
+                Glide.with(it.context)
+                    .load(champ.imgUrl)
+                    .into(it)
+                it.tag = 0
+                when (champ.cost) {
+                    "1" -> it.setBackgroundResource(R.drawable.background_1_gold)
+                    "2" -> it.setBackgroundResource(R.drawable.background_2_gold)
+                    "3" -> it.setBackgroundResource(R.drawable.background_3_gold)
+                    "4" -> it.setBackgroundResource(R.drawable.background_4_gold)
+                    "5" -> it.setBackgroundResource(R.drawable.background_5_gold)
+                }
+                return
+            }
+        }
 
-    override fun onClickListener(id: String) {
-        val dialog = DialogShowDetailsChamp.newInstance(id)
-        dialog.show(childFragmentManager, "DialogShowDetailsChamp")
-    }
-
-    override fun onClickListenerForChampInTeam(
-        id: String,
-        listItem: List<ChampDialogModel.Item>,
-        star: String
-    ) {
     }
 }
