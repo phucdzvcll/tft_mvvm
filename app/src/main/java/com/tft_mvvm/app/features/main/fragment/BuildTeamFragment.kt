@@ -1,12 +1,10 @@
 package com.tft_mvvm.app.features.main.fragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,6 +36,7 @@ class BuildTeamFragment : Fragment(),
         setupUI()
         observeViewModel()
         setupPickChamp()
+        deleteAll()
         showChampByRankViewModel.getAllClassAndOriginName()
     }
 
@@ -56,9 +55,27 @@ class BuildTeamFragment : Fragment(),
         )
         listImage.forEach { img ->
             img?.setOnClickListener {
-                it?.tag = "blank"
+                listChamp.forEach { champ ->
+
+                }
+                img.tag = "blank"
+                img.setImageResource(R.drawable.back)
+                img.setBackgroundResource(R.drawable.back)
+
             }
             listImageView.add(img)
+        }
+    }
+
+    private fun deleteAll() {
+        btn_delete?.setOnClickListener {
+            listChamp.clear()
+            btn_delete?.text = "XÓA (0/10)"
+            listImageView.forEach { img->
+                img?.tag = "blank"
+                img?.setImageResource(R.drawable.back)
+                img?.setBackgroundResource(R.drawable.back)
+            }
         }
     }
 
@@ -91,24 +108,17 @@ class BuildTeamFragment : Fragment(),
     }
 
     override fun onClick(champ: ClassAndOriginContent.Champ) {
-        var check = 0
-        if (listChamp.isNotEmpty()){
-            listChamp.forEach {
-                if (it.id==champ.id){
-                    check++
-                }
-            }
-        }
-        if (check==0&&listChamp.size<10){
+        if (listChamp.size < 10) {
             listChamp.add(champ)
+            val size = listChamp.size
+            btn_delete?.text = "XÓA ($size/10)"
         }
-        countChamp?.text = listChamp.size.toString()
         listImageView.forEach {
             if (it?.tag == "blank") {
                 Glide.with(it.context)
                     .load(champ.imgUrl)
                     .into(it)
-                it.tag = 0
+                it.tag = champ.id.toInt()
                 when (champ.cost) {
                     "1" -> it.setBackgroundResource(R.drawable.background_1_gold)
                     "2" -> it.setBackgroundResource(R.drawable.background_2_gold)
@@ -119,6 +129,5 @@ class BuildTeamFragment : Fragment(),
                 return
             }
         }
-
     }
 }
